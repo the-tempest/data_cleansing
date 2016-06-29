@@ -1,0 +1,19 @@
+{
+  "name": "data_cleansing",
+  "version": "0.0.1",
+  "description": "web application for performing ETL using data cleansing and data harmonization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-tempest/data_cleansing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/the-tempest/data_cleansing/issues"
+  },
+  "homepage": "https://github.com/the-tempest/data_cleansing#readme"
+}
