@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>File Upload test</title>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
+  </head>
+  <body>
+    <input type="file" id="upload" name="upload">
+    <script type="text/javascript">
+      $("#upload").change(function() {
+        console.log("changed");
+        var fileUploadControl = $("#upload")[0];
+        if (fileUploadControl.files.length > 0) {
+          var file = fileUploadControl.files[0];
+          console.log(file);
+          var formData = new FormData();
+          formData.append('file', file);
+          console.log(formData);
+          console.log(formData.get('file'));
+          $.ajax({
+            //dataType: 'json',
+            type: "POST",
+            url: "/process",
+            data: formData,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,  // tell jQuery not to set contentType
+            success: function (succ) {
+              console.log(succ.result);
+            },
+            error: function (t, b, err){
+              console.log(t);
+            }
+          });
+
+        }
+        });
+    </script>
+  </body>
+</html>
