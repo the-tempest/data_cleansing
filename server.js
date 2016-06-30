@@ -57,18 +57,8 @@ app.post('/process', function(req, resp) {
         resp.write('received upload:\n\n');
         resp.end(util.inspect({fields: fields, files: files}));
     });
-    /*var pyshell = new PythonShell('my_script.py');
-    pyshell.send('hello');
 
-    pyshell.on('message', function (message) {
-        // received a message sent from the Python script (a simple "print" statement)
-        console.log(message);
-    });
 
-    pyshell.end(function (err) {
-        if (err) throw err;
-        console.log('finished');
-    });*/
     form.on('end', function(fields, files) {
        /* Temporary location of our uploaded file */
        var temp_path = this.openedFiles[0].path;
@@ -81,7 +71,14 @@ app.post('/process', function(req, resp) {
            if (err) {
                console.error(err);
            } else {
-               console.log("success!")
+               console.log("success!");
+               var options = {
+                 args: [new_location+file_name]
+               };
+               PythonShell.run('test.py', options, function (err) {
+                 if (err) throw err;
+                 console.log('finished');
+               });
            }
        });
      });
