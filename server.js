@@ -37,7 +37,7 @@ app.post('/process', function(req, resp) {
             console.error(err.message);
             return;
         }
-        
+
         resp.writeHead(200, {'content-type': 'text/plain'});
         resp.write('received upload:\n\n');
         resp.end(util.inspect({fields: fields, files: files}));
@@ -60,7 +60,7 @@ app.post('/process', function(req, resp) {
                var options = {
                  args: [new_location+file_name]
                };
-               PythonShell.run('test.py', options, function (err) {
+               PythonShell.run('extraction.py', options, function (err) {
                  if (err) throw err;
                  console.log('finished');
                });

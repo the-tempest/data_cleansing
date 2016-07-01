@@ -13,7 +13,7 @@ def flatten_json(raw):
 
 #execfile('column_type.py');
 # db connector stuff
-cnx = mysql.connector.connect(user='root', password='misconejos', host='localhost', database='scratch')
+cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world')
 cursor = cnx.cursor();
 # sys.argv[1]
 #"./uploaded/SalesJan2009.csv"
@@ -54,10 +54,11 @@ elif (file_extension == '.json'):
         columns = map(lambda x: x.keys(), data)
         columns = reduce(lambda x,y: x+y, columns)
         columns = list(set(columns))
-        
+
         columnsToInitialize = []
         for col in columns:
             columnsToInitialize.append(col+ ' TEXT');
+
 
         # creating new database
         query = 'drop table if exists ' + filename;
@@ -79,10 +80,11 @@ elif (file_extension == '.json'):
             new_item = []
             for key in item:
                 new_item.append(str(item[key]))
-            cursor.execute(query, new_item)
+            cursor.execute(query, new_item);
 
 
 for i in range (len(columns)):
+    print "extracting"
     query = "SELECT " + columns[i] + " FROM " + filename;
     cursor.execute(query);
     rows = cursor.fetchall();
