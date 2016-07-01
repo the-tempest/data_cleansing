@@ -37,10 +37,6 @@ app.post('/process', function(req, resp) {
             console.error(err.message);
             return;
         }
-
-        resp.writeHead(200, {'content-type': 'text/plain'});
-        resp.write('received upload:\n\n');
-        resp.end(util.inspect({fields: fields, files: files}));
     });
 
 
@@ -63,10 +59,16 @@ app.post('/process', function(req, resp) {
                PythonShell.run('extraction.py', options, function (err) {
                  if (err) throw err;
                  console.log('finished');
+                 fs.readFile('output/columnTypes.txt', 'utf8', function (err, data) {
+                    if (err) throw err;
+                      obj = JSON.parse(data);
+                      resp.json(obj);
+                 });
                });
-           }
-       });
-     });
+
+               };
+             });
+           })
 
     return;
 });
