@@ -1,8 +1,19 @@
 import os, sys, csv, json, mysql.connector
 
+def flatten_json(raw):
+    val = {}
+    for i in raw.keys():
+        if isinstance(raw[i], dict):
+            get = flatten_json(raw[i])
+            for j in get.keys():
+                val[i + "_" + j] = get[j]
+        else:
+            val[i] = raw[i]
+    return val
+
 #execfile('column_type.py');
 # db connector stuff
-cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world')
+cnx = mysql.connector.connect(user='root', password='misconejos', host='localhost', database='scratch')
 cursor = cnx.cursor();
 # sys.argv[1]
 #"./uploaded/SalesJan2009.csv"
@@ -32,13 +43,14 @@ if (file_extension == '.csv'):
         query = query.format(','.join(columns), ','.join(s))
 
         for data in reader:
+            print data
             cursor.execute(query, data)
 
 elif (file_extension == '.json'):
     with open(fn+file_extension, 'rU') as f:
         # load and flatten the json file
         raw_data = json.load(f)
-        data = map(lambda x: flatten_json(x), data)
+        data = map(lambda x: flatten_json(x), raw_data)
         columns = map(lambda x: x.keys(), data)
         columns = reduce(lambda x,y: x+y, columns)
         columns = list(set(columns))
@@ -64,19 +76,10 @@ elif (file_extension == '.json'):
         print query
 
         for item in data:
-            cursor.execute(query, item)
-
-
-def flatten_json(raw):
-    val = {}
-    for i in raw.keys():
-        if isinstance(raw[i], dict):
-            get = flatten_json(raw[i])
-            for j in get.keys():
-                val[i + "_" + j] = get[j]
-        else:
-            val[i] = raw[i]
-    return val
+            new_item = []
+            for key in item:
+                new_item.append(str(item[key]))
+            cursor.execute(query, new_item)
 
 
 for i in range (len(columns)):
