@@ -37,10 +37,7 @@ app.post('/process', function(req, resp) {
             console.error(err.message);
             return;
         }
-        var data = "Hello from the Node writeFile method!";
-
-        console.log(files['file']);
-
+        
         resp.writeHead(200, {'content-type': 'text/plain'});
         resp.write('received upload:\n\n');
         resp.end(util.inspect({fields: fields, files: files}));
