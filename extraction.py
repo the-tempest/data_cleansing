@@ -43,7 +43,6 @@ if (file_extension == '.csv'):
         query = query.format(','.join(columns), ','.join(s))
 
         for data in reader:
-            print data
             cursor.execute(query, data)
 
 elif (file_extension == '.json'):
@@ -74,7 +73,6 @@ elif (file_extension == '.json'):
         for i in range(len(columns)):
             s.append('%s')
         query = query.format(','.join(columns), ','.join(s))
-        print query
 
         for item in data:
             new_item = []
@@ -82,16 +80,25 @@ elif (file_extension == '.json'):
                 new_item.append(str(item[key]))
             cursor.execute(query, new_item);
 
-
+columnTypePairs = {};
 for i in range (len(columns)):
-    print "extracting"
     query = "SELECT " + columns[i] + " FROM " + filename;
     cursor.execute(query);
     rows = cursor.fetchall();
     for i in range(len(rows)):
         rows[i] = str(''.join(rows[i]));
     #coltyper = column_typer(rows);
-    #coltyper.column_parser();
+    #t = coltyper.column_parser(); #type
+    #columnTypePairs[columns[i]] = t;
+
+# for testing
+columnTypePairs = {"city" : "location", "Name": "name"} ;
+
+with open('output/columnTypes.txt', 'w') as outfile:
+    json.dump(columnTypePairs, outfile);
+
+
+
 
 cnx.commit()
 cursor.close()
