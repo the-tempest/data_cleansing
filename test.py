@@ -1,7 +1,7 @@
 import os, sys, csv, mysql.connector
 
 # db connector stuff
-cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='kappa')
+cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world')
 cursor = cnx.cursor();
 # sys.argv[1]
 fn, file_extension = os.path.splitext(sys.argv[1]);
@@ -35,7 +35,8 @@ if (file_extension == '.csv'):
             print data
             cursor.execute(query, data)
 
-elif (file_extension == '.json')
+#elif (file_extension == '.json'):
+
 cnx.commit()
 cursor.close()
 cnx.close()
