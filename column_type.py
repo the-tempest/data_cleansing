@@ -3,11 +3,19 @@ class column_typer:
 	def __init__(self, column_list):
 		self.column_list = column_list
 		self.column_type_dict = {'names': 0,'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'locations': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
+		self.line_form_dict = {}
 		self.column_type = ''
 		self.column_length = len(column_list)
+		self.cond_column_form = ''
 
 	def column_typify(self):
 		for elem in self.column_list:
+			form = make_form(elem)
+			if self.line_form_dict.has_key(form):
+				self.line_form_dict[form] += 1
+			else:
+				self.line_form_dict[form] = 1
+
 			word_type_dictionary = {'names': 0, 'dates': 0, 'times': 0, 'locations': 0, 'zipnumbers': 0, 'numbers': 0, 'misc': 0}
 			for item in elem.split():
 				character_type_dictionary = {'colons': 0, 'letters': 0, 'numbers': 0, 'slashes':0, 'delimiters':0, 'misc':0}
@@ -71,34 +79,33 @@ class column_typer:
 			if len(word_type_dictionary.keys()) == 1:
 				self.column_type_dict[word_type_dictionary.keys()[0]] += 1
 			else:
-				wordNum = keySum(word_type_dictionary)
-				print word_type_dictionary.keys()
+				wordNum = key_sum(word_type_dictionary)
 				if (wordNum == 2):
-					if word_type_dictionary.keys() == ['name','location']:
+					if word_type_dictionary.keys() == ['names','locations']:
 						self.column_type_dict['locations'] += 1
-					elif word_type_dictionary.keys() == ['date','time']:
+					elif word_type_dictionary.keys() == ['dates','times']:
 						self.column_type_dict['datetimes'] += 1
-					elif (word_type_dictionary.keys() == ['name','number'] or word_type_dictionary.keys() == ['location','number']):
+					elif (word_type_dictionary.keys() == ['names','numbers'] or word_type_dictionary.keys() == ['locations','numbers']):
 						self.column_type_dict['datestrings'] += 1
 					else:
 						self.column_type_dict['misc'] += 1
 				elif (wordNum == 3):
-					if (word_type_dictionary.keys().contains('dates') or word_type_dictionary.keys().contains('times') or word_type_dictionary.keys().contains('misc')):
+					if ('dates' in word_type_dictionary.keys() or 'times' in word_type_dictionary.keys() or 'misc' in word_type_dictionary.keys()):
 						self.column_type_dict['misc'] += 1
 					else:
 						words = 0
-						if word_type_dictionary.contains('name'):
-							words += word_type_dictionary['name']
-						if word_type_dictioanry.contains('location'):
-							words += word_type_dictionary['location']
+						if 'names' in word_type_dictionary.keys():
+							words += word_type_dictionary['names']
+						if 'locations' in word_type_dictionary.keys():
+							words += word_type_dictionary['locations']
 
 						numbers = 0
-						if word_type_dictionary.contains('zipnumbers'):
+						if 'zipnumbers' in word_type_dictionary.keys():
 							words += word_type_dictionary['zipnumbers']
-						if word_type_dictioanry.contains('numbers'):
+						if 'numbers' in word_type_dictionary.keys():
 							words += word_type_dictionary['numbers']
 
-						if word_type_dictionary.keys() == ['name','location']:
+						if word_type_dictionary.keys() == ['names','locations']:
 							self.column_type_dict['locations'] += 1
 						elif word_type_dictionary.keys() == ['zipnumbers','numbers']:
 							self.column_type_dict['numbers'] += 1
@@ -109,19 +116,19 @@ class column_typer:
 						else:
 							self.column_type_dict['misc'] += 1
 				else:
-					if (word_type_dictionary.keys().contains('dates') or word_type_dictionary.keys().contains('times') or word_type_dictionary.keys().contains('misc')):
+					if ('dates' in word_type_dictionary.keys() or 'times' in word_type_dictionary.keys() or 'misc' in word_type_dictionary.keys()):
 						self.column_type_dict['misc'] += 1
 					else:
 						words = 0
-						if word_type_dictionary.contains('name'):
-							words += word_type_dictionary['name']
-						if word_type_dictioanry.contains('location'):
-							words += word_type_dictionary['location']
+						if 'names' in word_type_dictionary.keys():
+							words += word_type_dictionary['names']
+						if 'locations' in word_type_dictionary.keys():
+							words += word_type_dictionary['locations']
 
 						numbers = 0
-						if word_type_dictionary.contains('zipnumbers'):
+						if 'zipnumbers' in word_type_dictionary.keys():
 							words += word_type_dictionary['zipnumbers']
-						if word_type_dictioanry.contains('numbers'):
+						if 'numbers' in word_type_dictionary.keys():
 							words += word_type_dictionary['numbers']
 
 						if (words > 0 and numbers > 0):
@@ -129,11 +136,41 @@ class column_typer:
 						else:
 							self.column_type_dict['misc'] += 1
 
-		if self.column_type_dict['zipnumbers'] == self.column_length:
-			return 'zipnumbers'
-		else:
-			return self.max_column_type()
+		ret = ''
 
+		if self.column_type_dict['zipnumbers'] == self.column_length:
+			ret += 'zipnumbers'
+		else:
+			ret += dict_max(self.column_type_dict)
+
+		ret += ' with the main form of: '
+
+		condensed_forms = {}
+		for key in self.line_form_dict.keys():
+			cond_key = condense(key)
+			if condensed_forms.has_key(cond_key):
+				condensed_forms[cond_key] += 1
+			else:
+				condensed_forms[cond_key] = 1
+
+		print self.line_form_dict
+		print condensed_forms
+
+		self.cond_column_form = dict_max(condensed_forms)
+		print self.cond_column_form
+		for key in self.line_form_dict.keys():
+			if condense(key) != self.cond_column_form:
+				del self.line_form_dict[key]
+
+		ret += dict_max(self.line_form_dict)
+
+		ret += "\nAll forms:"
+		for key in self.line_form_dict.keys():
+			ret += "\n\""
+			ret += key
+			ret += "\""
+
+		return ret
 
 	def name_heuristic(self, char_dict, length, token):
 		'''returns a really crappy name heuristic value that probably doesn't work or False
@@ -167,25 +204,57 @@ class column_typer:
 		value += 9 - abs(length - 9)
 		return value
 
-	def max_column_type(self):
-		'''returns the column type with the maximum number of classifications (excluding zipnumbers)'''
-		max_val = 0
-		max_type = ''
-		for key in self.column_type_dict.keys():
-			if column_type_dict[key] > max_val:
-				max_val = column_type_dict[key]
-				max_type = key
-		if max_type == '':
-			return 'misc'
-		return max_type
+def dict_max(Adict):
+	'''returns the key with the largest value in a dictionary'''
+	max_val = float("-inf")
+	max_key = ''
+	for key in Adict.keys():
+		if Adict[key] > max_val:
+			max_val = Adict[key]
+			max_key = key
 
-def keySum(Adict):
+	return max_key
+
+def key_sum(Adict):
 	'''returns the sum of the values of the keys in a dictionary'''
 	total = 0
 	vals = Adict.values()
 	for num in vals:
 		total += num
 	return num
+
+def make_form(inString):
+	'''Turns the input string into a string that represents the general form of the string'''
+	returnString = ''
+	for char in inString:
+		if (ord(char) <= 57 and ord(char) >= 48):
+			returnString += '0'
+		elif (ord(char) <= 90 and ord(char) >= 65):
+			returnString += 'X'
+		elif (ord(char) >= 97 and ord(char) <= 122):
+			returnString += 'x'
+		else:
+			returnString += char
+	return returnString
+
+def condense(inString):
+	'''Turns the input form string into a standardized form string with word and number lengths removed'''
+	condString = ''
+	index = 0
+	while index < len(inString):
+		condString += inString[index]
+		if inString[index] == 'x':
+			while (index < len(inString) and inString[index] == 'x'):
+				index += 1
+			continue
+		if inString[index] == '0':
+			while (index < len(inString) and inString[index] == '0'):
+				index += 1
+			continue
+		index += 1
+
+	return condString
+
 
 
 
