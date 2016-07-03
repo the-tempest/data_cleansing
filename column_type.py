@@ -153,11 +153,7 @@ class column_typer:
 			else:
 				condensed_forms[cond_key] = 1
 
-		print self.line_form_dict
-		print condensed_forms
-
 		self.cond_column_form = dict_max(condensed_forms)
-		print self.cond_column_form
 		for key in self.line_form_dict.keys():
 			if condense(key) != self.cond_column_form:
 				del self.line_form_dict[key]
@@ -182,6 +178,8 @@ class column_typer:
 		return value
 
 	def date_heuristic(self, char_dict, length, token):
+		'''returns a really crappy date heuristic value that probably doesn't work or False
+		if it definitely isn't a date'''
 		value = 0
 		if (char_dict['colons'] + char_dict['letters']) > 0:
 			return False
@@ -190,6 +188,8 @@ class column_typer:
 		return value
 
 	def time_heuristic(self, char_dict, length, token):
+		'''returns a really crappy time heuristic value that probably doesn't work or False
+		if it definitely isn't a time'''
 		value = 0
 		if (char_dict['letters'] + char_dict['delimiters'] + char_dict['slashes']) > 0:
 			return False
@@ -198,6 +198,8 @@ class column_typer:
 		return value
 
 	def location_heuristic(self, char_dict, length, token):
+		'''returns a really crappy location heuristic value that probably doesn't work or False
+		if it definitely isn't a location'''
 		value = 0
 		if (char_dict['colons'] + char_dict['numbers']) > 0:
 			return False
