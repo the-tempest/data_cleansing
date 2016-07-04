@@ -1,5 +1,5 @@
 import mysql.connector, os
-class column_typer: 	
+class column_typer:
 	def __init__(self, column_list):
 		self.column_list = column_list
 		self.column_type_dict = {'names': 0,'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'locations': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
@@ -223,7 +223,7 @@ def key_sum(Adict):
 	vals = Adict.values()
 	for num in vals:
 		total += num
-	return num
+	return total
 
 def make_form(inString):
 	'''Turns the input string into a string that represents the general form of the string'''
@@ -256,7 +256,3 @@ def condense(inString):
 		index += 1
 
 	return condString
-
-
-
-
