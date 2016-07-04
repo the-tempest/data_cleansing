@@ -11,9 +11,9 @@ def flatten_json(raw):
             val[i] = raw[i]
     return val
 
-#execfile('column_type.py');
+execfile('column_type.py');
 # db connector stuff
-cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world')
+cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world', port='3308')
 cursor = cnx.cursor();
 # sys.argv[1]
 #"./uploaded/SalesJan2009.csv"
@@ -85,14 +85,14 @@ for i in range (len(columns)):
     query = "SELECT " + columns[i] + " FROM " + filename;
     cursor.execute(query);
     rows = cursor.fetchall();
-    for i in range(len(rows)):
-        rows[i] = str(''.join(rows[i]));
-    #coltyper = column_typer(rows);
-    #t = coltyper.column_parser(); #type
-    #columnTypePairs[columns[i]] = t;
+    for j in range(len(rows)):
+        rows[j] = str(''.join(rows[j]));
+    coltyper = column_typer(rows);
+    t = coltyper.column_typify(); #type
+    columnTypePairs[columns[i]] = t;
 
 # for testing
-columnTypePairs = {"city" : "location", "Name": "name"} ;
+#columnTypePairs = {"city" : "location", "Name": "name"} ;
 
 with open('output/columnTypes.txt', 'w') as outfile:
     json.dump(columnTypePairs, outfile);
