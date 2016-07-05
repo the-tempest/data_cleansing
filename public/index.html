@@ -4,6 +4,9 @@
     <meta charset="utf-8">
       <title>File Upload test</title>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+      <div id='data-cleaning'>
+
+      </div>
       <div id="result"> </div>
 
   </head>
@@ -11,7 +14,8 @@
     <input type="file" id="upload" name="upload">
     <script type="text/javascript">
       $("#upload").change(function() {
-        console.log("changed");
+        $("#upload").hide(0);
+        $('#data-cleaning').html('<img src="img/data_cleaning.jpg" /> <img src="img/silver-gear-cogs-animation-6.gif" />');
         var fileUploadControl = $("#upload")[0];
         if (fileUploadControl.files.length > 0) {
           var file = fileUploadControl.files[0];
@@ -25,7 +29,9 @@
             processData: false,  // tell jQuery not to process the data
             contentType: false,  // tell jQuery not to set contentType
             success: function (res) {
+              $("#data-cleaning").html("")
               var keys = Object.keys(res);
+
               for (var key in res) {
                 $("#result").append("<p>" + key + ": " + res[key] + "</p> <br>");
               }
