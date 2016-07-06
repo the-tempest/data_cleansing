@@ -1,0 +1,9 @@
+What we are classifying:
+
+First names
+Last names
+Locations
+Product Names
+Descriptions
+Email address
+Misc
