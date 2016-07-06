@@ -1,0 +1,1 @@
+NAME_FEATURES = [' jr', ' jnr', ' sr', ' snr', ' ii', ' iv']

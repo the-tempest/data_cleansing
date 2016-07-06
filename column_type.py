@@ -1,4 +1,5 @@
 import mysql.connector, os
+execfile("features/features.py")
 
 #The code that is commented out is the old heurisitc way that I evaluated things
 #There is new code before it that examines form types rather than using heuristics
@@ -12,6 +13,7 @@ import mysql.connector, os
 #Unicode characters are still a problem that I am working on fixing...
 
 NAME_LENGTH = 7
+NUM_SPACES = 1.5
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
@@ -122,19 +124,33 @@ class column_typer:
 		return ret
 
 	def name_heuristic(self, token):
-		'''returns a  name heuristic value that probably doesn't work or False
+		'''returns a  name heuristic value or negative infinity
 		if it definitely isn't a name'''
-		if (token.find(':')):
+		# check if it can't be a name
+		char_val_list = []
+		for char in token:
+			char_val_list.append(ord(char))
+		if not self.column_classifiers[0].can_be(char_val_list):
 			return float("-inf")
-		for num in ASCII_NUMS:
-			if chr(num) in token:
-				return float("-inf")
+		value = 0
+
+		# counting common features of names
+		for f in features:
+			if f in token.lower():
+				value += 1
+
+		# account for name length
 		temp = token.split()
 		lengths = [len(x) for x in temp]
 		if len(lengths) == 0:
 			return float("-inf")
 		avg_len = float(sum(lengths)) / float(len(lengths))
-		value = NAME_LENGTH - abs(avg_len - NAME_LENGTH)
+		value += NAME_LENGTH - abs(avg_len - NAME_LENGTH)
+		
+		# account for number of spaces
+		spaces = len(temp) - 1
+		value += NUM_SPACES - abs(spaces - NUM_SPACES)
+		
 		return value
 
 	def date_heuristic(self, char_dict, length, token):

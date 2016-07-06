@@ -7,3 +7,10 @@ Product Names
 Descriptions
 Email address
 Misc
+
+Common features of names:
+sr
+jr
+roman numerals
+titles
+honors (PHD, MD, etc.)
