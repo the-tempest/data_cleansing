@@ -11,7 +11,6 @@
 
   </head>
   <body>
-  <h1> Upload File<h>
     <input type="file" id="upload" name="upload">
     <script type="text/javascript">
       $("#upload").change(function() {
@@ -34,7 +33,7 @@
               var keys = Object.keys(res);
 
               for (var key in res) {
-                $("#result").append("<p>" + key + ": " + res[key] + "</p> <br>");
+                $("#result").append("<p><b>" + key + "</b>: " + res[key] + "</p> <br>");
               }
             },
             error: function (t, b, err){
