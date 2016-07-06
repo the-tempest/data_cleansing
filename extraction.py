@@ -11,6 +11,7 @@ def flatten_json(raw):
             val[i] = raw[i]
     return val
 
+execfile('column.py');
 execfile('column_type.py');
 # db connector stuff
 cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world', port='3308')
@@ -81,21 +82,42 @@ elif (file_extension == '.json'):
             cursor.execute(query, new_item);
 
 columnTypePairs = {};
-for i in range (len(columns)):
-    query = "SELECT " + columns[i] + " FROM " + filename;
+
+def getRows(columnName):
+    query = "SELECT " + columnName + " FROM " + filename;
     cursor.execute(query);
     rows = cursor.fetchall();
     for j in range(len(rows)):
         rows[j] = str(''.join(rows[j]));
-    coltyper = column_typer(rows);
+    return rows;
+
+def classify(col):
+    ''' takes a column object and runs Keith's script on it '''
+    coltyper = column_typer(col);
     t = coltyper.column_typify(); #type
     columnTypePairs[columns[i]] = t;
+
+
+rows = None;
+nextCol = getRows(columns[0]);
+
+for i in range (len(columns)-1):
+    prevCol = rows;
+    rows = nextCol;
+    nextCol = getRows(columns[i+1]);
+    colName = columns[i];
+    col = column(rows, colName, prevCol, nextCol);
+    #classify(col);
+
+col = column(nextCol, columns[i+1], rows, None);
+#classify(col);
+
 
 # for testing
 #columnTypePairs = {"city" : "location", "Name": "name"} ;
 
-with open('output/columnTypes.txt', 'w') as outfile:
-    json.dump(columnTypePairs, outfile);
+##with open('output/columnTypes.txt', 'w') as outfile:
+#    json.dump(columnTypePairs, outfile);
 
 
 

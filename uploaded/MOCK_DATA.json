@@ -10,7 +10,7 @@
 {"id":10,"first_name":"Stephanie","last_name":"Fox","email":"sfox9@wiley.com","gender":"Female","ip_address":"158.255.147.39"},
 {"id":11,"first_name":"Mary","last_name":"Warren","email":"mwarrena@ibm.com","gender":"Female","ip_address":"200.218.43.64"},
 {"id":12,"first_name":"Scott","last_name":"Marshall","email":"smarshallb@wordpress.com","gender":"Male","ip_address":"173.232.174.23"},
-{"id":13,"first_name":"Lisa","last_name":"Cox","email":"lcoxc@ucsd.edu","gender":"Female","ip_address":"137.194.7.61"},
+{"id":13,"first_name":"Lisa","last_name":"Cox","gender":"Female","ip_address":"137.194.7.61"},
 {"id":14,"first_name":"Juan","last_name":"Porter","email":"jporterd@blog.com","gender":"Male","ip_address":"14.118.87.238"},
 {"id":15,"first_name":"Norma","last_name":"Dean","email":"ndeane@amazon.co.jp","gender":"Female","ip_address":"37.241.78.128"},
 {"id":16,"first_name":"Jason","last_name":"Lynch","email":"jlynchf@cam.ac.uk","gender":"Male","ip_address":"9.176.9.169"},
