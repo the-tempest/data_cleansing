@@ -1,5 +1,6 @@
 What we are classifying:
 
+Full Names
 First names
 Last names
 Locations

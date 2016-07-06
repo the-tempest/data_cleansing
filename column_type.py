@@ -20,13 +20,12 @@ ASCII_LOWER = [n for n in range(97, 123)]
 
 
 class column_typer:
-	def __init__(self, column_list):
-		self.reset(column_list)
-
+	def __init__(self, col):
+		self.reset(col)
 		self.build_classifiers()
 
 	def column_typify(self):
-		for elem in self.column_list:
+		for elem in self.column_list.rows:
 			#skips null values - may want to change what this does
 			if elem == None:
 				continue
@@ -123,16 +122,20 @@ class column_typer:
 
 		return ret
 
-	def name_heuristic(self, token):
+	def full_name_heuristic(self, token):
 		'''returns a  name heuristic value or negative infinity
 		if it definitely isn't a name'''
 		# check if it can't be a name
+		value = 0
 		char_val_list = []
 		for char in token:
 			char_val_list.append(ord(char))
 		if not self.column_classifiers[0].can_be(char_val_list):
-			return float("-inf")
-		value = 0
+			return value
+
+		# check column name
+		if 'name' in self.column_name.lower():
+			value += 10
 
 		# counting common features of names
 		for f in features:
@@ -143,9 +146,20 @@ class column_typer:
 		temp = token.split()
 		lengths = [len(x) for x in temp]
 		if len(lengths) == 0:
-			return float("-inf")
+			return 0
 		avg_len = float(sum(lengths)) / float(len(lengths))
 		value += NAME_LENGTH - abs(avg_len - NAME_LENGTH)
+
+		# looking at format of individual words
+		for word in temp:
+			# check for common names
+			if self.column_classifiers[0].is_a(word.lower()):
+				return 100
+			word_form = condense(make_form(word))
+			if word_form == 'Xx':
+				value += 2
+			if word_form.strip('.') == 'X':
+				value += 1
 		
 		# account for number of spaces
 		spaces = len(temp) - 1
@@ -156,11 +170,18 @@ class column_typer:
 	def date_heuristic(self, char_dict, length, token):
 		'''returns a really crappy date heuristic value that probably doesn't work or False
 		if it definitely isn't a date'''
+		
+		# this calls Will's thing
+		# need to figure out how to merge/use both files
+
 		return 0
 
 	def time_heuristic(self, char_dict, length, token):
 		'''returns a really crappy time heuristic value that probably doesn't work or False
 		if it definitely isn't a time'''
+		
+		# same as date
+
 		return 0
 
 	def build_classifiers(self):
@@ -169,7 +190,8 @@ class column_typer:
 		self.column_classifiers = []
 
 		self.column_classifiers.append(classifier('names', [32, 44, 45, 46] + upper_case_letters + lower_case_letters, 
-			['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.']))
+			['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.'],
+			COMMON_FIRST_NAMES + COMMON_LAST_NAMES))
 
 		types_without_dow = ['Xx 0, 0', '0 Xx 0', 'Xx. 0, 0', '0 Xx. 0', 'x 0, 0', '0 x 0', 'x. 0, 0', '0 x. 0']
 		types_with_dow = []
@@ -220,9 +242,12 @@ class column_typer:
 
 		self.column_classifiers.append(classifier('numbers', [44, 46] + numbers, ['0', '0.0', '0,0', '0,0,0', '0,0,0,0', '0,0,0,0,0', '0,0.0', '0,0,0.0', '0,0,0,0.0', '0,0,0,0,0.0']))
 
-	def reset(self, column_list):
+	def reset(self, col):
 		'''resets the dictionaries and other data members so that a different set of data can be run'''
-		self.column_list = column_list
+		self.column_list = col.rows
+		self.column_name = col.colName
+		self.prev_column_list = col.prev
+		self.next_column_list = col.next
 		self.column_type_dict = {'names': 0,'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
 		self.column_length = len(column_list)
 
@@ -289,10 +314,13 @@ class classifier:
 			97-122 but cannot contain '=' 61)
 		3. A list of the known forms that this particular types comes in. (Ex: names can be written as 'Xx Xx' or 'Xx' or 'Xx X. Xx' etc) 
 			I wrote in many known forms but there are plenty that I missed'''
-	def __init__(self, n, pv, kf):
+	def __init__(self, n, pv, kf, ke):
 		self.name = n
 		self.possVals = pv
 		self.knownForms = kf
+		self.knownExamples = {}
+		for elem in ke:
+			self.knownExamples[elem] = 1
 
 	def can_be(self, vals):
 		'''Tests whether the sequence of ascii values inputted has any that are not allowed in this particular type'''
@@ -301,11 +329,13 @@ class classifier:
 				return False
 		return True
 
-	def is_a(self, form):
+	def has_form(self, form):
 		'''Tests whether the given condensed form is in the known forms of this particular type'''
-		if form in self.knownForms:
-			return True
-		return False
+		return form in self.knownForms
+
+	def is_a(self, inString):
+		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
+		return inString in self.knownExamples
 
 """
 			for item in elem.split():
