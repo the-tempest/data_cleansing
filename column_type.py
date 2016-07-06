@@ -11,6 +11,12 @@ import mysql.connector, os
 
 #Unicode characters are still a problem that I am working on fixing...
 
+NAME_LENGTH = 7
+ASCII_NUMS = [n for n in range(48, 58)]
+ASCII_UPPER = [n for n in range(65, 91)]
+ASCII_LOWER = [n for n in range(97, 123)]
+
+
 class column_typer:
 	def __init__(self, column_list):
 		self.reset(column_list)
@@ -75,116 +81,6 @@ class column_typer:
 				else:
 					self.column_type_dict['misc'] += 1
 
-
-			
-			"""word_type_dictionary = {'names': 0, 'dates': 0, 'times': 0, 'zipnumbers': 0, 'numbers': 0, 'misc': 0}
-			for item in elem.split():
-
-
-				character_type_dictionary = {'colons': 0, 'letters': 0, 'numbers': 0, 'slashes':0, 'delimiters':0, 'misc':0}
-				length = len(item)
-				tempString = item
-				for character in item:
-					if (ord(character) <= 57 and ord(character) >= 48): # is an ascii number
-						character_type_dictionary['numbers'] += 1
-					elif (ord(character) == 46 or ord(character) == 44): # is a , or a .
-						character_type_dictionary['delimiters'] += 1
-					elif ((ord(character) <= 90 and ord(character) >= 65) or ((ord(character) >= 97) and ord(character) <= 122)): #is a letter
-						character_type_dictionary['letters'] += 1
-					elif (ord(character) == 58 or ord(character) == 59):
-						character_type_dictionary['colons'] += 1
-					elif (ord(character) == 47 or ord(character) == 92 or ord(character) == 45):
-						character_type_dictionary['slashes'] += 1
-					else:
-						character_type_dictionary['misc'] += 1
-
-				if (character_type_dictionary['colons'] + character_type_dictionary['letters'] + character_type_dictionary['slashes'] + character_type_dictionary['misc']) == 0:
-					if (length == 5 and character_type_dictionary['delimiters'] == 0):
-						word_type_dictionary['zipnumbers'] += 1
-					else:
-						word_type_dictionary['numbers'] += 1
-				else:
-					word_type = ''
-					max_val = float("-inf")
-					temp_val = self.name_heuristic(character_type_dictionary, length, item)
-					if temp_val != False:
-						if temp_val > max_val:
-							word_type = 'names'
-							max_val = temp_val
-
-					temp_val = self.date_heuristic(character_type_dictionary, length, item)
-					if temp_val != False:
-						if temp_val > max_val:
-							word_type = 'dates'
-							max_val = temp_val
-
-					temp_val = self.time_heuristic(character_type_dictionary, length, item)
-					if temp_val != False:
-						if temp_val > max_val:
-							word_type = 'times'
-							max_val = temp_val
-
-					if word_type == '':
-						word_type_dictionary['misc'] += 1
-					else:
-						word_type_dictionary[word_type] += 1
-
-			for key in word_type_dictionary.keys():
-				if word_type_dictionary[key] == 0:
-					del word_type_dictionary[key]
-
-			if len(word_type_dictionary.keys()) == 1:
-				self.column_type_dict[word_type_dictionary.keys()[0]] += 1
-			else:
-				wordNum = key_sum(word_type_dictionary)
-				if (wordNum == 2):
-					elif word_type_dictionary.keys() == ['dates','times']:
-						self.column_type_dict['datetimes'] += 1
-					elif word_type_dictionary.keys() == ['names','numbers']:
-						self.column_type_dict['datestrings'] += 1
-					else:
-						self.column_type_dict['misc'] += 1
-				elif (wordNum == 3):
-					if ('dates' in word_type_dictionary.keys() or 'times' in word_type_dictionary.keys() or 'misc' in word_type_dictionary.keys()):
-						self.column_type_dict['misc'] += 1
-					else:
-						words = 0
-						if 'names' in word_type_dictionary.keys():
-							words += word_type_dictionary['names']
-
-						numbers = 0
-						if 'zipnumbers' in word_type_dictionary.keys():
-							words += word_type_dictionary['zipnumbers']
-						if 'numbers' in word_type_dictionary.keys():
-							words += word_type_dictionary['numbers']
-
-						if word_type_dictionary.keys() == ['zipnumbers','numbers']:
-							self.column_type_dict['numbers'] += 1
-						elif (words == 1 and numbers == 2):
-							self.column_type_dict['datestrings'] += 1
-						elif (words == 2 and numbers == 1):
-							self.column_type_dict['addresses'] += 1
-						else:
-							self.column_type_dict['misc'] += 1
-				else:
-					if ('dates' in word_type_dictionary.keys() or 'times' in word_type_dictionary.keys() or 'misc' in word_type_dictionary.keys()):
-						self.column_type_dict['misc'] += 1
-					else:
-						words = 0
-						if 'names' in word_type_dictionary.keys():
-							words += word_type_dictionary['names']
-
-						numbers = 0
-						if 'zipnumbers' in word_type_dictionary.keys():
-							words += word_type_dictionary['zipnumbers']
-						if 'numbers' in word_type_dictionary.keys():
-							words += word_type_dictionary['numbers']
-
-						if (words > 0 and numbers > 0):
-							self.column_type_dict['addresses'] += 1
-						else:
-							self.column_type_dict['misc'] += 1"""
-
 		ret = ''
 
 		if self.column_type_dict['zipnumbers'] == self.column_length:
@@ -225,42 +121,36 @@ class column_typer:
 
 		return ret
 
-	def name_heuristic(self, char_dict, length, token):
-		'''returns a really crappy name heuristic value that probably doesn't work or False
+	def name_heuristic(self, token):
+		'''returns a  name heuristic value that probably doesn't work or False
 		if it definitely isn't a name'''
-		value = 0
-		if (char_dict['colons'] + char_dict['numbers']) > 0:
-			return False
-		value +=  7- abs(length - 7)
+		if (token.find(':')):
+			return float("-inf")
+		for num in ASCII_NUMS:
+			if chr(num) in token:
+				return float("-inf")
+		temp = token.split()
+		lengths = [len(x) for x in temp]
+		if len(lengths) == 0:
+			return float("-inf")
+		avg_len = float(sum(lengths)) / float(len(lengths))
+		value = NAME_LENGTH - abs(avg_len - NAME_LENGTH)
 		return value
 
 	def date_heuristic(self, char_dict, length, token):
 		'''returns a really crappy date heuristic value that probably doesn't work or False
 		if it definitely isn't a date'''
-		value = 0
-		if (char_dict['colons'] + char_dict['letters']) > 0:
-			return False
-		value += 10 * (2 - abs(char_dict['slashes'] - 2))
-		value += 4 * (5 - abs(char_dict['numbers'] - 5))
-		return value
+		return 0
 
 	def time_heuristic(self, char_dict, length, token):
 		'''returns a really crappy time heuristic value that probably doesn't work or False
 		if it definitely isn't a time'''
-		value = 0
-		if (char_dict['letters'] + char_dict['delimiters'] + char_dict['slashes']) > 0:
-			return False
-		value += 10 * (2 - abs(char_dict['colons'] - 2))
-		value += 4 * (5 - abs(char_dict['numbers'] - 5))
-		return value
+		return 0
 
 	def build_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created 
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
 		self.column_classifiers = []
-		numbers = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57]
-		upper_case_letters = [65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90]
-		lower_case_letters = [97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122]
 
 		self.column_classifiers.append(classifier('names', [32, 44, 45, 46] + upper_case_letters + lower_case_letters, 
 			['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.']))
@@ -401,3 +291,37 @@ class classifier:
 			return True
 		return False
 
+"""
+			for item in elem.split():
+
+				if (character_type_dictionary['colons'] + character_type_dictionary['letters'] + character_type_dictionary['slashes'] + character_type_dictionary['misc']) == 0:
+					if (length == 5 and character_type_dictionary['delimiters'] == 0):
+						word_type_dictionary['zipnumbers'] += 1
+					else:
+						word_type_dictionary['numbers'] += 1
+				else:
+					word_type = ''
+					max_val = float("-inf")
+					temp_val = self.name_heuristic(character_type_dictionary, length, item)
+					if temp_val != False:
+						if temp_val > max_val:
+							word_type = 'names'
+							max_val = temp_val
+
+					temp_val = self.date_heuristic(character_type_dictionary, length, item)
+					if temp_val != False:
+						if temp_val > max_val:
+							word_type = 'dates'
+							max_val = temp_val
+
+					temp_val = self.time_heuristic(character_type_dictionary, length, item)
+					if temp_val != False:
+						if temp_val > max_val:
+							word_type = 'times'
+							max_val = temp_val
+
+					if word_type == '':
+						word_type_dictionary['misc'] += 1
+					else:
+						word_type_dictionary[word_type] += 1
+			"""
