@@ -10,14 +10,13 @@ execfile("features/features.py")
 #The condensed form strings take out word lengths by reducing any sequence of x's to x and
 #take out number lengths by reducing any sequence of 0's to 0
 
-#Unicode characters are still a problem that I am working on fixing...
+#TODO: unicode support
 
 NAME_LENGTH = 7
 NUM_SPACES = 1.5
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
-NAME_FEATURES = COMMON_PREFIXES + COMMON_SUFFIXES
 
 
 class column_typer:
@@ -280,6 +279,7 @@ class column_typer:
 		if len(temp) == 3:
 			value += 10
 		
+		# check if it's a mix of strings and numbers
 		numStrings = 0
 		numNums = 0
 		for word in temp:
@@ -292,6 +292,7 @@ class column_typer:
 		if numPair == (2,1) or numPair == (2,2) or numPair (1,1):
 			value += 5
 
+		# check forms
 		form = condense(make_form(token))
 		if self.column_classifiers[3].has_form(form):
 			value += 10
@@ -300,12 +301,50 @@ class column_typer:
 			if self.column_classifiers[3].is_a(word):
 				value += 20
 
-
 		return value
 
 	def address_heuristic(self, token):
 		'''returns a certainty value for token being an address
 		or zero if it definitely isn't an address'''
+		value = 0
+		char_val_list = []
+		for char in token:
+			char_val_list.append(ord(char))
+		if not self.column_classifiers[4].can_be(char_val_list):
+			return value
+
+		# check column name
+		if 'add' in self.column_name.lower():
+			value += 5
+			if 'address' in self.column_name.lower():
+				value += 5
+
+		# counting common features of address strings
+		for self.column_classifiers[4].contains_a(token.lower()):
+			value += 1
+		
+		# check if it's a mix of strings and numbers
+		numStrings = 0
+		numNums = 0
+		for word in temp:
+			word_form = condense(make_form(word))
+			if '0' in word_form:
+				numNums += 1
+			elif 'X' in word_form or 'x' in word_form:
+				numStrings += 1
+		if numStrings and numNums:
+			value += 10
+		    numPair = (numStrings, numNums)
+		
+		form = condense(make_form(token))
+		if self.column_classifiers[4].has_form(form):
+			value += 10
+
+		for word in temp:
+			if self.column_classifiers[4].is_a(word):
+				value += 20
+
+		return value
 
 	def email_heuristic(self, token):
 		'''returns a certainty value for token being an email
@@ -371,8 +410,7 @@ class column_typer:
 		legal_symbols = [32, 44, 46]
 		legal_ascii = legal_symbols + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
 		possible forms = ['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow
-		known_examples = COMMON_DATE_NAMES
-		self.column_classifiers.append(classifier('datestrings', legal_ascii, possible_forms, known_examples, COMMON_DATE_ABBREV))
+		self.column_classifiers.append(classifier('datestrings', legal_ascii, possible_forms, COMMON_DATE_NAMES, COMMON_DATE_ABBREV))
 
 		# addresses ---------------------------------
 		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
@@ -392,7 +430,8 @@ class column_typer:
 			address_types.append(address_types[x] + ' Xx, XX 0')
 			address_types.append(address_types[x] + ' Xx Xx, XX 0')
 
-		self.column_classifiers.append(classifier('addresses', [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER, address_types, []))
+		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+		self.column_classifiers.append(classifier('addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
 
 	def reset(self, col):
 		'''resets the dictionaries and other data members so that a different set of data can be run'''
@@ -402,7 +441,6 @@ class column_typer:
 		self.next_column_list = col.next
 		self.column_type_dict = {'full names': 0,'first names': 0,'last names':0, 'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
 		self.column_length = len(self.column_list)
-
 		self.line_form_dict = {}
 		self.cond_column_form = ''
 
