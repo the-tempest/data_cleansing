@@ -121,6 +121,7 @@ class column_typer:
 			ret += key
 			ret += "\""
 
+		return (tipe, prob, lst of examples)
 		return ret
 
 	def full_name_heuristic(self, token):
@@ -156,7 +157,7 @@ class column_typer:
 			# check for common names
 			#TODO: Need to change because it will flag all single names as full names
 			if self.column_classifiers[0].is_a(word.lower()):
-				return value + 100
+				return value += 100
 			word_form = condense(make_form(word))
 			if word_form == 'Xx':
 				value += 2
@@ -261,6 +262,9 @@ class column_typer:
 	
 		return value
 
+	def datestring_heuristic(self, token):
+		
+
 	def date_heuristic(self, char_dict, length, token):
 		'''returns a really crappy date heuristic value that probably doesn't work or False
 		if it definitely isn't a date'''
@@ -288,7 +292,7 @@ class column_typer:
 		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
 		possible forms = ['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.']
 		known_examples = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
-		self.column_classifiers.append(classifier('names', legal_ascii, possible_forms,	known_examples))
+		self.column_classifiers.append(classifier('full names', legal_ascii, possible_forms,	known_examples))
 
 		# first names ------------------------------------------
 		legal_symbols = [32, 44, 45, 46]
@@ -317,8 +321,11 @@ class column_typer:
 			types_with_dow.append('Xx., ' + elem)
 			types_with_dow.append('x., ' + elem)
 
-		self.column_classifiers.append(classifier('datestrings', [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER, 
-			['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow, []))
+		legal_symbols = [32, 44, 46]
+		legal_ascii = legal_symbols + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
+		possible forms = ['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow
+		known_examples = COMMON_DATE_NAMES + COMMON_DATE_ABBREV
+		self.column_classifiers.append(classifier('datestrings', legal_ascii, possible_forms, known_examples))
 
 		# addresses ---------------------------------
 		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
@@ -346,7 +353,7 @@ class column_typer:
 		self.column_name = col.colName
 		self.prev_column_list = col.prev
 		self.next_column_list = col.next
-		self.column_type_dict = {'names': 0,'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
+		self.column_type_dict = {'full names': 0,'first names': 0,'last names':0, 'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
 		self.column_length = len(self.column_list)
 
 		self.line_form_dict = {}
@@ -403,6 +410,10 @@ def condense(inString):
 
 	return condString
 
+def normalize(val, maxVal):
+	'''Normalizes the input value over a 0-1 scale'''
+	return float(val)/float(maxVal)
+	#TODO: Make it quadratic or logarithmic or something to make it work better
 
 class classifier:
 	'''this class is a class used only in the column_classifiers data member in order to structure the types better.
