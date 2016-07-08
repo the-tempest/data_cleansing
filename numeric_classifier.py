@@ -1,9 +1,11 @@
-import os, math, operator
+import os, math, operator, csv
+from os import listdir
+from os.path import isfile, join
 
 class numeric_classifier:
 	def __init__(self):
 
-		self.numeric_types = [] #list of all numeric_type classes 
+		self.numeric_types = [] #list of all numeric_type classes (strings)
 
 
 	def classify(self, nText):
@@ -15,7 +17,9 @@ class numeric_classifier:
 				
 				curr_dictionary = feature_occurance
 				total_number = sum(curr_dictionary.itervalues())
+
 				posterier_type_prob = self.type_switch(feature, nText, curr_dictionary)
+				
 				type_probabilities[type.name] *= posterier_type_prob
 
 		#find the max of all types to guess what the type of the column is
@@ -33,7 +37,7 @@ class numeric_classifier:
 
 					}
 			
-		return switcher.get(feature, "feature not yet implemented")
+		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented 
 	def count_a_char(nText, char):
 		'''A helpful feature for dates probably '''
 		sum = 0
@@ -55,5 +59,17 @@ class numeric_type:
 		self.feature_dictionary = {} # a dictionary of feature dictionaries
 		self.name = name
 
+
+	def train(self, training_dir):
+		''' Will train given some training data, can edit this later. must give path to directory'''
+
+		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
+		for file in training_files_list:
+			file_path = training_dir + file # build up the whole path
+			with open(file_path, 'rb') as csvfile:
+
+				reader = csv.reader(csvfile) # might need to set dialect
+				for row in reader:
+					values = list(row[self.name])
 
 trained_date = numeric_type("date")
