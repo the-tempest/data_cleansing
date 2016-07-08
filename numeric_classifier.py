@@ -1,6 +1,9 @@
-import os, math, operator, csv
+import os, math, operator, csv, sys
 from os import listdir
 from os.path import isfile, join
+import subprocess
+
+execfile('table.py')
 
 class numeric_classifier:
 	def __init__(self):
@@ -56,8 +59,9 @@ class numeric_classifier:
 # want to build a bunch of these and save them should train these. 
 class numeric_type:
 	def __init__(self, name):
-		self.feature_dictionary = {} # a dictionary of feature dictionaries
+		self.types_feature_dictionary = {} # a dictionary of feature dictionaries
 		self.name = name
+		self.features = []
 
 
 	def train(self, training_dir):
@@ -66,13 +70,25 @@ class numeric_type:
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for file in training_files_list:
 			file_path = training_dir + file # build up the whole path
-			types = ['date', 'number']
-			Table = os.system('extraction.py ' + file_path)
+			
+
+			table_name = subprocess.check_output([sys.executable, "extraction.py", file]) #
+			t = getTable(table_name) #  returns table object
 			column_names = []
-			for column in Table.columns:
-				column_names.append(column.co)
+			for column in t.columns:
+				column_names.append(column.colName)
 			for type in types:
-				if type in Table.columns.:
+				if type in column_names:
+					index = t.column_index[type]
+					col = t.column_names[index] # we have the column object now 
+					self.train_type(col)
+
+	def train_type(self, col):
+		row_list = col.row
+		for item in row_list:
+			if col.colName in self.type_switch_feature_dictionary: #if the type is in the dict
+				
+
 
 
 trained_date = numeric_type("date")a
