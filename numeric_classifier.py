@@ -66,10 +66,13 @@ class numeric_type:
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for file in training_files_list:
 			file_path = training_dir + file # build up the whole path
-			with open(file_path, 'rb') as csvfile:
+			types = ['date', 'number']
+			Table = os.system('extraction.py ' + file_path)
+			column_names = []
+			for column in Table.columns:
+				column_names.append(column.co)
+			for type in types:
+				if type in Table.columns.:
 
-				reader = csv.reader(csvfile) # might need to set dialect
-				for row in reader:
-					values = list(row[self.name])
 
-trained_date = numeric_type("date")
+trained_date = numeric_type("date")a
