@@ -1,11 +1,12 @@
-output = open("first_names.txt", "w")
-names = []
-with open("raw_first_names.txt", "r") as f:
+output = open("street_names.txt", "w")
+names = {}
+with open("raw_street_names.txt", "r") as f:
 	for line in f:
 		word = line.split()[0].lower()
-		names.append(word)
+		if word not in names:
+			names[word] = 1
 ret = "["
-for name in names:
+for name in names.keys():
 	ret += '\''
 	ret += name
 	ret += '\', '
