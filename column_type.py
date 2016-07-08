@@ -25,7 +25,7 @@ class column_typer:
 		self.build_classifiers()
 
 	def column_typify(self):
-		for elem in self.column_list.rows:
+		for elem in self.column_list:
 			#skips null values - may want to change what this does
 			if elem == None:
 				continue
@@ -63,7 +63,7 @@ class column_typer:
 			found = False
 			cond_form = condense(form)
 			for x in self.column_classifiers:
-				if x.is_a(cond_form):
+				if x.has_form(cond_form):
 					self.column_type_dict[x.name] += 1
 					found = True
 					break
@@ -153,6 +153,7 @@ class column_typer:
 		# looking at format of individual words
 		for word in temp:
 			# check for common names
+			#TODO: Need to change because it will flag all single names as full names
 			if self.column_classifiers[0].is_a(word.lower()):
 				return 100
 			word_form = condense(make_form(word))
@@ -189,7 +190,7 @@ class column_typer:
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
 		self.column_classifiers = []
 
-		self.column_classifiers.append(classifier('names', [32, 44, 45, 46] + upper_case_letters + lower_case_letters, 
+		self.column_classifiers.append(classifier('names', [32, 44, 45, 46] + ASCII_UPPER + ASCII_LOWER, 
 			['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.'],
 			COMMON_FIRST_NAMES + COMMON_LAST_NAMES))
 
@@ -205,21 +206,21 @@ class column_typer:
 			types_with_dow.append('Xx., ' + elem)
 			types_with_dow.append('x., ' + elem)
 
-		self.column_classifiers.append(classifier('datestrings', [32, 44, 46] + numbers + upper_case_letters + lower_case_letters, 
-			['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow))
+		self.column_classifiers.append(classifier('datestrings', [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER, 
+			['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow, []))
 
 		date_types = ['0/0', '0/0/0', '0-0', '0-0-0', '0.0', '0.0.0']
-		self.column_classifiers.append(classifier('dates', [45, 46, 47] + numbers, date_types))
+		self.column_classifiers.append(classifier('dates', [45, 46, 47] + ASCII_NUMS, date_types, []))
 
 		time_types = ['0:0', '0:0:0']
-		self.column_classifiers.append(classifier('times', numbers + [58], time_types))
+		self.column_classifiers.append(classifier('times', ASCII_NUMS + [58], time_types, []))
 
 		datetime_types = []
 		for x in date_types:
 			for y in time_types:
 				datetime_types.append(x + ' ' + y)
 				datetime_types.append(y + ' ' + x)
-		self.column_classifiers.append(classifier('datetimes', [32, 45, 46, 47] + numbers + [58], datetime_types))
+		self.column_classifiers.append(classifier('datetimes', [32, 45, 46, 47] + ASCII_NUMS + [58], datetime_types, []))
 
 		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
 		for x in range(len(address_types)):
@@ -238,9 +239,9 @@ class column_typer:
 			address_types.append(address_types[x] + ' Xx, XX 0')
 			address_types.append(address_types[x] + ' Xx Xx, XX 0')
 
-		self.column_classifiers.append(classifier('addresses', [32, 39, 44, 45, 46] + numbers + [58, 59] + upper_case_letters + lower_case_letters, address_types))
+		self.column_classifiers.append(classifier('addresses', [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER, address_types, []))
 
-		self.column_classifiers.append(classifier('numbers', [44, 46] + numbers, ['0', '0.0', '0,0', '0,0,0', '0,0,0,0', '0,0,0,0,0', '0,0.0', '0,0,0.0', '0,0,0,0.0', '0,0,0,0,0.0']))
+		self.column_classifiers.append(classifier('numbers', [44, 46] + ASCII_NUMS, ['0', '0.0', '0,0', '0,0,0', '0,0,0,0', '0,0,0,0,0', '0,0.0', '0,0,0.0', '0,0,0,0.0', '0,0,0,0,0.0'], []))
 
 	def reset(self, col):
 		'''resets the dictionaries and other data members so that a different set of data can be run'''
@@ -249,7 +250,7 @@ class column_typer:
 		self.prev_column_list = col.prev
 		self.next_column_list = col.next
 		self.column_type_dict = {'names': 0,'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
-		self.column_length = len(column_list)
+		self.column_length = len(self.column_list)
 
 		self.line_form_dict = {}
 		self.cond_column_form = ''
