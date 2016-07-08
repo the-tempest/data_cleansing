@@ -17,6 +17,7 @@ NUM_SPACES = 1.5
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
+FEATURES = COMMON_PREFIXES + COMMON_SUFFIXES
 
 
 class column_typer:
@@ -138,7 +139,7 @@ class column_typer:
 			value += 10
 
 		# counting common features of names
-		for f in features:
+		for f in FEATURES:
 			if f in token.lower():
 				value += 1
 
@@ -155,7 +156,7 @@ class column_typer:
 			# check for common names
 			#TODO: Need to change because it will flag all single names as full names
 			if self.column_classifiers[0].is_a(word.lower()):
-				return 100
+				return value + 100
 			word_form = condense(make_form(word))
 			if word_form == 'Xx':
 				value += 2
@@ -166,6 +167,100 @@ class column_typer:
 		spaces = len(temp) - 1
 		value += NUM_SPACES - abs(spaces - NUM_SPACES)
 		
+		return value
+
+	def first_name_heuristic(self, token):
+		'''returns a  first name heuristic value or negative infinity
+		if it definitely isn't a name'''
+		#TODO edit to be more relevant to first names
+
+		# check if it can't be a name
+		value = 0
+		char_val_list = []
+		for char in token:
+			char_val_list.append(ord(char))
+		if not self.column_classifiers[0].can_be(char_val_list):
+			return value
+
+		# check column name
+		if 'first' in self.column_name.lower():
+			value += 10
+		if 'name' in self.column_name.lower():
+			value += 10
+
+		# counting common features of names
+		# TODO split feature list into prefix and suffix forms
+		for f in COMMON_PREFIXES:
+			if f in token.lower():
+				value += 1
+
+		# account for name length
+		temp = token.split()
+		lengths = [len(x) for x in temp]
+		if len(lengths) == 0:
+			return 0
+		if len(lengths) == 1:
+			value += 10
+
+		# check for common names
+		#TODO: Need to change because it will flag all single names as full names
+		#TODO: figure out where first name goes
+		if self.column_classifiers[0].is_a(token.lower()):
+			return 100
+		word_form = condense(make_form(token))
+		if word_form == 'Xx':
+			value += 2
+		if word_form.strip('.') == 'X':
+			value += 1
+	
+		return value
+
+	def last_name_heuristic(self, token):
+		'''returns a  first name heuristic value or negative infinity
+		if it definitely isn't a name'''
+		#TODO edit to be more relevant to last names
+
+		# check if it can't be a name
+		value = 0
+		char_val_list = []
+		for char in token:
+			char_val_list.append(ord(char))
+		if not self.column_classifiers[0].can_be(char_val_list):
+			return value
+
+		# check column name
+		if 'last' in self.column_name.lower():
+			value += 10
+		if 'sur' in self.column_name.lower():
+			value += 10
+		if 'name' in self.column_name.lower():
+			value += 10
+
+		# counting common features of names
+		# TODO split feature list into prefix and suffix forms
+		for f in COMMON_SUFFIXES:
+			if f in token.lower():
+				value += 1
+
+		# account for name length
+		temp = token.split()
+		lengths = [len(x) for x in temp]
+		if len(lengths) == 0:
+			return 0
+		if len(lengths) == 1:
+			value += 10
+
+		# check for common names
+		#TODO: Need to change because it will flag all single names as full names
+		#TODO: figure out where last name goes
+		if self.column_classifiers[0].is_a(token.lower()):
+			return 100
+		word_form = condense(make_form(token))
+		if word_form == 'Xx':
+			value += 2
+		if word_form.strip('.') == 'X':
+			value += 1
+	
 		return value
 
 	def date_heuristic(self, char_dict, length, token):
@@ -190,10 +285,28 @@ class column_typer:
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
 		self.column_classifiers = []
 
-		self.column_classifiers.append(classifier('names', [32, 44, 45, 46] + ASCII_UPPER + ASCII_LOWER, 
-			['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.'],
-			COMMON_FIRST_NAMES + COMMON_LAST_NAMES))
+		# names ------------------------------------------------
+		legal_symbols = [32, 44, 45, 46]
+		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
+		possible forms = ['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.']
+		known_examples = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
+		self.column_classifiers.append(classifier('names', legal_ascii, possible_forms,	known_examples))
 
+		# first names ------------------------------------------
+		legal_symbols = [32, 44, 45, 46]
+		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
+		possible forms = ['Xx', 'X Xx', 'X. Xx']
+		known_examples = COMMON_FIRST_NAMES
+		self.column_classifiers.append(classifier('first names', legal_ascii, possible_forms, known_examples))
+
+		# last names ------------------------------------------
+		legal_symbols = [32, 44, 45, 46]
+		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
+		possible forms = ['Xx', 'X Xx', 'X. Xx']
+		known_examples = COMMON_LAST_NAMES
+		self.column_classifiers.append(classifier('last names', legal_ascii, possible_forms, known_examples))
+
+		# datestrings ------------------------------------------------
 		types_without_dow = ['Xx 0, 0', '0 Xx 0', 'Xx. 0, 0', '0 Xx. 0', 'x 0, 0', '0 x 0', 'x. 0, 0', '0 x. 0']
 		types_with_dow = []
 		for elem in types_without_dow:
@@ -209,19 +322,7 @@ class column_typer:
 		self.column_classifiers.append(classifier('datestrings', [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER, 
 			['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow, []))
 
-		date_types = ['0/0', '0/0/0', '0-0', '0-0-0', '0.0', '0.0.0']
-		self.column_classifiers.append(classifier('dates', [45, 46, 47] + ASCII_NUMS, date_types, []))
-
-		time_types = ['0:0', '0:0:0']
-		self.column_classifiers.append(classifier('times', ASCII_NUMS + [58], time_types, []))
-
-		datetime_types = []
-		for x in date_types:
-			for y in time_types:
-				datetime_types.append(x + ' ' + y)
-				datetime_types.append(y + ' ' + x)
-		self.column_classifiers.append(classifier('datetimes', [32, 45, 46, 47] + ASCII_NUMS + [58], datetime_types, []))
-
+		# addresses ---------------------------------
 		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
 		for x in range(len(address_types)):
 			address_types.append(address_types[x] + ', Xx. 0')
@@ -240,8 +341,6 @@ class column_typer:
 			address_types.append(address_types[x] + ' Xx Xx, XX 0')
 
 		self.column_classifiers.append(classifier('addresses', [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER, address_types, []))
-
-		self.column_classifiers.append(classifier('numbers', [44, 46] + ASCII_NUMS, ['0', '0.0', '0,0', '0,0,0', '0,0,0,0', '0,0,0,0,0', '0,0.0', '0,0,0.0', '0,0,0,0.0', '0,0,0,0,0.0'], []))
 
 	def reset(self, col):
 		'''resets the dictionaries and other data members so that a different set of data can be run'''
