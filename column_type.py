@@ -280,20 +280,36 @@ class column_typer:
 		if len(temp) == 3:
 			value += 10
 		
-		containsStrings = 0
-		containsNums = 0
+		numStrings = 0
+		numNums = 0
 		for word in temp:
 			word_form = condense(make_form(word))
 			if '0' in word_form:
-				containsNums += 1
-			if 'X' in word_form or 'x' in word_form:
-				containsStrings += 1
-		if containsStrings + containsNums == 3:
+				numNums += 1
+			elif 'X' in word_form or 'x' in word_form:
+				numStrings += 1
+		numPair = (numStrings, numNums)
+		if numPair == (2,1) or numPair == (2,2) or numPair (1,1):
+			value += 5
+
+		form = condense(make_form(token))
+		if self.column_classifiers[3].has_form(form):
 			value += 10
-		
-		return value
+
+		for word in temp:
+			if self.column_classifiers[3].is_a(word):
+				value += 20
+
 
 		return value
+
+	def address_heuristic(self, token):
+		'''returns a certainty value for token being an address
+		or zero if it definitely isn't an address'''
+
+	def email_heuristic(self, token):
+		'''returns a certainty value for token being an email
+		or zero if it definitely isn't an email'''
 
 	def date_heuristic(self, char_dict, length, token):
 		'''returns a really crappy date heuristic value that probably doesn't work or False
@@ -355,8 +371,8 @@ class column_typer:
 		legal_symbols = [32, 44, 46]
 		legal_ascii = legal_symbols + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
 		possible forms = ['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow
-		known_examples = COMMON_DATE_NAMES + COMMON_DATE_ABBREV
-		self.column_classifiers.append(classifier('datestrings', legal_ascii, possible_forms, known_examples))
+		known_examples = COMMON_DATE_NAMES
+		self.column_classifiers.append(classifier('datestrings', legal_ascii, possible_forms, known_examples, COMMON_DATE_ABBREV))
 
 		# addresses ---------------------------------
 		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
