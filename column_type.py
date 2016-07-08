@@ -264,6 +264,8 @@ class column_typer:
 	
 		return value
 
+	def datestring_heuristic(self, token):
+		
 
 	def date_heuristic(self, char_dict, length, token):
 		'''returns a really crappy date heuristic value that probably doesn't work or False
