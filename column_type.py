@@ -10,14 +10,13 @@ execfile("features/features.py")
 #The condensed form strings take out word lengths by reducing any sequence of x's to x and
 #take out number lengths by reducing any sequence of 0's to 0
 
-#Unicode characters are still a problem that I am working on fixing...
+#TODO: unicode support
 
 NAME_LENGTH = 7
 NUM_SPACES = 1.5
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
-NAME_FEATURES = COMMON_PREFIXES + COMMON_SUFFIXES
 
 
 class column_typer:
@@ -300,12 +299,49 @@ class column_typer:
 			if self.column_classifiers[3].is_a(word):
 				value += 20
 
-
 		return value
 
 	def address_heuristic(self, token):
 		'''returns a certainty value for token being an address
 		or zero if it definitely isn't an address'''
+		value = 0
+		char_val_list = []
+		for char in token:
+			char_val_list.append(ord(char))
+		if not self.column_classifiers[4].can_be(char_val_list):
+			return value
+
+		# check column name
+		if 'add' in self.column_name.lower():
+			value += 5
+			if 'address' in self.column_name.lower():
+				value += 5
+
+		# counting common features of address strings
+		for self.column_classifiers[4].contains_a(token.lower()):
+			value += 1
+		
+		numStrings = 0
+		numNums = 0
+		for word in temp:
+			word_form = condense(make_form(word))
+			if '0' in word_form:
+				numNums += 1
+			elif 'X' in word_form or 'x' in word_form:
+				numStrings += 1
+		if numStrings and numNums:
+			value += 10
+		    numPair = (numStrings, numNums)
+		
+		form = condense(make_form(token))
+		if self.column_classifiers[4].has_form(form):
+			value += 10
+
+		for word in temp:
+			if self.column_classifiers[4].is_a(word):
+				value += 20
+
+		return value
 
 	def email_heuristic(self, token):
 		'''returns a certainty value for token being an email
