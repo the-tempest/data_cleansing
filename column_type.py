@@ -17,7 +17,7 @@ NUM_SPACES = 1.5
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
-FEATURES = COMMON_PREFIXES + COMMON_SUFFIXES
+NAME_FEATURES = COMMON_PREFIXES + COMMON_SUFFIXES
 
 
 class column_typer:
@@ -140,9 +140,8 @@ class column_typer:
 			value += 10
 
 		# counting common features of names
-		for f in FEATURES:
-			if f in token.lower():
-				value += 1
+		if self.column_classifiers[0].contains_a(token.lower()):
+			value += 1
 
 		# account for name length
 		temp = token.split()
@@ -190,10 +189,8 @@ class column_typer:
 			value += 10
 
 		# counting common features of names
-		# TODO split feature list into prefix and suffix forms
-		for f in COMMON_PREFIXES:
-			if f in token.lower():
-				value += 1
+		if self.column_classifiers[1].contains_a(token.lower()):
+			value += 1
 
 		# account for name length
 		temp = token.split()
@@ -237,10 +234,8 @@ class column_typer:
 			value += 10
 
 		# counting common features of names
-		# TODO split feature list into prefix and suffix forms
-		for f in COMMON_SUFFIXES:
-			if f in token.lower():
-				value += 1
+		for self.column_classifiers[2].contains_a(token.lower()):
+			value += 1
 
 		# account for name length
 		temp = token.split()
@@ -263,7 +258,42 @@ class column_typer:
 		return value
 
 	def datestring_heuristic(self, token):
+		'''returns a certainty value for token being a date string
+		or zero if it definitely isn't a date string'''
+		value = 0
+		char_val_list = []
+		for char in token:
+			char_val_list.append(ord(char))
+		if not self.column_classifiers[3].can_be(char_val_list):
+			return value
+
+		# check column name
+		if 'date' in self.column_name.lower():
+			value += 10
+
+		# counting common features of date strings
+		for self.column_classifiers[3].contains_a(token.lower()):
+			value += 1
+
+		# account for name length
+		temp = token.split()
+		if len(temp) == 3:
+			value += 10
 		
+		containsStrings = 0
+		containsNums = 0
+		for word in temp:
+			word_form = condense(make_form(word))
+			if '0' in word_form:
+				containsNums += 1
+			if 'X' in word_form or 'x' in word_form:
+				containsStrings += 1
+		if containsStrings + containsNums == 3:
+			value += 10
+		
+		return value
+
+		return value
 
 	def date_heuristic(self, char_dict, length, token):
 		'''returns a really crappy date heuristic value that probably doesn't work or False
@@ -292,21 +322,22 @@ class column_typer:
 		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
 		possible forms = ['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.']
 		known_examples = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
-		self.column_classifiers.append(classifier('full names', legal_ascii, possible_forms,	known_examples))
+		common_features = COMMON_PREFIXES + COMMON_SUFFIXES
+		self.column_classifiers.append(classifier('full names', legal_ascii, possible_forms, known_examples, common_features))
 
 		# first names ------------------------------------------
 		legal_symbols = [32, 44, 45, 46]
 		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
 		possible forms = ['Xx', 'X Xx', 'X. Xx']
 		known_examples = COMMON_FIRST_NAMES
-		self.column_classifiers.append(classifier('first names', legal_ascii, possible_forms, known_examples))
+		self.column_classifiers.append(classifier('first names', legal_ascii, possible_forms, known_examples, COMMON_PREFIXES))
 
 		# last names ------------------------------------------
 		legal_symbols = [32, 44, 45, 46]
 		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
 		possible forms = ['Xx', 'X Xx', 'X. Xx']
 		known_examples = COMMON_LAST_NAMES
-		self.column_classifiers.append(classifier('last names', legal_ascii, possible_forms, known_examples))
+		self.column_classifiers.append(classifier('last names', legal_ascii, possible_forms, known_examples, COMMON_SUFFIXES))
 
 		# datestrings ------------------------------------------------
 		types_without_dow = ['Xx 0, 0', '0 Xx 0', 'Xx. 0, 0', '0 Xx. 0', 'x 0, 0', '0 x 0', 'x. 0, 0', '0 x. 0']
@@ -423,13 +454,15 @@ class classifier:
 			97-122 but cannot contain '=' 61)
 		3. A list of the known forms that this particular types comes in. (Ex: names can be written as 'Xx Xx' or 'Xx' or 'Xx X. Xx' etc) 
 			I wrote in many known forms but there are plenty that I missed'''
-	def __init__(self, n, pv, kf, ke):
+	def __init__(self, n, pv, kf, ke, cf):
+		#TODO make all the lists into dictionaries (for time complexity purposes)
 		self.name = n
 		self.possVals = pv
 		self.knownForms = kf
 		self.knownExamples = {}
 		for elem in ke:
 			self.knownExamples[elem] = 1
+		self.commonFeatures = cf
 
 	def can_be(self, vals):
 		'''Tests whether the sequence of ascii values inputted has any that are not allowed in this particular type'''
@@ -445,6 +478,13 @@ class classifier:
 	def is_a(self, inString):
 		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
 		return inString in self.knownExamples
+
+	def contains_a(self, inString):
+		'''Tests whether the given string contains a common feature of the particular type'''
+		for f in self.commonFeatures:
+			if f in inString:
+				return True
+		return False
 
 """
 			for item in elem.split():
