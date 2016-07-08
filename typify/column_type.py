@@ -30,7 +30,6 @@ class column_typer:
 		for col in table.getColumns():
 			# TODO add functionality
 			print "implement me!"
-			
 
 	def column_typify(self):
 		for elem in self.column_list:
