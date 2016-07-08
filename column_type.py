@@ -279,6 +279,7 @@ class column_typer:
 		if len(temp) == 3:
 			value += 10
 		
+		# check if it's a mix of strings and numbers
 		numStrings = 0
 		numNums = 0
 		for word in temp:
@@ -291,6 +292,7 @@ class column_typer:
 		if numPair == (2,1) or numPair == (2,2) or numPair (1,1):
 			value += 5
 
+		# check forms
 		form = condense(make_form(token))
 		if self.column_classifiers[3].has_form(form):
 			value += 10
@@ -321,6 +323,7 @@ class column_typer:
 		for self.column_classifiers[4].contains_a(token.lower()):
 			value += 1
 		
+		# check if it's a mix of strings and numbers
 		numStrings = 0
 		numNums = 0
 		for word in temp:
@@ -407,8 +410,7 @@ class column_typer:
 		legal_symbols = [32, 44, 46]
 		legal_ascii = legal_symbols + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
 		possible forms = ['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow
-		known_examples = COMMON_DATE_NAMES
-		self.column_classifiers.append(classifier('datestrings', legal_ascii, possible_forms, known_examples, COMMON_DATE_ABBREV))
+		self.column_classifiers.append(classifier('datestrings', legal_ascii, possible_forms, COMMON_DATE_NAMES, COMMON_DATE_ABBREV))
 
 		# addresses ---------------------------------
 		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
@@ -428,7 +430,8 @@ class column_typer:
 			address_types.append(address_types[x] + ' Xx, XX 0')
 			address_types.append(address_types[x] + ' Xx Xx, XX 0')
 
-		self.column_classifiers.append(classifier('addresses', [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER, address_types, []))
+		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+		self.column_classifiers.append(classifier('addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
 
 	def reset(self, col):
 		'''resets the dictionaries and other data members so that a different set of data can be run'''
@@ -438,7 +441,6 @@ class column_typer:
 		self.next_column_list = col.next
 		self.column_type_dict = {'full names': 0,'first names': 0,'last names':0, 'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
 		self.column_length = len(self.column_list)
-
 		self.line_form_dict = {}
 		self.cond_column_form = ''
 
