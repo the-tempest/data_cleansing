@@ -3,6 +3,8 @@ What we are classifying:
 Full Names
 First names
 Last names
+Datestrings
+Addresses
 Locations
 Product Names
 Descriptions
