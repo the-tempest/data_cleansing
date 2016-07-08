@@ -1,6 +1,6 @@
-output = open("street_names.txt", "w")
+output = open("URL_domain_extensions.txt", "w")
 names = {}
-with open("raw_street_names.txt", "r") as f:
+with open("raw_URL_domain_extensions.txt", "r") as f:
 	for line in f:
 		word = line.split()[0].lower()
 		if word not in names:
@@ -10,6 +10,7 @@ for name in names.keys():
 	ret += '\''
 	ret += name
 	ret += '\', '
+ret = ret[:-2]
 ret += "]"
 output.write(ret)
 output.close()
