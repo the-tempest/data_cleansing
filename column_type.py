@@ -179,7 +179,7 @@ class column_typer:
 		char_val_list = []
 		for char in token:
 			char_val_list.append(ord(char))
-		if not self.column_classifiers[0].can_be(char_val_list):
+		if not self.column_classifiers[1].can_be(char_val_list):
 			return value
 
 		# check column name
@@ -204,8 +204,7 @@ class column_typer:
 
 		# check for common names
 		#TODO: Need to change because it will flag all single names as full names
-		#TODO: figure out where first name goes
-		if self.column_classifiers[0].is_a(token.lower()):
+		if self.column_classifiers[1].is_a(token.lower()):
 			return 100
 		word_form = condense(make_form(token))
 		if word_form == 'Xx':
@@ -216,7 +215,7 @@ class column_typer:
 		return value
 
 	def last_name_heuristic(self, token):
-		'''returns a  first name heuristic value or negative infinity
+		'''returns a last name heuristic value or negative infinity
 		if it definitely isn't a name'''
 		#TODO edit to be more relevant to last names
 
@@ -225,7 +224,7 @@ class column_typer:
 		char_val_list = []
 		for char in token:
 			char_val_list.append(ord(char))
-		if not self.column_classifiers[0].can_be(char_val_list):
+		if not self.column_classifiers[2].can_be(char_val_list):
 			return value
 
 		# check column name
@@ -252,8 +251,7 @@ class column_typer:
 
 		# check for common names
 		#TODO: Need to change because it will flag all single names as full names
-		#TODO: figure out where last name goes
-		if self.column_classifiers[0].is_a(token.lower()):
+		if self.column_classifiers[2].is_a(token.lower()):
 			return 100
 		word_form = condense(make_form(token))
 		if word_form == 'Xx':
