@@ -1,4 +1,8 @@
-# helper functions
+# helper.py
+# these functions are used extensively in the 
+# files in this directory, to aid in classifying
+# various types of strings and translate them into
+# condensed formats
 
 def dict_max(Adict):
 	'''returns the key with the largest value in a dictionary'''
@@ -56,3 +60,5 @@ def normalize(val, maxVal):
 	'''Normalizes the input value over a 0-1 scale'''
 	return float(val)/float(maxVal)
 	#TODO: Make it quadratic or logarithmic or something to make it work better
+
+

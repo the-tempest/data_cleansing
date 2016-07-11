@@ -129,6 +129,12 @@ class column_typer:
 		#return (tipe, prob, lst of examples)
 		return ret
 
+	def token_typify(self, token):
+		#TODO implement this fully
+		# this takes in a token (from a column) and 
+		# returns a classification
+		print "implement me!"
+
 	def build_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created 
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
