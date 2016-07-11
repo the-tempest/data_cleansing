@@ -1,5 +1,5 @@
 (function() {
-
+	var files = [];
 	// getElementById
 	function $id(id) {
 		return document.getElementById(id);
@@ -33,11 +33,51 @@
 		// process all File objects
 		for (var i = 0, f; f = files[i]; i++) {
 			ParseFile(f);
-			UploadFile(f);
+			addFileToList(f);
 		}
 
 	}
 
+
+
+
+
+
+
+	function addFileToList(f) {
+		console.log(f);
+		files.push(f);
+		console.log(files);
+	}
+
+	function uploadFiles(e) {
+		e.preventDefault();
+		var formData = new FormData();
+		for  (var i = 0; i < files.length; i++ ) {
+				formData.append('file'+i, files[i]);
+		}
+
+		$.ajax({
+			//dataType: 'json',
+			type: "POST",
+			url: "/process",
+			data: formData,
+			processData: false,  // tell jQuery not to process the data
+			contentType: false,  // tell jQuery not to set contentType
+			success: function (res) {
+				$("#data-cleaning").html("")
+				/*var keys = Object.keys(res);
+
+				for (var key in res) {
+					$("#result").append("<p><b>" + key + "</b>: " + res[key] + "</p> <br>");
+				} */
+				console.log(res);
+			},
+			error: function (t, b, err){
+				console.log(t);
+			}
+		});
+	}
 
 	// output file information
 	function ParseFile(file) {
@@ -78,8 +118,9 @@
 
 
 	// upload JPEG files
-	function UploadFile(file) {
+	/*function UploadFile(file) {
 		var formData = new FormData();
+
 		formData.append('file', file);
 		$.ajax({
 			//dataType: 'json',
@@ -94,14 +135,13 @@
 
 				for (var key in res) {
 					$("#result").append("<p><b>" + key + "</b>: " + res[key] + "</p> <br>");
-				}*/
+				}
 				console.log(res);
 			},
 			error: function (t, b, err){
 				console.log(t);
 			}
 		});
-		/*
 		// following line is not necessary: prevents running on SitePoint servers
 		if (location.host.indexOf("sitepointstatic") >= 0) return
 
@@ -132,9 +172,9 @@
 			xhr.setRequestHeader("X_FILENAME", file.name);
 			xhr.send(file);
 
-		}*/
+		}
 
-	}
+	}*/
 
 
 	// initialize
@@ -156,7 +196,7 @@
 			filedrag.addEventListener("dragleave", FileDragHover, false);
 			filedrag.addEventListener("drop", FileSelectHandler, false);
 			filedrag.style.display = "block";
-
+			submitbutton.addEventListener('click', uploadFiles,false);
 			// remove submit button
 			//submitbutton.style.display = "none";
 		}

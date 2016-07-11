@@ -5,13 +5,14 @@
 <title>Data Cleaning </title>
 <link rel="stylesheet" type="text/css" media="all" href="styles.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 </head>
 <body>
 
 <h1>Data Cleaning</h1>
 
 
-<form id="upload" enctype="multipart/form-data">
+<form id="upload" enctype="multipart/form-data" onsubmit="uploadFiles()">
 
 <fieldset>
 <legend>File Upload</legend>
@@ -24,7 +25,7 @@
 	<div id="filedrag">or drop files here</div>
 </div>
 
-<div id="submitbutton">
+<div id="submitbutton" >
 	<button type="submit">Upload Files</button>
 </div>
 
