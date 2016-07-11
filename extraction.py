@@ -81,6 +81,9 @@ def main(arg):
                     new_item.append(str(item[key]))
                 cursor.execute(query, new_item);
 
+    else:
+        sys.exit();
+
     #columnTypePairs = {};
 
 
