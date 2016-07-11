@@ -1,11 +1,11 @@
 # heuristics.py
+
 # this file contains all the string heuristics
 # that we use to predict what type a string token
 # belongs to. They take in a token and a classifier,
 # which is a helper class defined in classifier.py
 # TODO these need to be merged with the numeric 
 # heuristics somehow
-
 
 NAME_LENGTH = 7
 NUM_NAME_SPACES = 1.5
@@ -18,9 +18,10 @@ LAST_NAME_POS      = 2
 DATESTRING_POS     = 3
 FULL_ADDRESS_POS   = 4
 STREET_ADDRESS_POS = 5
-EMAIL_POS          = 6
-LOCATION_POS       = 7
-DESCRIPTION_POS    = 8
+CITY_STATE_POS     = 6
+EMAIL_POS          = 7
+LOCATION_POS       = 8
+DESCRIPTION_POS    = 9
 
 
 def full_name_heuristic(token, typer):
@@ -263,9 +264,10 @@ def full_address_heuristic(token, typer):
 
 	return value
 
-def street_address(token, typer):
-	'''returns a certainty value for token being an address
-	or zero if it definitely isn't an address'''
+def street_address_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	street address or zero if it definitely
+	isn't an address'''
 	# get the right classifier
 	my_typer = typer.column_classifiers[STREET_ADDRESS_POS]
 
@@ -277,6 +279,8 @@ def street_address(token, typer):
 		return value
 
 	# check column name
+	if 'street' in typer.column_name.lower():
+		value += 10
 	if 'add' in typer.column_name.lower():
 		value += 5
 		if 'address' in typer.column_name.lower():
@@ -297,14 +301,52 @@ def street_address(token, typer):
 			numStrings += 1
 	if numStrings and numNums:
 		value += 10
-	    
+
+	# check if it matches a condensed form
 	form = condense(make_form(token))
 	if my_typer.has_form(form):
 		value += 10
 
+	# check examples
 	for word in temp:
 		if my_typer.is_a(word):
 			value += 20
+
+	return value
+
+def city_state_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	street address or zero if it definitely
+	isn't an address'''
+	# get the right classifier
+	my_typer = typer.column_classifiers[CITY_STATE_POS]
+
+	value = 0
+	char_val_list = []
+	for char in token:
+		char_val_list.append(ord(char))
+	if not my_typer.can_be(char_val_list):
+		return value
+
+	# check column name
+	if 'city' in typer.column_name.lower():
+		value += 10
+	if 'state' in typer.column_name.lower():
+		value += 5
+		
+	# counting common features of address strings
+	if my_typer.contains_a(token.lower()):
+		value += 1
+
+	# check if it matches a condensed form
+	form = condense(make_form(token))
+	if my_typer.has_form(form):
+		value += 10
+
+	# check examples
+	for word in temp:
+		if my_typer.is_a(word):
+			value += 10
 
 	return value
 
