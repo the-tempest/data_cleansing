@@ -24,18 +24,18 @@ def key_sum(Adict):
 
 def make_form(inString):
 	'''Turns the input string into a string that represents the general form of the string'''
-	returnString = ''
+	ret = ''
 	for char in inString:
 		ord_char = ord(char)
 		if ord_char <= 57 and ord_char >= 48:
-			returnString += '0'
+			ret += '0' # it's a digit
 		elif ord_char <= 90 and ord_char >= 65:
-			returnString += 'X'
+			ret += 'X' # it's uppercase
 		elif ord_char >= 97 and ord_char <= 122:
-			returnString += 'x'
+			ret += 'x' # it's lowercase
 		else:
-			returnString += char
-	return returnString
+			ret += char # it's punctuation
+	return ret
 
 def condense(inString):
 	'''Turns the input form string into a standardized form string with word and number lengths removed'''
@@ -53,7 +53,6 @@ def condense(inString):
 				index += 1
 			continue
 		index += 1
-
 	return condString
 
 def normalize(val, maxVal):

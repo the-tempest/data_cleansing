@@ -12,10 +12,15 @@ def getRows(columnName, fileName):
 def getTable(tablename, u='root', p='123', h='localhost', d='world'):
     cnx = mysql.connector.connect(user=u, password=p, host=h, database=d);
     cursor = cnx.cursor();
-    newTable = table(filename)
+    newTable = table(filename);
+    query = "SHOW columns FROM" + tablename;
+    cursor.execute(query)
+    columns = cursor.fetchall();
+    print columns;
     for i in range(len(columns)):
         colName = columns[i];
         data = getRows(colName)
+        #column_name = normalize_name(colName)
         newCol = column(data, colName);
         newTable.addColumn(newCol);
     cnx.commit()
