@@ -25,8 +25,22 @@ class column_typer:
 		self.reset(col)
 		self.build_classifiers()
 
-	def build_report(self):
-		pass
+	def build_report(self, table):
+		ret = ''
+		results = table_typify(table)
+		for item in results:
+			actual = item[0]
+			prediction = item[1]
+			fraction = str(item[2])
+			line = "The column named "
+			line += actual
+			line += " appears to be of the type "
+			line += prediction
+			line += " with a certainty of "
+			line += fraction
+			line += "%.\n\n"
+			line += ret
+		return ret 
 
 	def table_typify(self, table):
 		'''takes in a table and returns a
@@ -179,4 +193,3 @@ class column_typer:
 		self.column_length = len(self.column_list)
 		self.line_form_dict = {}
 		self.cond_column_form = ''
-
