@@ -6,11 +6,13 @@ Full Names
 First names
 Last names
 Datestrings
-Addresses
+Full Addresses
 
 NOT:
 Locations
 Product Names
 Descriptions
 Email address
+Street Addresses
+City, state pairs
 Misc

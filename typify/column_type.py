@@ -199,6 +199,7 @@ class column_typer:
 		self.column_classifiers.append(classifier('addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
 
 		# email --------------------------------------
+
 		
 
 	def reset(self, col):
@@ -212,6 +213,17 @@ class column_typer:
 		self.line_form_dict = {}
 		self.cond_column_form = ''
 
+#NAMES
+#regex = re.compile('[a-zA-Z'-]*,? ([a-zA-Z'-]*)* [a-zA-Z'-]*')
+
+#FIRST NAMES
+#regex = re.compile('[A-Z][a-z]*')
+
+#LAST NAMES
+#regex = re.compile('[A-Z][a-zA-Z]*')
+
+#DATESTRINGS
+#regex = re.compile('([A-Z][a-zA-Z]*\.?,? )?([0-3][0-9] )?[A-Z][a-zA-Z]*\.?,?' ([0-3][0-9]\.?,? )?[0-9]*)
 
 
 

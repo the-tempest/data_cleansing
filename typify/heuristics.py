@@ -1,5 +1,7 @@
 NAME_LENGTH = 7
-NUM_SPACES = 1.5
+NUM_NAME_SPACES = 1.5
+LOCATION_LENGTH = 9
+NUM_LOCATION_SPACES = 1
 
 def full_name_heuristic(token, typer):
 	'''returns a  name heuristic value or negative infinity
@@ -42,7 +44,7 @@ def full_name_heuristic(token, typer):
 	
 	# account for number of spaces
 	spaces = len(temp) - 1
-	value += NUM_SPACES - abs(spaces - NUM_SPACES)
+	value += NUM_SPACES - abs(spaces - NUM_NAME_SPACES)
 	
 	return value
 
@@ -254,3 +256,53 @@ def email_heuristic(token, typer):
 	
 	return value
 
+def location_heuristic(token, typer):
+	'''returns a certainty value for token being a location
+	or zero if it definitely isn't a location'''
+	value = 0
+	char_val_list = []
+	for char in token:
+		char_val_list.append(ord(char))
+	if not typer.column_classifiers[6].can_be(char_val_list):
+		return value
+
+	# check column name
+	#TODO fix this part of the heuristic to accurately reflect locations
+	if 'location' in typer.column_name.lower():
+		value += 10
+	elif 'place' in typer.column_name.lower():
+		value += 10
+	elif 'country' in typer.column_name.lower():
+		value += 10
+
+
+	# counting common features of locations
+	if typer.column_classifiers[6].contains_a(token.lower()):
+		value += 1
+
+	# account for location length
+	temp = token.split()
+	lengths = [len(x) for x in temp]
+	if len(lengths) == 0:
+		return 0
+	avg_len = float(sum(lengths)) / float(len(lengths))
+	value += LOCATION_LENGTH - abs(avg_len - LOCATION_LENGTH)
+
+	# looking at format of individual words
+	for word in temp:
+		# check for common names
+		#TODO: Need to change because it will flag all single names as full names
+		if typer.column_classifiers[6].is_a(word.lower()):
+			value += 50
+		word_form = condense(make_form(word))
+		if word_form == 'Xx':
+			value += 2
+
+	
+	# account for number of spaces
+	spaces = len(temp) - 1
+	value += NUM_LOCATION_SPACES - abs(spaces - NUM_LOCATION_SPACES)
+	
+	return value
+
+def descriptions(token, typer):
