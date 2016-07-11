@@ -1,3 +1,12 @@
+# heuristics.py
+# this file contains all the string heuristics
+# that we use to predict what type a string token
+# belongs to. They take in a token and a classifier,
+# which is a helper class defined in classifier.py
+# TODO these need to be merged with the numeric 
+# heuristics somehow
+
+
 NAME_LENGTH = 7
 NUM_NAME_SPACES = 1.5
 LOCATION_LENGTH = 9
