@@ -208,7 +208,7 @@ def datestring_heuristic(token, typer):
 
 	# check forms
 	form = condense(make_form(token))
-	if my_typer.has_form(form):
+	if my_typer.has_form(token):
 		value += 10
 
 	for word in temp:
@@ -254,7 +254,7 @@ def full_address_heuristic(token, typer):
 		value += 10
 	    
 	form = condense(make_form(token))
-	if my_typer.has_form(form):
+	if my_typer.has_form(token):
 		value += 10
 
 	for word in temp:
@@ -303,7 +303,7 @@ def street_address_heuristic(token, typer):
 
 	# check if it matches a condensed form
 	form = condense(make_form(token))
-	if my_typer.has_form(form):
+	if my_typer.has_form(token):
 		value += 10
 
 	# check examples
@@ -339,7 +339,7 @@ def city_state_heuristic(token, typer):
 
 	# check if it matches a condensed form
 	form = condense(make_form(token))
-	if my_typer.has_form(form):
+	if my_typer.has_form(token):
 		value += 10
 
 	# check examples
@@ -377,7 +377,7 @@ def email_heuristic(token, typer):
 	if my_typer.contains_a(token.lower()):
 		value += 1
 
-	regex = re.compile('[Xx0\W]*@[Xx0\W]*.x')
+	regex = re.compile(r'[Xx0\W]*@[Xx0\W]*.x')
 	if regex.search(token):
 		value += 20
 	
