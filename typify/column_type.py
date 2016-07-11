@@ -31,14 +31,25 @@ class column_typer:
 	def table_typify(self, table):
 		'''takes in a table and returns a
 		tuple'''
-		actual_types = []
-		for col in table.getColumns():
-			actual_types.append(col.colName)
-		column_predictions = []
+		actual = []
+		predictions = []
+		fractions = []
 		for elem in table.getColumns():
 			column = elem.rows
 			guesses = column_typify(column)
-			column_predictions.append()
+			prediction, fraction = column_predict(guesses)
+			actual.append(col.colName)
+			predictions.append(prediction)
+			fractions.append(fraction)
+		results = []
+		for i in range(len(table.getColumns())):
+			a = actual[i]
+			p = predictions[i]
+			f = fractions[i]
+			t = (a, p, f)
+			results.append(t)
+		return results
+
 
 	def column_predict(self, guesses):
 		'''takes in a list of predictions for
