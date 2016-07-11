@@ -378,7 +378,7 @@ def email_heuristic(token, typer):
 	if my_typer.contains_a(token.lower()):
 		value += 1
 
-	regex = re.compile('[Xx0\W]*@[Xx0\W]*.x')
+	regex = re.compile(r'[Xx0\W]*@[Xx0\W]*.x')
 	if regex.search(token):
 		value += 20
 	

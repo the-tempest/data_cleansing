@@ -61,4 +61,32 @@ def normalize(val, maxVal):
 	#TODO: Make it quadratic or logarithmic or something to make it work better
 
 
-#
+#NAMES
+regex = re.compile(r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$''')
+
+#FIRST NAMES
+regex = re.compile(r'''^[A-Z][a-z'-]*$''')
+
+#LAST NAMES
+regex = re.compile(r'''^[A-Z][a-zA-Z'-]*$''')
+
+#DATESTRINGS
+regex = re.compile(r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$''')
+
+#FULL_ADDRESSES
+regex = re.compile(r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$''')
+
+#STREET_ADDRESSES
+regex = re.compile(r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?$''')
+
+#CITY_STATE
+regex = re.compile(r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$''')
+
+#EMAIL
+regex = re.compile(r'''^\S*?@\S*?(?:\.\S*?)+$''')
+
+#LOCATION
+regex = re.compile(r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$''')
+
+#DESCRIPTION
+regex = re.compile(r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$''')
