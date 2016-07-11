@@ -79,7 +79,29 @@
 
 	// upload JPEG files
 	function UploadFile(file) {
+		var formData = new FormData();
+		formData.append('file', file);
+		$.ajax({
+			//dataType: 'json',
+			type: "POST",
+			url: "/process",
+			data: formData,
+			processData: false,  // tell jQuery not to process the data
+			contentType: false,  // tell jQuery not to set contentType
+			success: function (res) {
+				$("#data-cleaning").html("")
+				/*var keys = Object.keys(res);
 
+				for (var key in res) {
+					$("#result").append("<p><b>" + key + "</b>: " + res[key] + "</p> <br>");
+				}*/
+				console.log(res);
+			},
+			error: function (t, b, err){
+				console.log(t);
+			}
+		});
+		/*
 		// following line is not necessary: prevents running on SitePoint servers
 		if (location.host.indexOf("sitepointstatic") >= 0) return
 
@@ -110,7 +132,7 @@
 			xhr.setRequestHeader("X_FILENAME", file.name);
 			xhr.send(file);
 
-		}
+		}*/
 
 	}
 
@@ -136,7 +158,7 @@
 			filedrag.style.display = "block";
 
 			// remove submit button
-			submitbutton.style.display = "none";
+			//submitbutton.style.display = "none";
 		}
 
 	}
