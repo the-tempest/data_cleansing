@@ -20,9 +20,7 @@ ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
 
 class column_typer:
-	#TODO make it loop over a table instead of just one column at a time
-	def __init__(self, col):
-		self.reset(col)
+	def __init__(self, table):
 		self.build_classifiers()
 
 	def build_report(self, table):
@@ -63,7 +61,6 @@ class column_typer:
 			t = (a, p, f)
 			results.append(t)
 		return results
-
 
 	def column_predict(self, guesses):
 		'''takes in a list of predictions for
@@ -172,24 +169,44 @@ class column_typer:
 		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
 		self.column_classifiers.append(classifier('addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
 
+		# street addresses ---------------------------
+		# TODO fix
+		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
+		for x in range(len(address_types)):
+			address_types.append(address_types[x] + ', Xx. 0')
+			address_types.append(address_types[x] + ', Xx 0')
+			address_types.append(address_types[x] + ', x. 0')
+			address_types.append(address_types[x] + ', x 0')
+			address_types.append(address_types[x] + ' Xx. 0')
+			address_types.append(address_types[x] + ' Xx 0')
+			address_types.append(address_types[x] + ' x. 0')
+			address_types.append(address_types[x] + ' x 0')
 
-		# street addresses
+		for x in range(len(address_types)):
+			address_types.append(address_types[x] + ', Xx, XX 0')
+			address_types.append(address_types[x] + ', Xx Xx, XX 0')
+			address_types.append(address_types[x] + ' Xx, XX 0')
+			address_types.append(address_types[x] + ' Xx Xx, XX 0')
 
-		# city state
+		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+		self.column_classifiers.append(classifier('street addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
+
+		# city state ---------------------------------
+		# TODO fix
+		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+		self.column_classifiers.append(classifier('street addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
 
 		# email --------------------------------------
+		#TODO fix
+		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+		self.column_classifiers.append(classifier('street addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))		
 
-		# location
+		# location -----------------------------------
+		# TODO fix
+		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+		self.column_classifiers.append(classifier('street addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
 
-		# descriptions
-
-	def reset(self, col):
-		'''resets the dictionaries and other data members so that a different set of data can be run'''
-		self.column_list = col.rows
-		self.column_name = col.colName
-		self.prev_column_list = col.prev
-		self.next_column_list = col.next
-		self.column_type_dict = {'full names': 0,'first names': 0,'last names':0, 'datestrings':0, 'dates': 0,'times': 0,'datetimes': 0, 'addresses': 0, 'numbers': 0, 'zipnumbers': 0, 'misc': 0}
-		self.column_length = len(self.column_list)
-		self.line_form_dict = {}
-		self.cond_column_form = ''
+		# descriptions -------------------------------
+		# TODO fix
+		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+		self.column_classifiers.append(classifier('street addresses', legal_symbols, address_types, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
