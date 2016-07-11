@@ -116,11 +116,10 @@ def main(arg):
     # for testing
     #columnTypePairs = {"city" : "location", "Name": "name"} ;
 
-    ##with open('output/columnTypes.txt', 'w') as outfile:
+    ##with open('output/' + filename + '.txt', 'w') as outfile:
     #    json.dump(columnTypePairs, outfile);
 
     '''
-
 
     cnx.commit()
     cursor.close()

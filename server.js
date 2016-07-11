@@ -59,6 +59,7 @@ app.post('/process', function(req, resp) {
                PythonShell.run('main.py', options, function (err) {
                  if (err) throw err;
                  console.log('finished');
+                 //fs.readFile('output/' + file_name + '.txt', 'utf8', function (err, data) {
                  fs.readFile('output/columnTypes.txt', 'utf8', function (err, data) {
                     if (err) throw err;
                       obj = JSON.parse(data);
