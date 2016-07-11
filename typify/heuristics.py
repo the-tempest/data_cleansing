@@ -284,7 +284,6 @@ def location_heuristic(token, typer):
 	elif 'country' in typer.column_name.lower():
 		value += 10
 
-
 	# counting common features of locations
 	if typer.column_classifiers[6].contains_a(token.lower()):
 		value += 1
@@ -306,7 +305,6 @@ def location_heuristic(token, typer):
 		word_form = condense(make_form(word))
 		if word_form == 'Xx':
 			value += 2
-
 	
 	# account for number of spaces
 	spaces = len(temp) - 1
@@ -325,7 +323,6 @@ def descriptions(token, typer):
 		return value
 
 	# check column name
-	#TODO fix this part of the heuristic to accurately reflect descriptions
 	if 'description' in typer.column_name.lower():
 		value += 10
 	if 'note' in typer.column_name.lower():
@@ -349,3 +346,4 @@ def descriptions(token, typer):
 		value += len_split_token
 
 	return value
+
