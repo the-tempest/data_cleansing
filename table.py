@@ -1,10 +1,11 @@
 import sys, mysql.connector
 execfile('column.py');
 
-def getRows(columnName, fileName):
-    query = "SELECT " + columnName + " FROM " + filename;
+def getRows(columnName, fileName, cursor):
+    query = "SELECT " + columnName + " FROM " + fileName;
     cursor.execute(query);
     rows = cursor.fetchall();
+    #print rows
     for j in range(len(rows)):
         rows[j] = str(''.join(rows[j]));
     return rows;
@@ -12,14 +13,18 @@ def getRows(columnName, fileName):
 def getTable(tablename, u='root', p='123', h='localhost', d='world'):
     cnx = mysql.connector.connect(user=u, password=p, host=h, database=d);
     cursor = cnx.cursor();
-    newTable = table(filename);
-    query = "SHOW columns FROM" + tablename;
+    newTable = table(tablename);
+    query = "SHOW columns FROM " + tablename;
     cursor.execute(query)
-    columns = cursor.fetchall();
-    print columns;
+    cols = cursor.fetchall();
+    columns = []
+    for i in range(len(cols)):
+        columns.append(str(cols[i][0]))
+
+    #print columns;
     for i in range(len(columns)):
         colName = columns[i];
-        data = getRows(colName)
+        data = getRows(colName, tablename, cursor)
         #column_name = normalize_name(colName)
         newCol = column(data, colName);
         newTable.addColumn(newCol);
@@ -27,3 +32,4 @@ def getTable(tablename, u='root', p='123', h='localhost', d='world'):
     cursor.close()
     cnx.close()
     return newTable;
+
