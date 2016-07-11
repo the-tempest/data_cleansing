@@ -8,7 +8,6 @@ def dict_max(Adict):
 		if Adict[key] > max_val:
 			max_val = Adict[key]
 			max_key = key
-
 	return max_key
 
 def key_sum(Adict):
@@ -23,11 +22,12 @@ def make_form(inString):
 	'''Turns the input string into a string that represents the general form of the string'''
 	returnString = ''
 	for char in inString:
-		if (ord(char) <= 57 and ord(char) >= 48):
+		ord_char = ord(char)
+		if ord_char <= 57 and ord_char >= 48:
 			returnString += '0'
-		elif (ord(char) <= 90 and ord(char) >= 65):
+		elif ord_char <= 90 and ord_char >= 65:
 			returnString += 'X'
-		elif (ord(char) >= 97 and ord(char) <= 122):
+		elif ord_char >= 97 and ord_char <= 122:
 			returnString += 'x'
 		else:
 			returnString += char
@@ -37,14 +37,15 @@ def condense(inString):
 	'''Turns the input form string into a standardized form string with word and number lengths removed'''
 	condString = ''
 	index = 0
-	while index < len(inString):
+	length = len(inString)
+	while index < length:
 		condString += inString[index]
 		if inString[index] == 'x':
-			while (index < len(inString) and inString[index] == 'x'):
+			while (index < length and inString[index] == 'x'):
 				index += 1
 			continue
 		if inString[index] == '0':
-			while (index < len(inString) and inString[index] == '0'):
+			while (index < length and inString[index] == '0'):
 				index += 1
 			continue
 		index += 1

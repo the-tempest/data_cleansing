@@ -7,9 +7,9 @@ First names
 Last names
 Datestrings
 Full Addresses
+Locations
 
 NOT:
-Locations
 Product Names
 Descriptions
 Email address
