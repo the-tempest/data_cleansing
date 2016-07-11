@@ -216,16 +216,20 @@ class column_typer:
 		self.cond_column_form = ''
 
 #NAMES
-#regex = re.compile('[a-zA-Z'-]*,? ([a-zA-Z'-]*)* [a-zA-Z'-]*')
+regex = re.compile(r'[a-zA-Z'-]*,? (?:[a-zA-Z'-]*)* [a-zA-Z'-]*')
 
 #FIRST NAMES
-#regex = re.compile('[A-Z][a-z]*')
+regex = re.compile(r'[A-Z][a-z'-]*')
 
 #LAST NAMES
-#regex = re.compile('[A-Z][a-zA-Z]*')
+regex = re.compile(r'[A-Z][a-zA-Z'-]*')
 
 #DATESTRINGS
-#regex = re.compile('([A-Z][a-zA-Z]*\.?,? )?([0-3][0-9] )?[A-Z][a-zA-Z]*\.?,?' ([0-3][0-9]\.?,? )?[0-9]*)
+regex = re.compile(r'^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$')
+
+#FULL_ADDRESSES
+regex = re.compile(r'^\d*\s(?:[NSEW]\.?|[a-zA-Z][a-z]{3,4})?\s[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?,?\s[a-zA-Z]*?,?\s(?:\d{5}|\d{5}[\s.-]?\d{4})$')
+
 
 """
 for item in elem.split():
