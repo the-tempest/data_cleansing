@@ -61,3 +61,4 @@ def normalize(val, maxVal):
 	#TODO: Make it quadratic or logarithmic or something to make it work better
 
 
+#
