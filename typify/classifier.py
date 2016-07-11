@@ -8,6 +8,7 @@ class classifier:
 			I wrote in many known forms but there are plenty that I missed
 		4. A list of a set of known examples for the particular type (Ex: John)
 		5. A list of the known features or common strings that are found in examples of this type (Ex: Dr. or Mr. or II)'''
+	# TODO change all list to dictionaries, so it's constant time
 	def __init__(self, n, pv, kf, ke, cf):
 		self.name = n
 		self.possVals = pv

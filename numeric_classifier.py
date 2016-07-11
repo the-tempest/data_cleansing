@@ -56,25 +56,29 @@ class numeric_classifier:
 
 # want to build a bunch of these and save them should train these. 
 class numeric_type:
-	def __init__(self, name):
-		self.types_feature_dictionary = {} # a dictionary of feature dictionaries
+	def __init__(self, name, types = [], features =[]):
 		self.name = name
-		self.features = []
+		self.features = features
+		self.types = types
+		self.types_feature_dictionary = {} # a dictionary of feature dictionaries
 
 
 	def train(self, training_dir):
-		''' Will train given some training data, can edit this later. must give path to directory'''
+		''' Will train given some training data, can edit this later. must give path to directory
+			need to put r in front of training_dir for windows at least'''
 
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
-			file_path = training_dir + training_file # build up the whole path
-			
-
-			table_name = subprocess.check_output([sys.executable, "extraction.py", training_file]) #
-			t = getTable(table_name) #  returns table object
+			file_path = training_dir + "\\" + training_file # build up the whole path
+			print file_path + "\n"
+			print training_file + "\n"
+			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
+			t = getTable(table_name, "root", "spence23", "localhost", "world") #  returns table object
 			column_names = []
 			for column in t.columns:
-				column_names.append(column.colName)
+				if column in self.types:
+					column_names.append(column.colName)
+			
 			#for type in types:
 				#if type in column_names:
 			for col in column_names:	
