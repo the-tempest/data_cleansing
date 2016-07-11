@@ -12,8 +12,8 @@ class table:
         self.column_index = {}
         self.columns = [];
         
-    def build column_index(self):
-    	for i in range(len(self.coolumns))
+    def build_column_index(self):
+    	for i in range(len(self.columns)):
     		self.column_index[self.columns[i].colName] = i 
 
     def addColumn(self, col):

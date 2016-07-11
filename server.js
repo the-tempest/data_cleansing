@@ -12,7 +12,7 @@ var PythonShell = require('python-shell');
 
 
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 2000));
 
 app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
@@ -56,9 +56,10 @@ app.post('/process', function(req, resp) {
                var options = {
                  args: [new_location+file_name]
                };
-               PythonShell.run('extraction.py', options, function (err) {
+               PythonShell.run('main.py', options, function (err) {
                  if (err) throw err;
                  console.log('finished');
+                 //fs.readFile('output/' + file_name + '.txt', 'utf8', function (err, data) {
                  fs.readFile('output/columnTypes.txt', 'utf8', function (err, data) {
                     if (err) throw err;
                       obj = JSON.parse(data);

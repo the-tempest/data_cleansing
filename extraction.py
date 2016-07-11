@@ -81,6 +81,9 @@ def main(arg):
                     new_item.append(str(item[key]))
                 cursor.execute(query, new_item);
 
+    else:
+        sys.exit();
+
     #columnTypePairs = {};
 
 
@@ -113,11 +116,10 @@ def main(arg):
     # for testing
     #columnTypePairs = {"city" : "location", "Name": "name"} ;
 
-    ##with open('output/columnTypes.txt', 'w') as outfile:
+    ##with open('output/' + filename + '.txt', 'w') as outfile:
     #    json.dump(columnTypePairs, outfile);
 
     '''
-
 
     cnx.commit()
     cursor.close()
