@@ -84,6 +84,7 @@ class numeric_type:
 			for col in column_names:	
 				index = t.column_index[col]
 				column_obj = t.column_names[index] # we have the column object now 
+				print column_obj.colName
 				self.train_type(column_obj)
 
 	def train_type(self, col):
@@ -96,7 +97,7 @@ class numeric_type:
 				curr_type_dict = self.types_feature_dictionary[col.colName] # dictionary 
 			
 				for feature in self.features: # string of features 
-			
+					
 					if feature in curr_type_dict: # if feature dict exits
 						curr_feature_dict = curr_type_dict[feature]
 						build_feature_freq(curr_feature_dict, item, feature)
