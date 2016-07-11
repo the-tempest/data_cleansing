@@ -23,7 +23,6 @@ EMAIL_POS          = 7
 LOCATION_POS       = 8
 DESCRIPTION_POS    = 9
 
-
 def full_name_heuristic(token, typer):
 	'''returns a  name heuristic value or negative infinity
 	if it definitely isn't a name'''
@@ -70,7 +69,7 @@ def full_name_heuristic(token, typer):
 	spaces = len(temp) - 1
 	value += NUM_SPACES - abs(spaces - NUM_NAME_SPACES)
 	
-	return value
+	return 'full name', value
 
 def first_name_heuristic(token, typer):
 	'''returns a  first name heuristic value or negative infinity
@@ -117,7 +116,7 @@ def first_name_heuristic(token, typer):
 	if word_form.strip('.') == 'X':
 		value += 1
 
-	return value
+	return 'first name', value
 
 def last_name_heuristic(token, typer):
 	'''returns a last name heuristic value or negative infinity
@@ -166,7 +165,7 @@ def last_name_heuristic(token, typer):
 	if word_form.strip('.') == 'X':
 		value += 1
 
-	return value
+	return 'last name', value
 
 def datestring_heuristic(token, typer):
 	'''returns a certainty value for token being a date string
@@ -216,7 +215,7 @@ def datestring_heuristic(token, typer):
 		if my_typer.is_a(word):
 			value += 20
 
-	return value
+	return 'datestring', value
 
 def full_address_heuristic(token, typer):
 	'''returns a certainty value for token being an address
@@ -262,7 +261,7 @@ def full_address_heuristic(token, typer):
 		if my_typer.is_a(word):
 			value += 20
 
-	return value
+	return 'full address', value
 
 def street_address_heuristic(token, typer):
 	'''returns a certainty value for token being a
@@ -312,7 +311,7 @@ def street_address_heuristic(token, typer):
 		if my_typer.is_a(word):
 			value += 20
 
-	return value
+	return 'street address', value
 
 def city_state_heuristic(token, typer):
 	'''returns a certainty value for token being a
@@ -348,7 +347,7 @@ def city_state_heuristic(token, typer):
 		if my_typer.is_a(word):
 			value += 10
 
-	return value
+	return 'city state', value
 
 def email_heuristic(token, typer):
 	'''returns a certainty value for token being an email
@@ -382,7 +381,7 @@ def email_heuristic(token, typer):
 	if regex.search(token):
 		value += 20
 	
-	return value
+	return 'email', value
 
 def location_heuristic(token, typer):
 	'''returns a certainty value for token being a location
@@ -432,7 +431,7 @@ def location_heuristic(token, typer):
 	spaces = len(temp) - 1
 	value += NUM_LOCATION_SPACES - abs(spaces - NUM_LOCATION_SPACES)
 	
-	return value
+	return 'location', value
 
 def description_heuristic(token, typer):
 	'''returns a certainty value for token being a description
@@ -470,4 +469,10 @@ def description_heuristic(token, typer):
 	else:
 		value += len_split_token
 
-	return value
+	return 'description', value
+
+
+heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
+				datestring_heuristic, full_address_heuristic, street_address_heuristic,
+				city_state_heuristic, email_heuristic, location_heuristic,
+				description_heuristic]

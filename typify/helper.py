@@ -59,6 +59,3 @@ def normalize(val, maxVal):
 	'''Normalizes the input value over a 0-1 scale'''
 	return float(val)/float(maxVal)
 	#TODO: Make it quadratic or logarithmic or something to make it work better
-
-
-#
