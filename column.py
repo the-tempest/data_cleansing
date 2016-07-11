@@ -9,7 +9,13 @@ class column:
 class table:
     def __init__(self, name):
         self.name = name;
+        self.column_index = {}
         self.columns = [];
+        
+    def build_column_index(self):
+    	for i in range(len(self.columns)):
+    		self.column_index[self.columns[i].colName] = i 
+
     def addColumn(self, col):
         self.columns.append(col)
     def getColumns(self):
