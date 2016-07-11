@@ -1,17 +1,3 @@
-What we are classifying:
+Column types left to classify:
 
-IMPLEMENTED:
-Full Names
-First names
-Last names
-Datestrings
-Full Addresses
-Locations
-Email address
-
-NOT:
 Product Names
-Descriptions
-Street Addresses
-City, state pairs
-Misc
