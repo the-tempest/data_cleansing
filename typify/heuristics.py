@@ -315,3 +315,37 @@ def location_heuristic(token, typer):
 	return value
 
 def descriptions(token, typer):
+	'''returns a certainty value for token being a description
+	or zero if it definitely isn't a description'''
+	value = 0
+	char_val_list = []
+	for char in token:
+		char_val_list.append(ord(char))
+	if not typer.column_classifiers[7].can_be(char_val_list):
+		return value
+
+	# check column name
+	#TODO fix this part of the heuristic to accurately reflect descriptions
+	if 'description' in typer.column_name.lower():
+		value += 10
+	if 'note' in typer.column_name.lower():
+		value += 10
+
+	# counting common features of descriptions
+	if typer.column_classifiers[7].contains_a(token.lower()):
+		value += 1
+
+	# account for description length
+	# using number of spaces
+	# maxes out at 100
+	# since that's where it normalizes
+	split_token = token.split()
+	len_split_token = len(split_token)
+	if len_split_token == 0:
+		value = 0
+	if len_split_token >= 100:
+		value = 100
+	else:
+		value += len_split_token
+
+	return value
