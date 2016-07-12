@@ -30,6 +30,7 @@ def main(arg):
 
             # creating new database
             query = 'drop table if exists ' + filename;
+            
             cursor.execute(query)
 
             # new table and headers

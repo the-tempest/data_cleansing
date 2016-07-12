@@ -14,6 +14,7 @@ def getTable(tablename, u='root', p='123', h='localhost', d='world'):
     cnx = mysql.connector.connect(user=u, password=p, host=h, database=d);
     cursor = cnx.cursor();
     newTable = table(tablename);
+    #print tablename   
     query = "SHOW columns FROM " + tablename;
     cursor.execute(query)
     cols = cursor.fetchall();

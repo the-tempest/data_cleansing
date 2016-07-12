@@ -46,7 +46,8 @@ class numeric_classifier:
 		switcher = {"length" : self.compute_feature_prob(len(arg), curr_dict ),
 					"slashes" : self.compute_feature_prob(self.count_a_char(arg, "/"), curr_dict),
 					"dashes" : self.compute_feature_prob(self.count_a_char(arg, "-"), curr_dict),
-					"decimal points": self.compute_feature_prob(self.count_a_char(arg, "."), curr_dict)
+					"decimal points": self.compute_feature_prob(self.count_a_char(arg, "."), curr_dict),
+					"spaces": self.compute_feature_prob(self.count_a_char(arg, " "), curr_dict)
 					}
 			
 		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented 
@@ -94,9 +95,11 @@ class numeric_trainer:
 
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
-			file_path = training_dir + "\\" + training_file # build up the whole path
+			file_path = training_dir  + "\\" + training_file # build up the whole path
 			
 			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
+			##print 101
+			#print table_name
 			t = getTable(table_name, "root", "spence23", "localhost", "world") #  returns table object
 			t.build_column_index()
 			column_names = []
@@ -162,7 +165,8 @@ class numeric_trainer:
 		switcher = {"length" :  len(arg),
 					"slashes" : self.count_a_char(arg, "/"),
 					"dashes" : self.count_a_char(arg, "-"),
-					"decimal points" : self.count_a_char(arg, ".")
+					"decimal points" : self.count_a_char(arg, "."),
+					"spaces": self.count_a_char(arg, " ")
 					}
 			
 		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented 
