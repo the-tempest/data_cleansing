@@ -118,6 +118,8 @@ class numeric_trainer:
 		row_list = col.rows
 	
 		for item in row_list: # each element
+			if item == "NULL":
+				continue
 			#print item
 			if col.colName in self.types_feature_dictionary: #if the type is in the dict
 
