@@ -7,8 +7,12 @@ import pickle
 execfile('table.py')
 training_directory = r"uploaded\numeric_training_data"
 
+features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points']
+types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip']
+
+
 class numeric_classifier:
-	def __init__(self, numeric_types = [], features = []):
+	def __init__(self, numeric_types = types, features = features):
 		self.features = features
 		self.numeric_types = numeric_types #list of all numeric_type classes (strings)
 		
