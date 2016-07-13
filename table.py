@@ -27,9 +27,9 @@ def getTable(tablename, u='root', p='123', h='localhost', d='world'):
         colName = columns[i];
         data = getRows(colName, tablename, cursor)
         #column_name = normalize_name(colName)
-        firstNum = "0"
-        for x in range(10):
-        	colName.replace(chr(ord(firstNum) + x), "") # remove characters 0-9 in column name 
+        # firstNum = "0"
+        # for x in range(10): # not working.
+        # 	colName.replace(chr(ord(firstNum) + x), "") # remove characters 0-9 in column name 
 
         newCol = column(data, colName);
         newTable.addColumn(newCol);

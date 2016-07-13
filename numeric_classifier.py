@@ -78,12 +78,7 @@ class numeric_classifier:
 		dObj = u.load()
 		f.close()
 		return dObj
-		#"""Given a file name, load and return the object stored in the file."""
-        # f = open(sFilename,"r")
-        # u = picl.e.Unpickler(f)
-        # dObj = u.load()
-        # f.close()
-        # return dObj
+		
 
 class numeric_trainer:
 	def __init__(self, types = [], features =[]):
@@ -101,28 +96,30 @@ class numeric_trainer:
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
 			file_path = training_dir  + "\\" + training_file # build up the whole path
-			
 			print file_path + "\n"
-		
 			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
-			##print 101
-			print table_name
 			t = getTable(table_name, "root", "spence23", "localhost", "world") #  returns table object
-			t.build_column_index()
+			
 			column_names = []
+			
 			for column in t.columns:
-				if column.colName in self.types:
+				# remove characters 0-9 in column name 
+				firstNum = "0"
+				for x in range(10): 	
+					column.colName = column.colName.replace(chr(ord(firstNum) + x), "")
+				
+				t.build_column_index()
+
+				if column.colName in self.types: #building the columns we are going to train as long as they are types we want
 					column_names.append(column.colName)
-			#print column_names
-			#for type in types:
-				#if type in column_names:
+			
+		
 			for col in column_names:	
 				index = t.column_index[col]
 				column_obj = t.columns[index] # we have the column object now 
-				#print column_obj.colName
 				self.train_type(column_obj)
 
-		self.save(self.types_feature_dictionary, "types_feature_dictionary.dat")
+		#self.save(self.types_feature_dictionary, "types_feature_dictionary.dat")
 
 	def train_type(self, col):
 		row_list = col.rows
