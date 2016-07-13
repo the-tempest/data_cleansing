@@ -93,7 +93,7 @@ def main(arg):
 
 
     #def classify(col):
-        ''' takes a column object and runs Keith's script on it '''
+        ''' takes a column object and runs Keith's and Pawel's script on it '''
         '''coltyper = column_typer(col)
         t = coltyper.column_typify() #type
         columnTypePairs[columns[i]] = t'''
