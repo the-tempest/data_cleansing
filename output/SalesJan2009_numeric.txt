@@ -1,0 +1,12 @@
+Transaction_date: Date
+Product: Number
+Price: Number
+Payment_Type: Number
+Name: Number
+City: Number
+State: Number
+Country: Date
+Account_Created: Date
+Last_Login: Date
+Latitude: Latitude
+Longitude: Longitude
