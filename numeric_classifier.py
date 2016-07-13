@@ -6,7 +6,7 @@ import pickle
 import time
 
 execfile('table.py')
-training_directory = r"uploaded\numeric_training_data"
+training_directory = r"uploaded/numeric_training_data"
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points']
 types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP']
@@ -16,14 +16,14 @@ class numeric_classifier:
 	def __init__(self, numeric_types = types, features = features):
 		self.features = features
 		self.numeric_types = numeric_types #list of all numeric_type classes (strings)
-		
-		if os.path.isfile("types_feature_dictionary.dat"):		
+
+		if os.path.isfile("types_feature_dictionary.dat"):
 			self.feature_dictionary = self.load("types_feature_dictionary.dat")
 		else:
 			trainer = numeric_trainer(self.numeric_types, self.features)
 			trainer.train(training_directory)
 			self.feature_dictionary = trainer.types_feature_dictionary
-			
+
 
 	def classify(self, nText):
 		type_probabilities = {}
@@ -36,15 +36,15 @@ class numeric_classifier:
 				total_number = sum(curr_dictionary.itervalues())
 
 				posterier_type_prob = self.type_switch(feature, nText, curr_dictionary)
-				
+
 				type_probabilities[t] += posterier_type_prob
 
 		#find the max of all types to guess what the type of the column is
-		result = max(type_probabilities.iteritems(), key=operator.itemgetter(1))[0] 
+		result = max(type_probabilities.iteritems(), key=operator.itemgetter(1))[0]
 		#print type_probabilities
 		#print result
 		return result
-	
+
 
 	def type_switch(self, feature, arg, curr_dict): # need to build this up
 		''' feature is the thing we are using to compute a prob. arg is the given text from a cell dict is the type we are in. This function is looped from in classify'''
@@ -54,8 +54,8 @@ class numeric_classifier:
 					"decimal points": self.compute_feature_prob(self.count_a_char(arg, "."), curr_dict),
 					"spaces": self.compute_feature_prob(self.count_a_char(arg, " "), curr_dict)
 					}
-			
-		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented 
+
+		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented
 	def count_a_char(self, nText, char):
 		'''A helpful feature for dates probably '''
 		total = 0
@@ -71,7 +71,7 @@ class numeric_classifier:
 		else:
 			return 0 # or mabye 1
 
-	
+
 	def load(self, sFilename):
 		f = open(sFilename, "r")
 		u = pickle.Unpickler(f)
@@ -100,14 +100,14 @@ class numeric_trainer:
 
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
-			file_path = training_dir  + "\\" + training_file # build up the whole path
-			
+			file_path = training_dir  + "/" + training_file # build up the whole path
+
 			print file_path + "\n"
-		
+
 			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
 			##print 101
 			print table_name
-			t = getTable(table_name, "root", "spence23", "localhost", "world") #  returns table object
+			t = getTable(table_name, "root", "123", "localhost", "world") #  returns table object
 			t.build_column_index()
 			column_names = []
 			for column in t.columns:
@@ -116,9 +116,9 @@ class numeric_trainer:
 			#print column_names
 			#for type in types:
 				#if type in column_names:
-			for col in column_names:	
+			for col in column_names:
 				index = t.column_index[col]
-				column_obj = t.columns[index] # we have the column object now 
+				column_obj = t.columns[index] # we have the column object now
 				#print column_obj.colName
 				self.train_type(column_obj)
 
@@ -126,17 +126,17 @@ class numeric_trainer:
 
 	def train_type(self, col):
 		row_list = col.rows
-	
+
 		for item in row_list: # each element
 			if item == "NULL":
 				continue
 			#print item
 			if col.colName in self.types_feature_dictionary: #if the type is in the dict
 
-				curr_type_dict = self.types_feature_dictionary[col.colName] # dictionary 
-			
-				for feature in self.features: # string of features 
-					
+				curr_type_dict = self.types_feature_dictionary[col.colName] # dictionary
+
+				for feature in self.features: # string of features
+
 					if feature in curr_type_dict: # if feature dict exits
 						curr_feature_dict = curr_type_dict[feature]
 						self.build_feature_freq(curr_feature_dict, item, feature)
@@ -148,7 +148,7 @@ class numeric_trainer:
 				curr_type_dict = self.types_feature_dictionary[col.colName]
 
 				for feature in self.features:
-				
+
 					if feature in curr_type_dict: # if feature dict exits
 						curr_feature_dict = curr_type_dict[feature]
 						self.build_feature_freq(curr_feature_dict, item, feature)
@@ -157,7 +157,7 @@ class numeric_trainer:
 						self.build_feature_freq(curr_type_dict[feature], item , feature)
 
 				#print " invalid type/column name! FIX HEADER OR CODE"
-						
+
 	def build_feature_freq(self, curr_dict, nText, feature):
 		feature_result = self.feature_switch(feature, nText)
 		if feature_result in curr_dict:
@@ -175,8 +175,8 @@ class numeric_trainer:
 					"decimal points" : self.count_a_char(arg, "."),
 					"spaces": self.count_a_char(arg, " ")
 					}
-			
-		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented 
+
+		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented
 
 	def count_a_char(self, nText, char):
 		'''A helpful feature for dates probably '''

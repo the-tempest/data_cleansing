@@ -11,11 +11,11 @@ class classifier:
 		5. A list of the known features or common strings that are found in examples of this type (Ex: Dr. or Mr. or II)'''
 	def __init__(self, n, pv, reg, ke):
 		self.name = n
-		
+
 		self.possVals = {}
 		for elem in pv:
 			self.possVals[elem] = 1
-		
+
 		self.regEx = re.compile(reg)
 
 		self.knownExamples = {}
@@ -38,6 +38,6 @@ class classifier:
 	def is_a(self, inString):
 		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
 		for elem in inString:
-			if elem in self.commonFeatures:
+			if elem in self.knownExamples:
 				return True
 		return False
