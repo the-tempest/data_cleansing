@@ -9,7 +9,7 @@ class classifier:
 		3. A regular expression representing the form of the type
 		4. A list of a set of known examples for the particular type (Ex: John)
 		5. A list of the known features or common strings that are found in examples of this type (Ex: Dr. or Mr. or II)'''
-	def __init__(self, n, pv, reg, ke, cf):
+	def __init__(self, n, pv, reg, ke):
 		self.name = n
 		
 		self.possVals = {}
@@ -21,10 +21,6 @@ class classifier:
 		self.knownExamples = {}
 		for elem in ke:
 			self.knownExamples[elem] = 1
-		
-		self.commonFeatures = {}
-		for elem in cf:
-			self.commonFeatures[elem] = 1
 
 	def can_be(self, vals):
 		'''Tests whether the sequence of ascii values inputted has any that are not allowed in this particular type'''
@@ -41,10 +37,6 @@ class classifier:
 
 	def is_a(self, inString):
 		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
-		return inString in self.knownExamples
-
-	def contains_a(self, inString):
-		'''Tests whether the given string contains a common feature of the particular type'''
 		for elem in inString:
 			if elem in self.commonFeatures:
 				return True

@@ -53,8 +53,8 @@ class column_typer:
 		# generate data for the tuples
 		for elem in table.getColumns():
 			column = elem.rows
-			guesses = column_typify(column)
-			prediction, fraction = column_predict(guesses)
+			guesses = self.column_typify(column)
+			prediction, fraction = self.column_predict(guesses)
 			actual.append(elem.colName)
 			predictions.append(prediction)
 			fractions.append(fraction)
@@ -105,7 +105,7 @@ class column_typer:
 		prediction for its type'''
 		certainties = {}
 		for f in heuristics:
-			tipe, value = f(token)
+			tipe, value = f(token, self)
 			certainties[tipe] = value
 		prediction = dict_max(certainties)
 		return prediction
@@ -142,30 +142,32 @@ class column_typer:
 				fa_regex, sa_regex, cs_regex, em_regex,
 				lo_regex, de_regex]
 
-		# known examples
-		full_name_ex = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
-		city_state_ex = []
+		
 		email_ex = []
 		location_ex = []
 		description_ex = []
 		known_examples = [full_name_ex, COMMON_FIRST_NAMES, COMMON_LAST_NAMES, COMMON_DATE_NAMES,
-						  COMMON_ADDRESS_NAMES, COMMON_ADDRESS_NAMES, city_state_ex, email_ex,
+						  COMMON_ADDRESS_NAMES, COMMON_ADDRESS_NAMES, COMMON_CITY_STATES, email_ex,
 						  location_ex, description_ex]
 
-		# common features
-		full_name_cf = COMMON_PREFIXES + COMMON_SUFFIXES
-		city_state_cf = []
-		email_cf = []
-		location_cf = []
-		description_cf = []
-		common_features = [full_name_cf, COMMON_PREFIXES, COMMON_SUFFIXES, COMMON_DATE_ABBREV,
-						   COMMON_ADDRESS_FEATURES, COMMON_ADDRESS_FEATURES, city_state_cf, email_cf,
-						   location_cf, description_cf]
+		# known examples
+		full_name_ex      = COMMON_PREFIXES + COMMON_SUFFIXES + COMMON_FIRST_NAMES + COMMON_LAST_NAMES
+		first_name_ex     = COMMON_PREFIXES + COMMON_FIRST_NAMES
+		last_name_ex      = COMMON_SUFFIXES + COMMON_LAST_NAMES
+		datestring_ex     = COMMON_DATE_NAMES + COMMON_DATE_ABBREV
+		full_address_ex   = COMMON_ADDRESS_NAMES + COMMON_ADDRESS_FEATURES + COMMON_STATEPROV_ABBREV + COMMON_CITY_STATES
+		street_address_ex = COMMON_ADDRESS_NAMES + COMMON_ADDRESS_FEATURES
+		city_state_ex     = COMMON_STATEPROV_ABBREV + COMMON_CITIES
+		email_ex          = COMMON_URL_EXTENSIONS + COMMON_EMAIL_DOMAINS
+		location_ex       = COMMON_CITIES + COMMON_LOCATION_FEATURES
+		description_ex    = COMMON_ADJECTIVES
+		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
+						  full_address_ex, street_address_ex, city_state_ex, email_ex,
+						  location_ex, description_ex]
 
 		for i in len(names):
 			curr = classifier(names[i],
 							  possible_values[i],
 							  regex[i],
-							  known_examples[i],
-							  common_features[i])
+							  known_examples[i])
 			self.classifiers.append(curr)

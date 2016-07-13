@@ -1,8 +1,8 @@
-output = open("URL_domain_extensions.txt", "w")
+output = open("adjectives.txt", "w")
 names = {}
-with open("raw_URL_domain_extensions.txt", "r") as f:
+with open("raw_adjectives.txt", "r") as f:
 	for line in f:
-		word = line.split()[0].lower()
+		word = line.split()[1].lower()
 		if word not in names:
 			names[word] = 1
 ret = "["
