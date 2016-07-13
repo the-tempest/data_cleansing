@@ -95,23 +95,11 @@ class numeric_trainer:
 
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
-<<<<<<< HEAD
+
 			file_path = training_dir  + "\\" + training_file # build up the whole path
 			print file_path + "\n"
 			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
 			t = getTable(table_name, "root", "spence23", "localhost", "world") #  returns table object
-			
-=======
-			file_path = training_dir  + "/" + training_file # build up the whole path
-
-			print file_path + "\n"
-
-			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
-			##print 101
-			print table_name
-			t = getTable(table_name, "root", "123", "localhost", "world") #  returns table object
-			t.build_column_index()
->>>>>>> 4a708e006eea611a27a5aa10e2edc1c9fdd9a61d
 			column_names = []
 			
 			for column in t.columns:
@@ -124,21 +112,12 @@ class numeric_trainer:
 
 				if column.colName in self.types: #building the columns we are going to train as long as they are types we want
 					column_names.append(column.colName)
-<<<<<<< HEAD
+
 			
 		
 			for col in column_names:	
 				index = t.column_index[col]
 				column_obj = t.columns[index] # we have the column object now 
-=======
-			#print column_names
-			#for type in types:
-				#if type in column_names:
-			for col in column_names:
-				index = t.column_index[col]
-				column_obj = t.columns[index] # we have the column object now
-				#print column_obj.colName
->>>>>>> 4a708e006eea611a27a5aa10e2edc1c9fdd9a61d
 				self.train_type(column_obj)
 
 		#self.save(self.types_feature_dictionary, "types_feature_dictionary.dat")
