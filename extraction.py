@@ -25,9 +25,10 @@ def main(arg):
             reader = csv.reader(f)
             columns = next(reader)
             columnsToInitialize = []
-            for col in columns:
-                columnsToInitialize.append(col+ ' TEXT');
-
+            columnNames = []
+            for i in range(len(columns)):
+                columns[i] = columns[i].replace(" ", "_")
+                columnsToInitialize.append(columns[i]+ ' TEXT');
             # creating new database
             query = 'drop table if exists ' + filename;
 
@@ -57,8 +58,9 @@ def main(arg):
             columns = list(set(columns))
 
             columnsToInitialize = []
-            for col in columns:
-                columnsToInitialize.append(col+ ' TEXT');
+            for i in range(len(columns)):
+                columns[i] = columns[i].replace(" ", "_")
+                columnsToInitialize.append(columns[i]+ ' TEXT');
 
 
             # creating new database
