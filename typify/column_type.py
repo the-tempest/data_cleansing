@@ -113,7 +113,7 @@ class column_typer:
 	def build_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created 
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
-		# TODO complete rest of classifiers
+		# TODO complete classifiers
 		self.column_classifiers = []
 
 		# names
@@ -123,9 +123,11 @@ class column_typer:
 
 		# possible values
 		datestring_pv = [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
+		email_pv = [43, 45, 46, 64, 95] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
+		description_pv = []
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
-					 ASCII_ADDRESS, ASCII_ADDRESS, [], [],
-					 [], [] ]
+					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
+					 ASCII_NAME, description_pv]
 
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
@@ -141,16 +143,24 @@ class column_typer:
 				lo_regex, de_regex]
 
 		# known examples
-		fn_ex = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
-		known_examples = [fn_ex, COMMON_FIRST_NAMES, COMMON_LAST_NAMES, COMMON_DATE_NAMES,
-						  COMMON_ADDRESS_NAMES, COMMON_ADDRESS_NAMES, [], [],
-						  [], [] ]
+		full_name_ex = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
+		city_state_ex = []
+		email_ex = []
+		location_ex = []
+		description_ex = []
+		known_examples = [full_name_ex, COMMON_FIRST_NAMES, COMMON_LAST_NAMES, COMMON_DATE_NAMES,
+						  COMMON_ADDRESS_NAMES, COMMON_ADDRESS_NAMES, city_state_ex, email_ex,
+						  location_ex, description_ex]
 
 		# common features
-		fn_cf = COMMON_PREFIXES + COMMON_SUFFIXES
-		common_features = [fn_cf, COMMON_PREFIXES, COMMON_SUFFIXES, COMMON_DATE_ABBREV,
-						   COMMON_ADDRESS_FEATURES, COMMON_ADDRESS_FEATURES, [], [],
-						   [], [] ]
+		full_name_cf = COMMON_PREFIXES + COMMON_SUFFIXES
+		city_state_cf = []
+		email_cf = []
+		location_cf = []
+		description_cf = []
+		common_features = [full_name_cf, COMMON_PREFIXES, COMMON_SUFFIXES, COMMON_DATE_ABBREV,
+						   COMMON_ADDRESS_FEATURES, COMMON_ADDRESS_FEATURES, city_state_cf, email_cf,
+						   location_cf, description_cf]
 
 		for i in len(names):
 			curr = classifier(names[i],
