@@ -58,8 +58,9 @@ def main(arg):
             columns = list(set(columns))
 
             columnsToInitialize = []
-            for col in columns:
-                columnsToInitialize.append(col+ ' TEXT');
+            for i in range(len(columns)):
+                columns[i] = columns[i].replace(" ", "_")
+                columnsToInitialize.append(columns[i]+ ' TEXT');
 
 
             # creating new database
