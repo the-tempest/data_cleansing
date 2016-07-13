@@ -60,6 +60,13 @@ def normalize(val, maxVal):
 	return float(val)/float(maxVal)
 	#TODO: Make it quadratic or logarithmic or something to make it work better
 
+def no_letters(inString):
+	'''Returns true if there are no letters in an input string''' 
+	for char in inString:
+		if ((ord(char) >= 65 and ord(char) <= 90) and (ord(char) >= 97 and ord(char) <= 122)):
+			return False
+	return True
+
 
 #NAMES
 regex = re.compile(r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$''')

@@ -43,7 +43,7 @@ app.post('/process', function(req, resp) {
 
 
        /* Location where we want to copy the uploaded file */
-       var new_location = 'u/';
+       var new_location = 'uploaded/';
        /*
        console.log(files);
        for (var i = 0; i < files.length; i++) {

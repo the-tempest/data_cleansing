@@ -7,15 +7,14 @@ class classifier:
 		2. A list of possible ascii values that can be contained in the type (Ex: names can contain lower_case_letters
 			97-122 but cannot contain '=' 61)
 		3. A regular expression representing the form of the type
-		4. A list of a set of known examples for the particular type (Ex: John)
-		5. A list of the known features or common strings that are found in examples of this type (Ex: Dr. or Mr. or II)'''
+		4. A list of a set of known examples for the particular type (Ex: John)'''
 	def __init__(self, n, pv, reg, ke):
 		self.name = n
-		
+
 		self.possVals = {}
 		for elem in pv:
 			self.possVals[elem] = 1
-		
+
 		self.regEx = re.compile(reg)
 
 		self.knownExamples = {}
@@ -38,6 +37,6 @@ class classifier:
 	def is_a(self, inString):
 		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
 		for elem in inString:
-			if elem in self.commonFeatures:
+			if elem in self.knownExamples:
 				return True
 		return False

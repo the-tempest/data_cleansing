@@ -20,6 +20,7 @@ def main(arg):
     #"./uploaded/SalesJan2009.csv"
     fn, file_extension = os.path.splitext(arg);
     filename = os.path.basename(fn);
+    filename = filename.replace(" ", "_")
     if (file_extension == '.csv'):
         with open (fn+file_extension, 'rU') as f:
             reader = csv.reader(f)
@@ -92,7 +93,7 @@ def main(arg):
 
 
     #def classify(col):
-        ''' takes a column object and runs Keith's script on it '''
+        ''' takes a column object and runs Keith's and Pawel's script on it '''
         '''coltyper = column_typer(col)
         t = coltyper.column_typify() #type
         columnTypePairs[columns[i]] = t'''

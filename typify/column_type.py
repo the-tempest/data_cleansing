@@ -5,10 +5,12 @@
 # a report in the form of a string
 
 import mysql.connector, os, re
-execfile("heuristics.py")
-execfile("helper.py")
-execfile("features/features.py")
-execfile("classifier.py")
+execfile("typify/heuristics.py")
+execfile("typify/helper.py")
+execfile("typify/features/features.py")
+execfile("typify/classifier.py")
+execfile('numeric_classifier.py')
+execfile('table.py')
 
 #The form strings are in the process of being totally replaced with regular expressions
 #TODO: unicode support
@@ -24,10 +26,12 @@ NAME_REGEX = r'''^[A-Z][a-z'-]*$'''
 class column_typer:
 	def __init__(self, table):
 		self.build_classifiers()
+		self.my_table = table
+		self.numClass = numeric_classifier()
 
-	def build_report(self, table):
+	def build_report(self):
 		ret = ''
-		results = table_typify(table)
+		results = self.table_typify(self.my_table)
 		for item in results:
 			actual = item[0]
 			prediction = item[1]
@@ -39,8 +43,8 @@ class column_typer:
 			line += " with a certainty of "
 			line += fraction
 			line += "%.\n\n"
-			line += ret
-		return ret 
+			ret += line
+		return ret
 
 	def table_typify(self, table):
 		'''takes in a table and returns a list
@@ -54,6 +58,7 @@ class column_typer:
 		# generate data for the tuples
 		for elem in table.getColumns():
 			column = elem.rows
+			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
 			prediction, fraction = self.column_predict(guesses)
 			actual.append(elem.colName)
@@ -82,7 +87,7 @@ class column_typer:
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
-			fraction = "{0:.2f}".format(fraction) 
+			fraction = "{0:.2f}".format(fraction)
 			results[key] = fraction
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
@@ -97,13 +102,16 @@ class column_typer:
 		for each token'''
 		predictions = []
 		for item in column:
-			guess = token_typify(item)
+			guess = self.token_typify(item)
 			predictions.append(guess)
 		return predictions
 
 	def token_typify(self, token):
 		'''takes in a token and returns a
 		prediction for its type'''
+		if no_letters(token):
+			tipe = numClass.classify(token)
+			return tipe
 		certainties = {}
 		for f in heuristics:
 			tipe, value = f(token, self)
@@ -112,7 +120,7 @@ class column_typer:
 		return prediction
 
 	def build_classifiers(self):
-		'''builds the self.column_classifiers data member by creating classifier objects created 
+		'''builds the self.column_classifiers data member by creating classifier objects created
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
 		# TODO complete classifiers
 		self.column_classifiers = []
@@ -148,7 +156,7 @@ class column_typer:
 		first_name_ex     = COMMON_PREFIXES + COMMON_FIRST_NAMES
 		last_name_ex      = COMMON_SUFFIXES + COMMON_LAST_NAMES
 		datestring_ex     = COMMON_DATE_NAMES + COMMON_DATE_ABBREV
-		full_address_ex   = COMMON_ADDRESS_NAMES + COMMON_ADDRESS_FEATURES + COMMON_STATEPROV_ABBREV + COMMON_CITY_STATES
+		full_address_ex   = COMMON_ADDRESS_NAMES + COMMON_ADDRESS_FEATURES + COMMON_STATEPROV_ABBREV + COMMON_CITIES
 		street_address_ex = COMMON_ADDRESS_NAMES + COMMON_ADDRESS_FEATURES
 		city_state_ex     = COMMON_STATEPROV_ABBREV + COMMON_CITIES
 		email_ex          = COMMON_URL_EXTENSIONS + COMMON_EMAIL_DOMAINS
@@ -158,9 +166,9 @@ class column_typer:
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
 						  location_ex, description_ex]
 
-		for i in len(names):
+		for i in range(len(names)):
 			curr = classifier(names[i],
 							  possible_values[i],
 							  regex[i],
 							  known_examples[i])
-			self.classifiers.append(curr)
+			self.column_classifiers.append(curr)

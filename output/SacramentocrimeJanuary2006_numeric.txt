@@ -1,0 +1,9 @@
+cdatetime: Date
+address: Number
+district: Number
+beat: Zip
+grid: Number
+crimedescr: Number
+ucr_ncic_code: Number
+latitude: Latitude
+longitude: Longitude
