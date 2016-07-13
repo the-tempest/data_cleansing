@@ -20,6 +20,7 @@ def main(arg):
     #"./uploaded/SalesJan2009.csv"
     fn, file_extension = os.path.splitext(arg);
     filename = os.path.basename(fn);
+    filename = filename.replace(" ", "_")
     if (file_extension == '.csv'):
         with open (fn+file_extension, 'rU') as f:
             reader = csv.reader(f)

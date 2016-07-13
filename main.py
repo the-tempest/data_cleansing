@@ -1,4 +1,4 @@
-import sys, subprocess, json, operator
+import sys, subprocess, json, operator, os
 execfile('table.py')
 execfile('typify/column_type.py')
 execfile('numeric_classifier.py')
@@ -8,7 +8,7 @@ table_name = subprocess.check_output([sys.executable, "extraction.py", sys.argv[
 t = getTable(table_name);
 #t.build_column_index();
 
-numClass = numeric_classifier();
+'''numClass = numeric_classifier();
 result = "";
 for col in t.columns:
     diction = {}
@@ -19,16 +19,16 @@ for col in t.columns:
         else:
             diction[res] = 1;
     result += col.colName + ': ' + max(diction.iteritems(), key=operator.itemgetter(1))[0];
-    result += str(" \n ");
+    result += os.linesep;'''
 
 
 
 # call Keith and Pawel's script
-#c = column_typer("temp");
-#cl = c.build_report(t);
+c = column_typer(t);
+cl = c.build_report();
 
 with open('output/' + table_name + '.txt', 'w') as outfile:
-    json.dump(result, outfile);
+    json.dump(cl, outfile);
 
 # loop to go through each column to build a JSON to save:
 # for c in t.columns:
