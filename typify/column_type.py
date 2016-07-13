@@ -9,6 +9,8 @@ execfile("typify/heuristics.py")
 execfile("typify/helper.py")
 execfile("typify/features/features.py")
 execfile("typify/classifier.py")
+execfile('numeric_classifier.py')
+execfile('table.py')
 
 #The form strings are in the process of being totally replaced with regular expressions
 #TODO: unicode support
@@ -25,7 +27,7 @@ class column_typer:
 	def __init__(self, table):
 		self.build_classifiers()
 		self.my_table = table
-
+		self.numClass = numeric_classifier()
 
 	def build_report(self):
 		ret = ''
@@ -107,6 +109,9 @@ class column_typer:
 	def token_typify(self, token):
 		'''takes in a token and returns a
 		prediction for its type'''
+		if no_letters(token):
+			tipe = numClass.classify(token)
+			return tipe
 		certainties = {}
 		for f in heuristics:
 			tipe, value = f(token, self)
