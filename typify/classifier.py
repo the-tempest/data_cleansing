@@ -9,13 +9,19 @@ class classifier:
 		3. A regular expression representing the form of the type
 		4. A list of a set of known examples for the particular type (Ex: John)
 		5. A list of the known features or common strings that are found in examples of this type (Ex: Dr. or Mr. or II)'''
-	def __init__(self, n, pv, re, ke, cf):
+	def __init__(self, n, pv, reg, ke, cf):
 		self.name = n
-		self.possVals = pv
-		self.regEx = re
+		
+		self.possVals = {}
+		for elem in pv:
+			self.possVals[elem] = 1
+		
+		self.regEx = re.compile(reg)
+
 		self.knownExamples = {}
 		for elem in ke:
 			self.knownExamples[elem] = 1
+		
 		self.commonFeatures = {}
 		for elem in cf:
 			self.commonFeatures[elem] = 1
@@ -39,7 +45,7 @@ class classifier:
 
 	def contains_a(self, inString):
 		'''Tests whether the given string contains a common feature of the particular type'''
-		for f in self.commonFeatures:
-			if f in inString:
+		for elem in inString:
+			if elem in self.commonFeatures:
 				return True
 		return False
