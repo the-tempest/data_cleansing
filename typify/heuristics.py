@@ -96,6 +96,9 @@ def first_name_heuristic(token, typer):
 	# check if it can't be a name
 	if not my_typer.can_be(char_val_list):
 		return 'first name', 0
+	# account for name length
+	if len(lengths) == 0:
+		return 'first name', 0
 
 	# main part #####################################
 	value = 0
@@ -115,16 +118,11 @@ def first_name_heuristic(token, typer):
 		value += 50
 
 	# misc part #############################
-	
-
-	# account for name length
-	if len(lengths) == 0:
-		return 'first name', 0
+	misc_value = 0
 	if len(lengths) == 1:
-		value += 10
+		misc_value = 10
 
-
-	return 'first name', value
+	return 'first name', value + misc_value
 
 def last_name_heuristic(token, typer):
 	'''returns a last name heuristic value or negative infinity
@@ -132,7 +130,6 @@ def last_name_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[LAST_NAME_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -142,24 +139,21 @@ def last_name_heuristic(token, typer):
 	# check if it can't be a name
 	if not my_typer.can_be(char_val_list):
 		return 'last name', value
+	if len(lengths) == 0:
+		return 'last name', 0
+
+	# main part #####################
+	value = 0
 
 	# check column name
 	if 'last' in typer.curr_col_name.lower():
-		value += 10
+		value += 5
 	if 'sur' in typer.curr_col_name.lower():
-		value += 10
+		value += 5
 	if 'name' in typer.curr_col_name.lower():
-		value += 10
-
-	# counting common features of names
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
-
-	# account for name length
-	if len(lengths) == 0:
-		return 'last name', 0
-	if len(lengths) == 1:
-		value += 10
+		value += 5
+	if value > 10:
+		value = 10
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -169,7 +163,12 @@ def last_name_heuristic(token, typer):
 	if my_typer.is_a(token.lower()):
 		value += 50
 
-	return 'last name', value
+	# misc part ###################
+	misc_value = 0
+	if len(lengths) == 1:
+		misc_value = 10
+
+	return 'last name', value + misc_value
 
 def datestring_heuristic(token, typer):
 	'''returns a certainty value for token being a date string
@@ -177,7 +176,6 @@ def datestring_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[DATESTRING_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -185,19 +183,16 @@ def datestring_heuristic(token, typer):
 
 	#check if it can't be a datestring
 	if not my_typer.can_be(char_val_list):
-		return 'datestring', value
+		return 'datestring', 0
+
+	# main part #####################
+	value = 0
 
 	# check column name
 	if 'date' in typer.curr_col_name.lower():
 		value += 10
 
-	# counting common features of date strings
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
-
 	# account for datestring length
-	if len(temp) == 3:
-		value += 10
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -206,8 +201,14 @@ def datestring_heuristic(token, typer):
 	for word in temp:
 		if my_typer.is_a(word):
 			value += 50
+			break
 
-	return 'datestring', value
+	# misc part #####################3
+	misc_value = 0
+	if len(temp) == 3:
+		misc_value = 10
+
+	return 'datestring', value + misc_value
 
 def full_address_heuristic(token, typer):
 	'''returns a certainty value for token being an address
@@ -215,8 +216,6 @@ def full_address_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[FULL_ADDRESS_POS]
 
-
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -224,7 +223,10 @@ def full_address_heuristic(token, typer):
 
 	#check if it can't be a full address
 	if not my_typer.can_be(char_val_list):
-		return 'full address', value
+		return 'full address', 0
+
+	# main part ######################
+	value = 0
 
 	# check column name
 	if 'add' in typer.curr_col_name.lower():
@@ -232,19 +234,21 @@ def full_address_heuristic(token, typer):
 		if 'address' in typer.curr_col_name.lower():
 			value += 5
 
-	# counting common features of address strings
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
-
 	#account for the form of the token
 	if my_typer.has_form(token):
 		value += 20
 
+	# check form
 	for word in temp:
 		if my_typer.is_a(word):
-			value += 20
+			value += 50
+			break
 
-	return 'full address', value
+	# misc part ######################
+	misc_value = 0
+	# TODO come up with something
+
+	return 'full address', value + misc_value
 
 def street_address_heuristic(token, typer):
 	'''returns a certainty value for token being a
