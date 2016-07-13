@@ -11,10 +11,10 @@ def getRows(columnName, fileName, cursor):
     return rows;
 
 def getTable(tablename, u='root', p='123', h='localhost', d='world'):
-    cnx = mysql.connector.connect(user=u, password=p, host=h, database=d);
+    cnx = mysql.connector.connect(user=u, password=p, host=h, database=d, port='3308');
     cursor = cnx.cursor();
     newTable = table(tablename);
-    #print tablename   
+    #print tablename
     query = "SHOW columns FROM " + tablename;
     cursor.execute(query)
     cols = cursor.fetchall();
@@ -29,7 +29,7 @@ def getTable(tablename, u='root', p='123', h='localhost', d='world'):
         #column_name = normalize_name(colName)
         firstNum = "0"
         for x in range(10):
-        	colName.replace(chr(ord(firstNum) + x), "") # remove characters 0-9 in column name 
+        	colName.replace(chr(ord(firstNum) + x), "") # remove characters 0-9 in column name
 
         newCol = column(data, colName);
         newTable.addColumn(newCol);
@@ -37,4 +37,3 @@ def getTable(tablename, u='root', p='123', h='localhost', d='world'):
     cursor.close()
     cnx.close()
     return newTable;
-
