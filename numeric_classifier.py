@@ -3,12 +3,13 @@ from os import listdir
 from os.path import isfile, join
 import subprocess
 import pickle
+import time
 
 execfile('table.py')
 training_directory = r"uploaded\numeric_training_data"
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points']
-types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip']
+types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP']
 
 
 class numeric_classifier:
@@ -40,8 +41,8 @@ class numeric_classifier:
 
 		#find the max of all types to guess what the type of the column is
 		result = max(type_probabilities.iteritems(), key=operator.itemgetter(1))[0] 
-		print type_probabilities
-		print result
+		#print type_probabilities
+		#print result
 		return result
 	
 
@@ -101,9 +102,11 @@ class numeric_trainer:
 		for training_file in training_files_list:
 			file_path = training_dir  + "\\" + training_file # build up the whole path
 			
+			print file_path + "\n"
+		
 			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
 			##print 101
-			#print table_name
+			print table_name
 			t = getTable(table_name, "root", "spence23", "localhost", "world") #  returns table object
 			t.build_column_index()
 			column_names = []
