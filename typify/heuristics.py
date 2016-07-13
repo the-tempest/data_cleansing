@@ -49,7 +49,7 @@ def full_name_heuristic(token, typer):
 	if not my_typer.can_be(char_val_list):
 		return 'full name', 0
 
-	# main part of heuristic
+	# main part of heuristic ###############################################
 	value = 0
 
 	# check column name
@@ -87,7 +87,6 @@ def first_name_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[FIRST_NAME_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -96,23 +95,16 @@ def first_name_heuristic(token, typer):
 
 	# check if it can't be a name
 	if not my_typer.can_be(char_val_list):
-		return 'first name', value
+		return 'first name', 0
+
+	# main part #####################################
+	value = 0
 
 	# check column name
 	if 'first' in typer.curr_col_name.lower():
-		value += 10
+		value += 5
 	if 'name' in typer.curr_col_name.lower():
-		value += 10
-
-	# counting common features of names
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
-
-	# account for name length
-	if len(lengths) == 0:
-		return 'first name', 0
-	if len(lengths) == 1:
-		value += 10
+		value += 5
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -121,6 +113,16 @@ def first_name_heuristic(token, typer):
 	# check for common names
 	if my_typer.is_a(token.lower()):
 		value += 50
+
+	# misc part #############################
+	
+
+	# account for name length
+	if len(lengths) == 0:
+		return 'first name', 0
+	if len(lengths) == 1:
+		value += 10
+
 
 	return 'first name', value
 
