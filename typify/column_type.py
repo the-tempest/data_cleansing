@@ -16,6 +16,7 @@ execfile("classifier.py")
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
+ASCII_PRINTABLE = [n for n in range(32, 128)]
 ASCII_ADDRESS = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
 ASCII_NAME = [32, 44, 45, 46] + ASCII_UPPER + ASCII_LOWER
 NAME_REGEX = r'''^[A-Z][a-z'-]*$'''
@@ -124,7 +125,7 @@ class column_typer:
 		# possible values
 		datestring_pv = [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
 		email_pv = [43, 45, 46, 64, 95] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
-		description_pv = []
+		description_pv = ASCII_PRINTABLE
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
 					 ASCII_NAME, description_pv]
@@ -141,14 +142,6 @@ class column_typer:
 		regex = [fn_regex, NAME_REGEX, NAME_REGEX, ds_regex,
 				fa_regex, sa_regex, cs_regex, em_regex,
 				lo_regex, de_regex]
-
-		
-		email_ex = []
-		location_ex = []
-		description_ex = []
-		known_examples = [full_name_ex, COMMON_FIRST_NAMES, COMMON_LAST_NAMES, COMMON_DATE_NAMES,
-						  COMMON_ADDRESS_NAMES, COMMON_ADDRESS_NAMES, COMMON_CITY_STATES, email_ex,
-						  location_ex, description_ex]
 
 		# known examples
 		full_name_ex      = COMMON_PREFIXES + COMMON_SUFFIXES + COMMON_FIRST_NAMES + COMMON_LAST_NAMES
