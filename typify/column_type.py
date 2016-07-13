@@ -1,23 +1,24 @@
+# column_type.py
+# this defines a column_typer class which
+# takes in a table object and attempts to
+# classify each column in it, returning
+# a report in the form of a string
+
 import mysql.connector, os, re
 execfile("heuristics.py")
 execfile("helper.py")
 execfile("features/features.py")
 execfile("classifier.py")
 
-#The code that is commented out is the old heurisitc way that I evaluated things
-#There is new code before it that examines form types rather than using heuristics
-#the heuristics might be a better way to go but they were pretty bad
-
-#The form strings I used replace all letters with X or x depending on case and all numbers with 0
-
-#The condensed form strings take out word lengths by reducing any sequence of x's to x and
-#take out number lengths by reducing any sequence of 0's to 0
-
+#The form strings are in the process of being totally replaced with regular expressions
 #TODO: unicode support
 
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
 ASCII_LOWER = [n for n in range(97, 123)]
+ASCII_ADDRESS = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
+ASCII_NAME = [32, 44, 45, 46] + ASCII_UPPER + ASCII_LOWER
+NAME_REGEX = r'''^[A-Z][a-z'-]*$'''
 
 class column_typer:
 	def __init__(self, table):
@@ -41,11 +42,15 @@ class column_typer:
 		return ret 
 
 	def table_typify(self, table):
-		'''takes in a table and returns a
-		tuple'''
+		'''takes in a table and returns a list
+		of tuples of the form (a, p, f) where
+		a is the actual column name
+		p is the predicted column name
+		f is the certainty of the guess'''
 		actual = []
 		predictions = []
 		fractions = []
+		# generate data for the tuples
 		for elem in table.getColumns():
 			column = elem.rows
 			guesses = column_typify(column)
@@ -54,6 +59,7 @@ class column_typer:
 			predictions.append(prediction)
 			fractions.append(fraction)
 		results = []
+		# construct tuples
 		for i in range(len(table.getColumns())):
 			a = actual[i]
 			p = predictions[i]
@@ -67,6 +73,7 @@ class column_typer:
 		a column and returns a tuple of the form
 		(prediction, certainty)'''
 		results = {}
+		# populate the dictionary
 		for item in guesses:
 			if item not in results:
 				results[item] = 0
@@ -78,13 +85,15 @@ class column_typer:
 			results[key] = fraction
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
+		# ensure there actually is a good guess
 		if best_guess < .5:
 			return 'misc', None
 		return best_guess, guess_fraction
 
 	def column_typify(self, column):
 		'''takes in a column and
-		returns a list of classifications'''
+		returns a list of predictions
+		for each token'''
 		predictions = []
 		for item in column:
 			guess = token_typify(item)
@@ -93,7 +102,7 @@ class column_typer:
 
 	def token_typify(self, token):
 		'''takes in a token and returns a
-		predictive classification'''
+		prediction for its type'''
 		certainties = {}
 		for f in heuristics:
 			tipe, value = f(token)
@@ -104,119 +113,59 @@ class column_typer:
 	def build_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created 
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
-		# TODO put in regular expressions to phase out forms
-		# TODO add rest of classifiers
+		# TODO complete classifiers
 		self.column_classifiers = []
 
-		# full names ------------------------------------------------
-		legal_symbols = [32, 44, 45, 46]
-		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$''')
-		possible_forms = ['Xx', 'Xx Xx', 'Xx X Xx', 'Xx X. Xx', 'Xx x Xx', 'Xx x. Xx', 'Xx, Xx', 'Xx, Xx X', 'Xx, Xx X.', 'Xx, Xx x.', 'Xx, Xx x', 'X Xx', 'X. Xx', 'Xx, X', 'Xx, X.']
-		known_examples = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
-		common_features = COMMON_PREFIXES + COMMON_SUFFIXES
-		self.column_classifiers.append(classifier('full names', legal_ascii, regex, known_examples, common_features))
+		# names
+		names = ['full name', 'first name', 'last name', 'datestring',
+				'full address', 'street address', 'city state', 'email',
+				'location', 'description']
 
-		# first names ------------------------------------------
-		legal_symbols = [32, 44, 45, 46]
-		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^[A-Z][a-z'-]*$''')
-		possible_forms = ['Xx', 'X Xx', 'X. Xx']
-		known_examples = COMMON_FIRST_NAMES
-		self.column_classifiers.append(classifier('first names', legal_ascii, regex, known_examples, COMMON_PREFIXES))
+		# possible values
+		datestring_pv = [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
+		email_pv = [43, 45, 46, 64, 95] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
+		description_pv = []
+		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
+					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
+					 ASCII_NAME, description_pv]
 
-		# last names ------------------------------------------
-		legal_symbols = [32, 44, 45, 46]
-		legal_ascii = legal_symbols + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^[A-Z][a-zA-Z'-]*$''')
-		possible_forms = ['Xx', 'X Xx', 'X. Xx']
-		known_examples = COMMON_LAST_NAMES
-		self.column_classifiers.append(classifier('last names', legal_ascii, regex, known_examples, COMMON_SUFFIXES))
+		# regular expressions
+		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
+		ds_regex = r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$'''
+		fa_regex = r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
+		sa_regex = r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?$'''
+		cs_regex = r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$'''
+		em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
+		lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
+		de_regex = r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$'''
+		regex = [fn_regex, NAME_REGEX, NAME_REGEX, ds_regex,
+				fa_regex, sa_regex, cs_regex, em_regex,
+				lo_regex, de_regex]
 
-		# datestrings ------------------------------------------------
-		types_without_dow = ['Xx 0, 0', '0 Xx 0', 'Xx. 0, 0', '0 Xx. 0', 'x 0, 0', '0 x 0', 'x. 0, 0', '0 x. 0']
-		types_with_dow = []
-		for elem in types_without_dow:
-			types_with_dow.append('x ' + elem)
-			types_with_dow.append('Xx ' + elem)
-			types_with_dow.append('Xx. ' + elem)
-			types_with_dow.append('x. ' + elem)
-			types_with_dow.append('Xx, ' + elem)
-			types_with_dow.append('x, ' + elem)
-			types_with_dow.append('Xx., ' + elem)
-			types_with_dow.append('x., ' + elem)
+		# known examples
+		full_name_ex = COMMON_FIRST_NAMES + COMMON_LAST_NAMES
+		city_state_ex = []
+		email_ex = []
+		location_ex = []
+		description_ex = []
+		known_examples = [full_name_ex, COMMON_FIRST_NAMES, COMMON_LAST_NAMES, COMMON_DATE_NAMES,
+						  COMMON_ADDRESS_NAMES, COMMON_ADDRESS_NAMES, city_state_ex, email_ex,
+						  location_ex, description_ex]
 
-		legal_symbols = [32, 44, 46]
-		legal_ascii = legal_symbols + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$''')
-		possible_forms = ['x 0', 'Xx 0', '0 x', '0 Xx', 'x. 0', 'Xx. 0', '0 x.', '0 Xx.'] + types_without_dow + types_with_dow
-		self.column_classifiers.append(classifier('datestrings', legal_ascii, regex, COMMON_DATE_NAMES, COMMON_DATE_ABBREV))
+		# common features
+		full_name_cf = COMMON_PREFIXES + COMMON_SUFFIXES
+		city_state_cf = []
+		email_cf = []
+		location_cf = []
+		description_cf = []
+		common_features = [full_name_cf, COMMON_PREFIXES, COMMON_SUFFIXES, COMMON_DATE_ABBREV,
+						   COMMON_ADDRESS_FEATURES, COMMON_ADDRESS_FEATURES, city_state_cf, email_cf,
+						   location_cf, description_cf]
 
-		# full addresses ---------------------------------
-		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
-		for x in range(len(address_types)):
-			address_types.append(address_types[x] + ', Xx. 0')
-			address_types.append(address_types[x] + ', Xx 0')
-			address_types.append(address_types[x] + ', x. 0')
-			address_types.append(address_types[x] + ', x 0')
-			address_types.append(address_types[x] + ' Xx. 0')
-			address_types.append(address_types[x] + ' Xx 0')
-			address_types.append(address_types[x] + ' x. 0')
-			address_types.append(address_types[x] + ' x 0')
-
-		for x in range(len(address_types)):
-			address_types.append(address_types[x] + ', Xx, XX 0')
-			address_types.append(address_types[x] + ', Xx Xx, XX 0')
-			address_types.append(address_types[x] + ' Xx, XX 0')
-			address_types.append(address_types[x] + ' Xx Xx, XX 0')
-
-		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$''')
-		self.column_classifiers.append(classifier('addresses', legal_symbols, regex, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
-
-		# street addresses ---------------------------
-		# TODO fix
-		address_types = ['0 Xx Xx.', '0 Xx x.', '0 Xx x', '0 Xx Xx', '0 X Xx Xx.', '0 X Xx x.', '0 X Xx x', '0 X Xx Xx', '0 X. Xx Xx.', '0 X. Xx x.', '0 X. Xx x', '0 X. Xx Xx']
-		for x in range(len(address_types)):
-			address_types.append(address_types[x] + ', Xx. 0')
-			address_types.append(address_types[x] + ', Xx 0')
-			address_types.append(address_types[x] + ', x. 0')
-			address_types.append(address_types[x] + ', x 0')
-			address_types.append(address_types[x] + ' Xx. 0')
-			address_types.append(address_types[x] + ' Xx 0')
-			address_types.append(address_types[x] + ' x. 0')
-			address_types.append(address_types[x] + ' x 0')
-
-		for x in range(len(address_types)):
-			address_types.append(address_types[x] + ', Xx, XX 0')
-			address_types.append(address_types[x] + ', Xx Xx, XX 0')
-			address_types.append(address_types[x] + ' Xx, XX 0')
-			address_types.append(address_types[x] + ' Xx Xx, XX 0')
-
-		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?$''')
-		self.column_classifiers.append(classifier('street addresses', legal_symbols, regex, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
-
-		# city state ---------------------------------
-		# TODO fix
-		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$''')
-		self.column_classifiers.append(classifier('street addresses', legal_symbols, regex, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
-
-		# email --------------------------------------
-		#TODO fix
-		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^\S*?@\S*?(?:\.\S*?)+$''')
-		self.column_classifiers.append(classifier('street addresses', legal_symbols, regex, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))		
-
-		# location -----------------------------------
-		# TODO fix
-		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$''')
-		self.column_classifiers.append(classifier('street addresses', legal_symbols, regex, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
-
-		# descriptions -------------------------------
-		# TODO fix
-		legal_symbols = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
-		regex = re.compile(r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$''')
-		self.column_classifiers.append(classifier('street addresses', legal_symbols, regex, COMMON_ADDRESS_NAMES, COMMON_ADDRESS_FEATURES))
+		for i in len(names):
+			curr = classifier(names[i],
+							  possible_values[i],
+							  regex[i],
+							  known_examples[i],
+							  common_features[i])
+			self.classifiers.append(curr)

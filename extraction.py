@@ -14,7 +14,7 @@ def main(arg):
 
 
     # db connector stuff
-    cnx = mysql.connector.connect(user='root', password='spence23', host='localhost', database='world')
+    cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world', port='3308')
     cursor = cnx.cursor();
     # sys.argv[1]
     #"./uploaded/SalesJan2009.csv"
@@ -30,7 +30,7 @@ def main(arg):
 
             # creating new database
             query = 'drop table if exists ' + filename;
-            
+
             cursor.execute(query)
 
             # new table and headers
