@@ -110,7 +110,7 @@ class column_typer:
 		'''takes in a token and returns a
 		prediction for its type'''
 		if no_letters(token):
-			tipe = numClass.classify(token)
+			tipe = self.numClass.classify(token)
 			return tipe
 		certainties = {}
 		for f in heuristics:

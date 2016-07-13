@@ -9,7 +9,7 @@ table_name = table_name.replace("\n", "")
 t = getTable(table_name);
 #t.build_column_index();
 
-numClass = numeric_classifier();
+'''numClass = numeric_classifier();
 result = "";
 for col in t.columns:
     diction = {}
@@ -21,6 +21,7 @@ for col in t.columns:
             diction[res] = 1;
     result += col.colName + ': ' + max(diction.iteritems(), key=operator.itemgetter(1))[0];
     result += '\n'
+    '''
 
 
 
@@ -34,8 +35,8 @@ cl = c.build_report();
 with open("output/" + table_name + '_general.txt', "w") as text_file:
     text_file.write(cl);
 
-with open("output/" + table_name + '_numeric.txt', "w") as text_file:
-    text_file.write(result);
+#with open("output/" + table_name + '_numeric.txt', "w") as text_file:
+#    text_file.write(result);
 
 
 # loop to go through each column to build a JSON to save:

@@ -1,5 +1,5 @@
 # helper.py
-# these functions are used extensively in the 
+# these functions are used extensively in the
 # files in this directory, to aid in classifying
 # various types of strings and translate them into
 # condensed formats
@@ -61,9 +61,9 @@ def normalize(val, maxVal):
 	#TODO: Make it quadratic or logarithmic or something to make it work better
 
 def no_letters(inString):
-	'''Returns true if there are no letters in an input string''' 
+	'''Returns true if there are no letters in an input string'''
 	for char in inString:
-		if ((ord(char) >= 65 and ord(char) <= 90) and (ord(char) >= 97 and ord(char) <= 122)):
+		if ((ord(char) >= 65 and ord(char) <= 90) or (ord(char) >= 97 and ord(char) <= 122)):
 			return False
 	return True
 
@@ -97,4 +97,3 @@ regex = re.compile(r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$''')
 
 #DESCRIPTION
 regex = re.compile(r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$''')
-

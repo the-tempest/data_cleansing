@@ -138,7 +138,7 @@ def last_name_heuristic(token, typer):
 
 	# check if it can't be a name
 	if not my_typer.can_be(char_val_list):
-		return 'last name', value
+		return 'last name', 0
 	if len(lengths) == 0:
 		return 'last name', 0
 
