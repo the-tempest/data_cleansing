@@ -78,7 +78,7 @@ class numeric_classifier:
 		dObj = u.load()
 		f.close()
 		return dObj
-		
+
 
 class numeric_trainer:
 	def __init__(self, types = [], features =[]):
@@ -96,28 +96,28 @@ class numeric_trainer:
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
 
-			file_path = training_dir  + "\\" + training_file # build up the whole path
+			file_path = os.path.join(training_dir, training_file) # build up the whole path
 			print file_path + "\n"
 			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) #
-			t = getTable(table_name, "root", "spence23", "localhost", "world") #  returns table object
+			t = getTable(table_name, "root", "123", "localhost", "world") #  returns table object
 			column_names = []
-			
+
 			for column in t.columns:
-				# remove characters 0-9 in column name 
+				# remove characters 0-9 in column name
 				firstNum = "0"
-				for x in range(10): 	
+				for x in range(10):
 					column.colName = column.colName.replace(chr(ord(firstNum) + x), "")
-				
+
 				t.build_column_index()
 
 				if column.colName in self.types: #building the columns we are going to train as long as they are types we want
 					column_names.append(column.colName)
 
-			
-		
-			for col in column_names:	
+
+
+			for col in column_names:
 				index = t.column_index[col]
-				column_obj = t.columns[index] # we have the column object now 
+				column_obj = t.columns[index] # we have the column object now
 				self.train_type(column_obj)
 
 		#self.save(self.types_feature_dictionary, "types_feature_dictionary.dat")
