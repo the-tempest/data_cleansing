@@ -31,11 +31,11 @@ class numeric_classifier:
 		self.numeric_types = numeric_types #list of all numeric_type classes (strings)
 
 		if os.path.isfile("training_dictionary.dat"):
-			self.training_dictionary = self.load("training_dictionary.dat")
+			self.trained_dictionary = self.load("training_dictionary.dat")
 		else:
 			trainer = numeric_trainer(self.numeric_types, self.features)
 			trainer.train(training_directory)
-			self.training_dictionary = trainer.training_dictionary
+			self.trained_dictionary = trainer.training_dictionary
 
 
 	def classify(self, nText):
@@ -44,9 +44,9 @@ class numeric_classifier:
 
 		for t in self.numeric_types: 
 			type_probabilities[t] = 1 #initialize 
-			for feature in self.feature_dictionary[t]: #for a specific type compute P(feature | type)
+			for feature in self.trained_dictionary[t]: #for a specific type compute P(feature | type)
 				
-				curr_dictionary = self.feature_dictionary[t][feature]
+				curr_dictionary = self.trained_dictionary[t][feature]
 
 				posterier_type_prob = self.type_switch(feature, nText, curr_dictionary)
 
@@ -88,7 +88,7 @@ class numeric_trainer: # class fo holding training functions
 	def __init__(self, types = [], features =[]):
 		self.features = features
 		self.types = types
-		self.training_dictionary = {} # a dictionary of feature dictionaries
+		self.trained_dictionary = {} # a dictionary of feature dictionaries
 
 
 	def train(self, training_dir):
@@ -121,7 +121,7 @@ class numeric_trainer: # class fo holding training functions
 				column_obj = t.columns[index] # we have the column object now
 				self.train_on_column(column_obj)
 
-		#self.save(self.training_dictionary, "training_dictionary.dat")
+		#self.save(self.trained_dictionary, "training_dictionary.dat")
 
 	def train_on_column(self, col):
 		row_list = col.rows
@@ -129,9 +129,9 @@ class numeric_trainer: # class fo holding training functions
 		for item in row_list: # each cell in a column's row list
 			if item == "NULL": # workaround for now for empty cells
 				continue
-			if col.colName in self.training_dictionary: #if the type is in the dict
+			if col.colName in self.trained_dictionary: #if the type is in the dict
 
-				curr_type_dict = self.training_dictionary[col.colName] # get dictionary of feature dictionaries
+				curr_type_dict = self.trained_dictionary[col.colName] # get dictionary of feature dictionaries
 
 				for feature in self.features: # string of features
 
@@ -142,8 +142,8 @@ class numeric_trainer: # class fo holding training functions
 						curr_type_dict[feature] = {}
 						self.build_feature_freq(curr_type_dict[feature], item , feature)
 			else:
-				self.training_dictionary[col.colName] = {}
-				curr_type_dict = self.training_dictionary[col.colName]
+				self.trained_dictionary[col.colName] = {}
+				curr_type_dict = self.trained_dictionary[col.colName]
 
 				for feature in self.features:
 
