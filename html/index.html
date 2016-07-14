@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> Data Cleansing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  </head>
+  <script src="react.js"></script>
+  <script src="react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
+
+  <body>
+    <div class="jumbotron">
+      <div id="upload">
+
+      </div>
+    </div>
+  <script type="text/babel">
+
+    var Upload = React.createClass({
+      getInitialState: function () {
+        return {files: []};
+      },
+      uploadToServer: function () {
+        var formData = new FormData();
+        for  (var i = 0; i < this.state.files.length; i++ ) {
+            formData.append('file'+i, this.state.files[i]);
+        }
+
+        $.ajax({
+          //dataType: 'json',
+          type: "POST",
+          url: "/process",
+          data: formData,
+          processData: false,  // tell jQuery not to process the data
+          contentType: false,  // tell jQuery not to set contentType
+          success: function (res) {
+            console.log(res);
+          },
+          error: function (t, b, err) {
+            console.log(t);
+          }
+        });
+      },
+      render: function() {
+        return (<div>
+                  	<input type="file" id={this.props.id} name="fileselect[]" multiple="multiple" /> <br  />
+                    <button type="button" className="btn btn-info" onClick={this.uploadToServer}>Upload</button>
+                </div>);
+      }
+
+    });
+    ReactDOM.render(<Upload id="fileselect"/>,  document.getElementById('upload'));
+  </script>
+
+  </body>
+</html>
