@@ -4,11 +4,7 @@
 # that we use to predict what type a string token
 # belongs to. They take in a token and a classifier,
 # which is a helper class defined in classifier.py
-# TODO these need to be merged with the numeric
-# heuristics somehow
 
-#TODO - IMPLEMENT FURTHER FEATURES
-#Adjacent Column Names
 #TODO - THINK OF MORE FEATURES TO IMPLEMENT
 
 NAME_LENGTH = 7
@@ -49,7 +45,7 @@ def full_name_heuristic(token, typer):
 	if not my_typer.can_be(char_val_list):
 		return 'full name', 0
 
-	# main part of heuristic ###############################################
+	# main part ###############################################
 	value = 0
 
 	# check column name
@@ -64,11 +60,13 @@ def full_name_heuristic(token, typer):
 	if spaces > 0:
 		for word in temp:
 			#check for common names
-			#TODO: Need to change because it will flag all single names as full names
 			if my_typer.is_a(word.lower()):
-				value += 50
+				value += 25
 				break
+	if value > 90:
+		value = 90
 
+	# misc part #######################################
 	# this is different for each heuristic
 	misc_value = 0
 	# account for name length
@@ -454,7 +452,7 @@ def description_heuristic(token, typer):
 		value += 20
 
 	# looking at format of individual words
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word.lower()):
 			value += 50
 			break
