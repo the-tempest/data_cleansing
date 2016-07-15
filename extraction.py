@@ -1,4 +1,5 @@
 import os, sys, csv, json, mysql.connector
+from secrets import password, port, database, user, host
 execfile('column.py');
 def main(arg):
     def flatten_json(raw):
@@ -14,7 +15,7 @@ def main(arg):
 
 
     # db connector stuff
-    cnx = mysql.connector.connect(user='root', password='123', host='localhost', database='world', port='3308')
+    cnx = mysql.connector.connect(user=user, password=password, host=host, database=database, port=port)
     cursor = cnx.cursor();
     # sys.argv[1]
     #"./uploaded/SalesJan2009.csv"
