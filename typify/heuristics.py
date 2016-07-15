@@ -33,12 +33,12 @@ def full_name_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
-	lengths = [len(x) for x in temp]
+	split_token = token.split()
+	lengths = [len(x) for x in split_token]
 	if len(lengths) == 0: # it isn't anything if it's an empty string
 		return 'full name', 0
 	avg_len = float(sum(lengths)) / float(len(lengths))
-	spaces = len(temp) - 1
+	spaces = len(split_token) - 1
 
 	#check if it can't be a name
 	# uses possible values
@@ -58,7 +58,7 @@ def full_name_heuristic(token, typer):
 
 	# looking at format of individual words
 	if spaces > 0:
-		for word in temp:
+		for word in split_token:
 			#check for common names
 			if my_typer.is_a(word.lower()):
 				value += 25
@@ -88,8 +88,8 @@ def first_name_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
-	lengths = [len(x) for x in temp]
+	split_token = token.split()
+	lengths = [len(x) for x in split_token]
 
 	# check if it can't be a name
 	if not my_typer.can_be(char_val_list):
@@ -131,8 +131,8 @@ def last_name_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
-	lengths = [len(x) for x in temp]
+	split_token = token.split()
+	lengths = [len(x) for x in split_token]
 
 	# check if it can't be a name
 	if not my_typer.can_be(char_val_list):
@@ -177,7 +177,7 @@ def datestring_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
+	split_token = token.split()
 
 	#check if it can't be a datestring
 	if not my_typer.can_be(char_val_list):
@@ -196,14 +196,14 @@ def datestring_heuristic(token, typer):
 	if my_typer.has_form(token):
 		value += 20
 
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word):
 			value += 50
 			break
 
 	# misc part #####################3
 	misc_value = 0
-	if len(temp) == 3:
+	if len(split_token) == 3:
 		misc_value = 10
 
 	return 'datestring', value + misc_value
@@ -217,7 +217,7 @@ def full_address_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
+	split_token = token.split()
 
 	#check if it can't be a full address
 	if not my_typer.can_be(char_val_list):
@@ -237,7 +237,7 @@ def full_address_heuristic(token, typer):
 		value += 20
 
 	# check form
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word):
 			value += 50
 			break
@@ -258,7 +258,7 @@ def street_address_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
+	split_token = token.split()
 
 	#check if it can't be a street address
 	if not my_typer.can_be(char_val_list):
@@ -278,7 +278,7 @@ def street_address_heuristic(token, typer):
 		value += 20
 
 	# check examples
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word):
 			value += 50
 			break
@@ -299,7 +299,7 @@ def city_state_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
+	split_token = token.split()
 
 	#check if it can't be a city state
 	if not my_typer.can_be(char_val_list):
@@ -319,7 +319,7 @@ def city_state_heuristic(token, typer):
 		value += 20
 
 	# check examples
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word):
 			value += 50
 			break
@@ -339,7 +339,7 @@ def email_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
+	split_token = token.split()
 
 	#check if it can't be an email
 	if not my_typer.can_be(char_val_list):
@@ -359,7 +359,7 @@ def email_heuristic(token, typer):
 		value += 20
 
 	# check examples
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word):
 			value += 50
 			break
@@ -380,12 +380,12 @@ def location_heuristic(token, typer):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	temp = token.split()
-	lengths = [len(x) for x in temp]
+	split_token = token.split()
+	lengths = [len(x) for x in split_token]
 	if len(lengths) == 0:
 		return 'location', 0
 	avg_len = float(sum(lengths)) / float(len(lengths))
-	spaces = len(temp) - 1
+	spaces = len(split_token) - 1
 
 	#check if it can't be a location
 	if not my_typer.can_be(char_val_list):
@@ -407,7 +407,7 @@ def location_heuristic(token, typer):
 		value += 20
 
 	# looking at format of individual words
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word.lower()):
 			value += 50
 			break
