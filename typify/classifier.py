@@ -23,8 +23,8 @@ class classifier:
 
 	def can_be(self, token):
 		'''Tests whether the sequence of ascii values inputted has any that are not allowed in this particular type'''
-		for elem in token:
-			if elem not in self.possVals:
+		for char in token:
+			if char not in self.possVals:
 				return False
 		return True
 
@@ -36,7 +36,7 @@ class classifier:
 
 	def is_a(self, token):
 		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
-		for elem in token:
+		for elem in token.split():
 			if elem in self.knownExamples:
 				return True
 		return False

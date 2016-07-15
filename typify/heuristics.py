@@ -452,7 +452,7 @@ def description_heuristic(token, typer):
 		value += 20
 
 	# looking at format of individual words
-	for word in temp:
+	for word in split_token:
 		if my_typer.is_a(word.lower()):
 			value += 50
 			break
