@@ -21,9 +21,9 @@ class classifier:
 		for elem in ke:
 			self.knownExamples[elem] = 1
 
-	def can_be(self, vals):
+	def can_be(self, token):
 		'''Tests whether the sequence of ascii values inputted has any that are not allowed in this particular type'''
-		for elem in vals:
+		for elem in token:
 			if elem not in self.possVals:
 				return False
 		return True
@@ -34,9 +34,9 @@ class classifier:
 			return True
 		return False
 
-	def is_a(self, inString):
+	def is_a(self, token):
 		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
-		for elem in inString:
+		for elem in token:
 			if elem in self.knownExamples:
 				return True
 		return False
