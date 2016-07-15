@@ -91,5 +91,5 @@ ENV/
 # Rope project settings
 .ropeproject
 
-/secrets.py
-
+# authentication stuff
+secrets.py
