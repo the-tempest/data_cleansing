@@ -257,7 +257,6 @@ def street_address_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[STREET_ADDRESS_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -265,19 +264,16 @@ def street_address_heuristic(token, typer):
 
 	#check if it can't be a street address
 	if not my_typer.can_be(char_val_list):
-		return 'street address', value
+		return 'street address', 0
+
+	# main part ######################333
+	value = 0
 
 	# check column name
 	if 'street' in typer.curr_col_name.lower():
-		value += 10
-	if 'add' in typer.curr_col_name.lower():
 		value += 5
-		if 'address' in typer.curr_col_name.lower():
-			value += 5
-
-	# counting common features of address strings
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
+	if 'address' in typer.curr_col_name.lower():
+		value += 5
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -286,9 +282,14 @@ def street_address_heuristic(token, typer):
 	# check examples
 	for word in temp:
 		if my_typer.is_a(word):
-			value += 20
+			value += 50
+			break
 
-	return 'street address', value
+	# misc part #####################3
+	misc_value = 0
+	# TODO think of something
+
+	return 'street address', value + misc_value
 
 def city_state_heuristic(token, typer):
 	'''returns a certainty value for token being a
@@ -297,7 +298,6 @@ def city_state_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[CITY_STATE_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -305,17 +305,16 @@ def city_state_heuristic(token, typer):
 
 	#check if it can't be a city state
 	if not my_typer.can_be(char_val_list):
-		return 'city, state', value
+		return 'city, state', 0
+
+	# main part ##############################
+	value = 0
 
 	# check column name
 	if 'city' in typer.curr_col_name.lower():
-		value += 10
+		value += 5
 	if 'state' in typer.curr_col_name.lower():
 		value += 5
-
-	# counting common features of address strings
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -324,9 +323,14 @@ def city_state_heuristic(token, typer):
 	# check examples
 	for word in temp:
 		if my_typer.is_a(word):
-			value += 10
+			value += 50
+			break
 
-	return 'city state', value
+	# misc part ########################
+	misc_value = 0
+	# TODO implement
+
+	return 'city state', value + misc_value
 
 def email_heuristic(token, typer):
 	'''returns a certainty value for token being an email
@@ -334,7 +338,6 @@ def email_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[EMAIL_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -342,21 +345,16 @@ def email_heuristic(token, typer):
 
 	#check if it can't be an email
 	if not my_typer.can_be(char_val_list):
-		return 'email', value
-	if '@' not in token:
-		return 'email', value
-	else:
-		value += 20
+		return 'email', 0
+	
+	# main part ###############
+	value = 0
 
 	# check column name
 	if 'address' in typer.curr_col_name.lower():
-		value += 5
+		value += 3
 	if 'email' in typer.curr_col_name.lower():
-		value += 10
-
-	# counting common features of emails
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
+		value += 7
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -365,9 +363,15 @@ def email_heuristic(token, typer):
 	# check examples
 	for word in temp:
 		if my_typer.is_a(word):
-			value += 10
+			value += 50
+			break
 
-	return 'email', value
+	# misc part ####################3
+	misc_value = 0
+	if '@' in token:
+		misc_value = 10
+
+	return 'email', value + misc_value
 
 def location_heuristic(token, typer):
 	'''returns a certainty value for token being a location
@@ -375,7 +379,6 @@ def location_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[LOCATION_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -388,7 +391,10 @@ def location_heuristic(token, typer):
 
 	#check if it can't be a location
 	if not my_typer.can_be(char_val_list):
-		return 'location', value
+		return 'location', 0
+
+	# main part #####################
+	value = 0
 
 	# check column name
 	if 'location' in typer.curr_col_name.lower():
@@ -397,14 +403,7 @@ def location_heuristic(token, typer):
 		value += 10
 	elif 'country' in typer.curr_col_name.lower():
 		value += 10
-
-	# counting common features of locations
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
-
-	# account for location length
-	value += LOCATION_LENGTH - abs(avg_len - LOCATION_LENGTH)
-
+	
 	#account for the form of the token
 	if my_typer.has_form(token):
 		value += 20
@@ -413,9 +412,15 @@ def location_heuristic(token, typer):
 	for word in temp:
 		if my_typer.is_a(word.lower()):
 			value += 50
+			break
 
+	# misc part ###################333
+	misc_value = 0
+	# TODO implement properly
 	# account for number of spaces
 	value += NUM_LOCATION_SPACES - abs(spaces - NUM_LOCATION_SPACES)
+	# account for location length
+	value = LOCATION_LENGTH - abs(avg_len - LOCATION_LENGTH)
 
 	return 'location', value
 
@@ -425,7 +430,6 @@ def description_heuristic(token, typer):
 	# get the right classifier
 	my_typer = typer.column_classifiers[DESCRIPTION_POS]
 
-	value = 0
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
@@ -434,34 +438,37 @@ def description_heuristic(token, typer):
 
 	#check if it can't be a description
 	if not my_typer.can_be(char_val_list):
-		return 'description', value
+		return 'description', 0
+
+	# main part #####################
+	value = 0
 
 	# check column name
 	if 'description' in typer.curr_col_name.lower():
 		value += 10
-	if 'note' in typer.curr_col_name.lower():
+	elif 'note' in typer.curr_col_name.lower():
 		value += 10
-
-	# counting common features of descriptions
-	#if my_typer.contains_a(token.lower()):
-	#	value += 1
-
-	# account for description length
-	# using number of spaces
-	# maxes out at 100
-	# since that's where it normalizes
-	if len_split_token == 0:
-		value = 0
-	if len_split_token >= 100:
-		value = 100
-	else:
-		value += len_split_token
 
 	#account for the form of the token
 	if my_typer.has_form(token):
 		value += 20
 
-	return 'description', value
+	# looking at format of individual words
+	for word in temp:
+		if my_typer.is_a(word.lower()):
+			value += 50
+			break
+
+	# misc part #############################
+	misc_value = 0
+	# account for description length
+	# using number of spaces
+	if len_split_token > 10:
+		misc_value += 10
+	else:
+		misc_value += len_split_token
+
+	return 'description', value + misc_value
 
 
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
