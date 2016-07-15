@@ -33,7 +33,11 @@ def execute(filename):
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);
 
-    with open("output/" + table_name + '_combined.txt', "w") as text_file:
+    dirToSave = "output";
+    fn = table_name + "_c.txt"
+    pathToSave = os.path.join(dirToSave, fn);
+    print pathToSave
+    with open(pathToSave, "w") as text_file:
         text_file.write(cl);
 
     #with open("output/" + table_name + '_numeric.txt', "w") as text_file:
