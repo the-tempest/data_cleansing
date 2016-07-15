@@ -1,5 +1,5 @@
 import sys, mysql.connector
-from secrets import password, port
+from secrets import password, port, user, host, database
 execfile('column.py');
 
 def getRows(columnName, fileName, cursor):
@@ -11,7 +11,7 @@ def getRows(columnName, fileName, cursor):
         rows[j] = str(''.join(rows[j]));
     return rows;
 
-def getTable(tablename, u='root', p=password, h='localhost', d='world', port = port ):
+def getTable(tablename, u=user, p=password, h=host, d=database, port = port ):
     cnx = mysql.connector.connect(user=u, password=p, host=h, database=d, port=port);
     cursor = cnx.cursor();
     newTable = table(tablename);
