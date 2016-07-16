@@ -1,7 +1,7 @@
 import os, sys, csv, json, mysql.connector
 from secrets import password, port, database, user, host
 execfile('column.py');
-def main(arg):
+def extract(f):
     def flatten_json(raw):
         val = {}
         for i in raw.keys():
@@ -19,7 +19,7 @@ def main(arg):
     cursor = cnx.cursor();
     # sys.argv[1]
     #"./uploaded/SalesJan2009.csv"
-    fn, file_extension = os.path.splitext(arg);
+    fn, file_extension = os.path.splitext(f);
     filename = os.path.basename(fn);
     filename = filename.replace(" ", "_")
     if (file_extension == '.csv'):
@@ -130,7 +130,3 @@ def main(arg):
     cursor.close()
     cnx.close()
     return filename;
-
-if __name__ == "__main__":
-    x = main(sys.argv[1])
-    print x;
