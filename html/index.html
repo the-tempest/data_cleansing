@@ -25,6 +25,7 @@
         // Great success! All the File APIs are supported.
            var dd = document.getElementById("draganddrop");
            console.log(dd)
+           var fs = document.getElementById("fileselect")
            var xhr = new XMLHttpRequest();
            if (xhr.upload) {
             dd.addEventListener("dragover", this.fileDragHover, false);
@@ -42,12 +43,15 @@
       },
 
       fileDragHover: function(e) {
+        console.log("FILEDRAGHOVER")
     		e.stopPropagation();
     		e.preventDefault();
     		e.target.className = (e.type == "dragover" ? "hover" : "");
     	},
 
       addFile: function (e) {
+        console.log("addFile")
+        this.fileDragHover(e);
         var files = e.target.files || e.dataTransfer.files;
         for (var i = 0, f; f = files[i]; i++) {
     			this.state.files.push(f);
@@ -81,10 +85,12 @@
       },
       render: function() {
         return (<div>
+                    <fieldset>
                   	<input type="file" id={this.props.id} name="fileselect[]" onChange={this.addFile} multiple="multiple" /> <br  />
                     <div id="draganddrop">or drop files here</div> <br />
                     <button type="button" className="btn btn-info" onClick={this.uploadToServer}>Upload</button>
                     <button type="button" onClick={this.printFiles}>Print</button>
+                    </fieldset>
                 </div>);
       }
 
