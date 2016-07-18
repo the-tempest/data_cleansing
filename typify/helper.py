@@ -3,6 +3,8 @@
 # files in this directory, to aid in classifying
 # various types of strings and translate them into
 # condensed formats
+import re
+
 
 def dict_max(Adict):
 	'''returns the key with the largest value in a dictionary'''
