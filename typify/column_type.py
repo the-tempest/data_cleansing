@@ -147,14 +147,24 @@ class column_typer:
 		#get best two predictions
 		
 		table = self.my_table
-		column = table.column[i]
+		elem = table.column[i]
 		dict = column.dictionary
 		best_guess = dict_max(dict)
 		guess_fraction = results[best_guess]
     	r = dict(dict)
     	del r[key]
 		best_guess2 = dict_max(r)
-		guess_fraction = results[best_guess2]
+		guess_fraction = results[best_guess2]		
+		column = elem.rows
+		self.curr_col_name = elem.colName
+		guesses = self.column_typify(column)
+		#we will write new heuristics in the heuristics class that weigh the column name 
+		#more heavily given that we already have chosen the type to be a certain way
+		
+		#ALSO: we can use the information from previous columns to learn about the current one
+		# EX: if we already have name column, perhaps given more weight to the alternative type of a given
+		#column	
+		
 		
 		
 		# remember, you need to return a tuple of the form t = (a, p, f)
