@@ -68,32 +68,11 @@ def no_letters(inString):
 	return True
 
 
-#NAMES
-regex = re.compile(r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$''')
-
-#FIRST NAMES
-regex = re.compile(r'''^[A-Z][a-z'-]*$''')
-
-#LAST NAMES
-regex = re.compile(r'''^[A-Z][a-zA-Z'-]*$''')
-
-#DATESTRINGS
-regex = re.compile(r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$''')
-
-#FULL_ADDRESSES
-regex = re.compile(r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$''')
-
-#STREET_ADDRESSES
-regex = re.compile(r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?$''')
-
-#CITY_STATE
-regex = re.compile(r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$''')
-
-#EMAIL
-regex = re.compile(r'''^\S*?@\S*?(?:\.\S*?)+$''')
-
-#LOCATION
-regex = re.compile(r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$''')
-
-#DESCRIPTION
-regex = re.compile(r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$''')
+fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
+ds_regex = r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$'''
+fa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+|(?:[a-zA-Z'-]*\s+)*?)(?:[a-zA-Z'-]*)?\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?)?(?:\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+[#]?\d*[a-zA-Z]?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
+sa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+|(?:[a-zA-Z'-]*\s+)*?)(?:[a-zA-Z'-]*)?\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?)?(?:\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+[#]?\S{1-5}?(?:[-/: ]\S{1-5})?))?$'''
+cs_regex = r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$'''
+em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
+lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
+de_regex = r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$'''

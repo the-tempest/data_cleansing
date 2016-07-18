@@ -1,6 +1,6 @@
-output = open("new_address_testing_data.txt", "w")
+output = open("new_spec_address_testing_data.txt", "w")
 names = {}
-with open("address_testing_data.txt", "r") as f:
+with open("spec_address_testing_data.txt", "r") as f:
 	for line in f:
 		word = line.strip('\n')
 		if word not in names:
