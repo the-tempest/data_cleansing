@@ -4,9 +4,13 @@ class column:
        self.colName = colName; # name of the column
        self.rows = rows # the actual data inside the column (in the form of list)
        self.tentClass = "" # tentative Classification
+       self.dictionary = {}  #dictionary of predictions and fractions associated 
     def tentativeClassification(self, tc):
        ''' the argument tc is the tentative classification for the column '''
-       self.tentClass = tc;
+       self.tentClass = tc; #spacing here could be off
+    def addDict(self, dict):
+	   	self.dictionary = dict
+    	 
 
 # class to represent a table
 class table:
