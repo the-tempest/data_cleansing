@@ -28,7 +28,7 @@ class column_typer:
 		self.build_classifiers()
 		self.my_table = table
 		self.numClass = numeric_classifier()
-
+				
 	def build_report(self):
 		ret = ''
 		results = self.table_typify(self.my_table)
@@ -60,6 +60,7 @@ class column_typer:
 			column = elem.rows
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
+			elem.addDict(generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
 			prediction, fraction = self.column_predict(guesses)
 			actual.append(elem.colName)
 			predictions.append(prediction)
@@ -70,6 +71,9 @@ class column_typer:
 			a = actual[i]
 			p = predictions[i]
 			f = fractions[i]
+			
+			if p = 'misc':
+				t = self.differentiate(i)
 			t = (a, p, f)
 			results.append(t)
 		return results
@@ -92,10 +96,28 @@ class column_typer:
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
 		# ensure there actually is a good guess
-		if best_guess < .5:
+		if best_guess < .7:
 			return 'misc', None
 		return best_guess, guess_fraction
-
+		
+	def generate_dict(self, guesses):
+		'''takes in a list of predictions for
+		a column and returns a list of all the predictions and the 
+		fractions corresponding for that specific column'''
+		results = {}
+		# populate the dictionary
+		for item in guesses:
+			if item not in results:
+				results[item] = 0
+			results[item] += 1
+		size = len(guesses)
+		for key in results.keys():
+			fraction = float(results[key]) / float(size)
+			fraction = "{0:.2f}".format(fraction)
+			results[key] = fraction
+		# ensure there actually is a good guess
+		return results
+		
 	def column_typify(self, column):
 		'''takes in a column and
 		returns a list of predictions
@@ -119,6 +141,34 @@ class column_typer:
 		prediction = dict_max(certainties)
 		return prediction
 
+	def differentiate(self, i):
+		'''this will address the cases where the fractions are below .7'''
+		#i indicates the index of the column in the table we are using
+		#get best two predictions
+		
+		table = self.my_table
+		elem = table.column[i]
+		dict = column.dictionary
+		best_guess = dict_max(dict)
+		guess_fraction = results[best_guess]
+    	r = dict(dict)
+    	del r[key]
+		best_guess2 = dict_max(r)
+		guess_fraction = results[best_guess2]		
+		column = elem.rows
+		self.curr_col_name = elem.colName
+		guesses = self.column_typify(column)
+		#we will write new heuristics in the heuristics class that weigh the column name 
+		#more heavily given that we already have chosen the type to be a certain way
+		
+		#ALSO: we can use the information from previous columns to learn about the current one
+		# EX: if we already have name column, perhaps given more weight to the alternative type of a given
+		#column	
+		
+		
+		
+		# remember, you need to return a tuple of the form t = (a, p, f)
+		
 	def build_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
@@ -137,16 +187,17 @@ class column_typer:
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
 					 ASCII_NAME, description_pv]
-
+					 
+		
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
 		ds_regex = r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$'''
-		fa_regex = r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
-		sa_regex = r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?$'''
+		fa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
+		sa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?$'''
 		cs_regex = r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$'''
 		em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
 		lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
-		de_regex = r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$'''
+		de_regex = r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$'''
 		regex = [fn_regex, NAME_REGEX, NAME_REGEX, ds_regex,
 				fa_regex, sa_regex, cs_regex, em_regex,
 				lo_regex, de_regex]
@@ -161,7 +212,7 @@ class column_typer:
 		city_state_ex     = COMMON_STATEPROV_ABBREV + COMMON_CITIES
 		email_ex          = COMMON_URL_EXTENSIONS + COMMON_EMAIL_DOMAINS
 		location_ex       = COMMON_CITIES + COMMON_LOCATION_FEATURES
-		description_ex    = COMMON_ADJECTIVES
+		 description_ex    = COMMON_ADJECTIVES
 		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
 						  location_ex, description_ex]
