@@ -63,12 +63,22 @@ class numeric_classifier:
 		print min_key
 		denominator = max_value - min_value	
 		for item in type_probabilities:
-			normalized_value = (type_probabilities[item] - min_value) / denominator
+			type_probabilities[item] = (type_probabilities[item] - min_value) / denominator
+		
+		mean = sum(type_probabilities.itervalues())/7
+		print mean 
 
-			type_probabilities[item] = normalized_value
-		return max_key, type_probabilities	
+		variance = 0 
+		for item in type_probabilities:
+			deviation = type_probabilities[item] - mean
+			deviation = deviation * deviation
+			variance += deviation
 
-
+		variance = variance / len(type_probabilities)
+		std_dev = math.sqrt(variance)
+		print std_dev
+		return max_key, type_probabilities, mean , std_dev
+		
 
 	def type_switch(self, feature, arg, curr_dict): # need to build this up
 		''' feature is the thing we are using to compute a prob. arg is the given text from a cell dict is the type we are in. This function is looped from in classify'''
