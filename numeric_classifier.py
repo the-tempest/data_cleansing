@@ -54,7 +54,7 @@ class numeric_classifier:
 				type_probabilities[t] += posterier_type_prob
 
 		#find the max of all types to guess what the type of the column is
-<<<<<<< HEAD
+
 		max_key = max(type_probabilities, key=type_probabilities.get)
 		min_key = min(type_probabilities, key = type_probabilities.get)
 		max_value = type_probabilities[max_key]
@@ -67,11 +67,7 @@ class numeric_classifier:
 
 			type_probabilities[item] = normalized_value
 		return max_key, type_probabilities	
-=======
-		result = max(type_probabilities.iteritems(), key=operator.itemgetter(1))[0]
 
-		return result
->>>>>>> f7e5ac235c5d8457ac2e3a6e35d9f5df57292afe
 
 
 	def type_switch(self, feature, arg, curr_dict): # need to build this up
