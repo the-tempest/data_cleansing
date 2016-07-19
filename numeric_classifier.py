@@ -54,9 +54,32 @@ class numeric_classifier:
 				type_probabilities[t] += posterier_type_prob
 
 		#find the max of all types to guess what the type of the column is
-		result = max(type_probabilities.iteritems(), key=operator.itemgetter(1))[0]
 
-		return result
+		max_key = max(type_probabilities, key=type_probabilities.get)
+		min_key = min(type_probabilities, key = type_probabilities.get)
+		max_value = type_probabilities[max_key]
+		min_value = type_probabilities[min_key]
+
+		print min_key
+		denominator = max_value - min_value	
+		# normalizing probabilities to be from 0 to 1
+		for item in type_probabilities:
+			type_probabilities[item] = (type_probabilities[item] - min_value) / denominator
+		
+		mean = sum(type_probabilities.itervalues())/7
+		print mean 
+
+		#computing the standard deviation of the data. Not sure if the data is skewed or not. Seems not to be. could implment basic IQR also 
+		variance = 0 
+		for item in type_probabilities:
+			deviation = type_probabilities[item] - mean
+			deviation = deviation * deviation
+			variance += deviation
+
+		variance = variance / len(type_probabilities)
+		std_dev = math.sqrt(variance)
+		print std_dev
+		return max_key, type_probabilities, mean , std_dev
 
 
 	def type_switch(self, feature, arg, curr_dict): # need to build this up
