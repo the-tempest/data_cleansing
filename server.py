@@ -1,10 +1,11 @@
-from flask import Flask, request, render_template, url_for, jsonify, send_file, Response, make_response
+from flask import Flask, request, render_template, url_for, jsonify, send_file, Response, make_response, send_from_directory
 from datetime import datetime
 import os, subprocess
 import main
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploaded/'
+app.config['OUTPUT_FOLDER'] = 'output/'
 
 @app.route('/')
 def index():
@@ -20,12 +21,12 @@ def process():
     for i in range(len(request.files)):
         f = request.files['file'+str(i)]
         if f:
-            now = datetime.now()
+            now = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
             noExt, ext = os.path.splitext(f.filename);
-            filename = os.path.join(app.config['UPLOAD_FOLDER'], f.filename)
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], noExt+now+ext)
             f.save(filename)
             main.execute(filename)
-            return "output/"+noExt+"_c.txt";
+            return noExt+now+".txt";
 
 
     return "No files were uploaded";
@@ -36,7 +37,8 @@ def process():
 @app.route('/download', methods=['GET'])
 def download():
     filename = request.args['fn'];
-    return send_file(filename, as_attachment=True);
+    return send_from_directory(app.config['OUTPUT_FOLDER'],filename, as_attachment=True);
+
 
 if __name__ == '__main__':
     app.run(debug=True)
