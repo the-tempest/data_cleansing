@@ -28,7 +28,7 @@ class column_typer:
 		self.build_classifiers()
 		self.my_table = table
 		self.numClass = numeric_classifier()
-				
+
 	def build_report(self):
 		ret = ''
 		results = self.table_typify(self.my_table)
@@ -39,7 +39,7 @@ class column_typer:
 			line = "The column named "
 			line += actual
 			line += " appears to be of the type "
-			line += prediction
+			line += str(prediction)
 			line += " with a certainty of "
 			line += fraction
 			line += "%.\n\n"
@@ -60,7 +60,7 @@ class column_typer:
 			column = elem.rows
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
-			elem.addDict(generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
+			elem.addDict(self.generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
 			prediction, fraction = self.column_predict(guesses)
 			actual.append(elem.colName)
 			predictions.append(prediction)
@@ -71,8 +71,8 @@ class column_typer:
 			a = actual[i]
 			p = predictions[i]
 			f = fractions[i]
-			
-			if p = 'misc':
+
+			if p == 'misc':
 				t = self.differentiate(i)
 			t = (a, p, f)
 			results.append(t)
@@ -82,12 +82,15 @@ class column_typer:
 		'''takes in a list of predictions for
 		a column and returns a tuple of the form
 		(prediction, certainty)'''
-		results = {}
+		'''results = {}
 		# populate the dictionary
+
 		for item in guesses:
-			if item not in results:
-				results[item] = 0
-			results[item] += 1
+
+			if (not isinstance(item,tuple)): # same problem as in generate dict below
+				if item not in results:
+					results[item] = 1
+				results[item] += 1
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
@@ -97,19 +100,25 @@ class column_typer:
 		guess_fraction = results[best_guess]
 		# ensure there actually is a good guess
 		if best_guess < .7:
-			return 'misc', None
-		return best_guess, guess_fraction
-		
+			return 'misc', None''' # this function is broken
+			# because for some guesses, all of the elements are tuples and best_guess
+			# is thus empty, need a way to deal with tuples!
+		return 0,0 #best_guess, guess_fraction
+
 	def generate_dict(self, guesses):
 		'''takes in a list of predictions for
-		a column and returns a list of all the predictions and the 
+		a column and returns a list of all the predictions and the
 		fractions corresponding for that specific column'''
 		results = {}
 		# populate the dictionary
+		# problem here is that Will's numeric classifier returns dictionaries
+		# guesses
 		for item in guesses:
-			if item not in results:
-				results[item] = 0
-			results[item] += 1
+			if (not isinstance(item, tuple)): # need to get rid of this eventually
+				if item in results:
+					results[item] += 1
+				else:
+					results[item] = 1
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
@@ -117,7 +126,7 @@ class column_typer:
 			results[key] = fraction
 		# ensure there actually is a good guess
 		return results
-		
+
 	def column_typify(self, column):
 		'''takes in a column and
 		returns a list of predictions
@@ -145,30 +154,30 @@ class column_typer:
 		'''this will address the cases where the fractions are below .7'''
 		#i indicates the index of the column in the table we are using
 		#get best two predictions
-		
+
 		table = self.my_table
 		elem = table.column[i]
 		dict = column.dictionary
 		best_guess = dict_max(dict)
 		guess_fraction = results[best_guess]
-    	r = dict(dict)
-    	del r[key]
+		r = dict(dict)
+		del r[key]
 		best_guess2 = dict_max(r)
-		guess_fraction = results[best_guess2]		
+		guess_fraction = results[best_guess2]
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
-		#we will write new heuristics in the heuristics class that weigh the column name 
-		#more heavily given that we already have chosen the type to be a certain way
-		
-		#ALSO: we can use the information from previous columns to learn about the current one
-		# EX: if we already have name column, perhaps given more weight to the alternative type of a given
-		#column	
-		
-		
-		
+	#we will write new heuristics in the heuristics class that weigh the column name
+	#more heavily given that we already have chosen the type to be a certain way
+
+	#ALSO: we can use the information from previous columns to learn about the current one
+	# EX: if we already have name column, perhaps given more weight to the alternative type of a given
+	#column
+
+
+
 		# remember, you need to return a tuple of the form t = (a, p, f)
-		
+
 	def build_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
@@ -187,8 +196,8 @@ class column_typer:
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
 					 ASCII_NAME, description_pv]
-					 
-		
+
+
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
 		ds_regex = r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$'''
@@ -212,7 +221,7 @@ class column_typer:
 		city_state_ex     = COMMON_STATEPROV_ABBREV + COMMON_CITIES
 		email_ex          = COMMON_URL_EXTENSIONS + COMMON_EMAIL_DOMAINS
 		location_ex       = COMMON_CITIES + COMMON_LOCATION_FEATURES
-		 description_ex    = COMMON_ADJECTIVES
+		description_ex    = COMMON_ADJECTIVES
 		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
 						  location_ex, description_ex]
