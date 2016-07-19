@@ -106,11 +106,22 @@
             console.log(typeof res);
             $("#processing").fadeOut("slow", function() {
 
-                $("#complete").html('Processing Complete! <br/> <br /> \
-                        <form action="/download" method="get"> \
-                        <input type="hidden" name="fn" value="' + res +'" /> \
-                        <input type="submit" class="btn btn-success" value="Download Your File" />\
-                        </form> ');
+                $("#complete").html('<div class="row"> \
+                                        <div class="col-lg-offset-0"> \
+                                            Processing Complete! <br/> <br /> \
+                                        </div>\
+                                     </div> \
+                        <div class="row" style="display:flex;"> \
+                            <div class="col-lg-offset-0"> \
+                            <form action="/download" method="get"> \
+                                <input type="hidden" name="fn" value="' + res +'" /> \
+                                <input type="submit" class="btn btn-success" value="Download Your File" />\
+                            </form> \
+                            </div> \
+                        </div> <br /> \
+                        <div class="row">\
+                            <input class="col-lg-offset-0 btn btn-info" type="button" value="Clean Another File" onclick="location.reload();"> \
+                        </div>');
             })
           },
           error: function (t, b, err) {
