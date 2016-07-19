@@ -3,8 +3,10 @@ from os import listdir
 from os.path import isfile, join
 import subprocess
 import pickle
-import time
 import extraction
+from secrets import password, port, database, user, host
+
+
 
 execfile('table.py')
 training_directory = r"uploaded/numeric_training_data"
@@ -31,12 +33,12 @@ class numeric_classifier:
 		self.features = features
 		self.numeric_types = numeric_types #list of all numeric_type classes (strings)
 
-		if os.path.isfile("training_dictionary.dat"):
-			self.trained_dictionary = self.load("training_dictionary.dat")
+		if os.path.isfile("trained_dictionary.dat"):
+			self.trained_dictionary = self.load("trained_dictionary.dat")
 		else:
 			trainer = numeric_trainer(self.numeric_types, self.features)
 			trainer.train(training_directory)
-			self.trained_dictionary = trainer.training_dictionary
+			self.trained_dictionary = trainer.trained_dictionary
 
 
 	def classify(self, nText):
@@ -126,7 +128,7 @@ class numeric_trainer: # class fo holding training functions
 			file_path = os.path.join(training_dir, training_file) # build up the whole path
 			print file_path + "\n"
 			table_name = extraction.extract(file_path);
-			t = getTable(table_name, "root", "123", "localhost", "world") #  returns table object
+			t = getTable(table_name, user, password, host, database) #  returns table object
 			column_names = []
 
 			for column in t.columns:
@@ -145,7 +147,7 @@ class numeric_trainer: # class fo holding training functions
 				column_obj = t.columns[index] # we have the column object now
 				self.train_on_column(column_obj)
 
-		#self.save(self.trained_dictionary, "training_dictionary.dat")
+		self.save(self.trained_dictionary, "trained_dictionary.dat")
 
 	def train_on_column(self, col):
 		row_list = col.rows
