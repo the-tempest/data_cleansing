@@ -34,7 +34,7 @@ def execute(filename):
     #    json.dump(cl, outfile);
 
     dirToSave = "output";
-    fn = table_name + "_c.txt"
+    fn = table_name + ".txt"
     pathToSave = os.path.join(dirToSave, fn);
     print pathToSave
     with open(pathToSave, "w") as text_file:
