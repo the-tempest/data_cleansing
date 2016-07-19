@@ -1,45 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Data Cleaning </title>
-<link rel="stylesheet" type="text/css" media="all" href="static/styles.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title> Data Cleansing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="static/styles.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat:700,400' rel='stylesheet' type='text/css'>
+  </head>
+  <script src="static/react.js"></script>
+  <script src="static/react-dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js"></script>
 
-</head>
-<body>
+  <body>
+    <div class="container-fluid">
+        <div class="jumbotron">
+            <div class="row" style="display:flex;">
+                <div class="col-lg-offset-0 col-lg-5" id="ttl">  Data Cleansing  </div>
+                <div id="nb" class="col-lg-5 col-lg-offset-6"></div>
+            </div> <br />
+            <div class="row">
+                <div id="upload" class="col-lg-offset-1">
+                </div>
+                <div id="processing" class="col-lg-offset-1">
+                </div>
+                <div id="complete" class="col-lg-offset-1">
 
-<h1>Data Cleaning</h1>
-
-
-<form id="upload" enctype="multipart/form-data" onsubmit="uploadFiles()">
-
-<fieldset>
-<legend>File Upload</legend>
-
-<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />
-
-<div>
-	<label for="fileselect">Files to upload:</label>
-	<input type="file" id="fileselect" name="fileselect[]" multiple="multiple" />
-	<div id="filedrag">or drop files here</div>
-</div>
-
-<div id="submitbutton" >
-	<button type="submit">Upload Files</button>
-</div>
-
-</fieldset>
-
-</form>
-
-<div id="progress"></div>
-
-<div id="messages">
-<p>Status Messages</p>
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+  <script type="text/babel">
 
 
-<script src="static/filedrag.js"></script>
-</body>
+    var Upload = React.createClass({
+      componentDidMount: function() {
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+        // Great success! All the File APIs are supported.
+           var dd = document.getElementById("draganddrop");
+           var fs = document.getElementById("fileselect")
+
+            dd.addEventListener("dragover", this.fileDragHover, false);
+            dd.addEventListener("dragleave", this.fileDragHover, false);
+            dd.addEventListener("drop", this.addFile, false);
+            dd.style.display = "block";
+
+        } else {
+        alert('The File APIs are not fully supported in this browser.');
+        }
+
+      },
+      getInitialState: function () {
+        return {files: [], currentFileNames: ""};
+      },
+
+      fileDragHover: function(e) {
+        console.log("FILEDRAGHOVER")
+    		e.stopPropagation();
+    		e.preventDefault();
+    		e.target.className = (e.type == "dragover" ? "col-lg-5 hover" : "col-lg-5");
+    	},
+
+      addFile: function (e) {
+        console.log("addFile");
+        if (e.target.id == "draganddrop")
+            this.fileDragHover(e);
+        var files = e.target.files || e.dataTransfer.files;
+        var tempFiles = this.state.files;
+        var tempCurr = this.state.currentFileNames;
+        for (var i = 0, f; f = files[i]; i++) {
+    			tempFiles.push(f);
+                if (tempCurr)
+                    tempCurr += ", " + f.name;
+                else
+                    tempCurr += f.name;
+        }
+        this.setState({files: tempFiles, currentFileNames: tempCurr});
+      },
+      printFiles: function () {
+        console.log(this.state.files)
+        for  (var i = 0; i < this.state.files.length; i++ ) {
+            console.log(this.state.files[i]);
+        }
+        console.log(this.state.currentFileNames);
+      },
+      uploadToServer: function () {
+        var formData = new FormData();
+        for  (var i = 0; i < this.state.files.length; i++ ) {
+            formData.append('file'+i, this.state.files[i]);
+        }
+        $("#upload").fadeOut("slow", function() {
+            $("#processing").html(" <img src='static/Loading_icon2.gif'> ");
+        })
+
+          $.ajax({
+          //dataType: 'json',
+          type: "POST",
+          url: "/process",
+          data: formData,
+          processData: false,  // tell jQuery not to process the data
+          contentType: false,  // tell jQuery not to set contentType
+          success: function (res) {
+            console.log(res);
+            console.log(typeof res);
+            $("#processing").fadeOut("slow", function() {
+
+                $("#complete").html('Processing Complete! <br/> <br /> \
+                        <form action="/download" method="get"> \
+                        <input type="hidden" name="fn" value="' + res +'" /> \
+                        <input type="submit" class="btn btn-success" value="Download Your File" />\
+                        </form> ');
+            })
+          },
+          error: function (t, b, err) {
+            console.log(t);
+          }
+        })
+      },
+      render: function() {
+        /*var l = this.state.files.length;
+        var currentFiles = "";
+        if (l > 0 )
+            currentFiles += "<div className='row'>";
+        for (var i = 0; i < this.state.files.length; i++) {
+            currentFiles += "<h3> File " + i + ": " + this. + " </h3> <br />";
+        }
+        if (l > 0)
+            currentFiles += "</div>";*/
+        return (<div>
+                    <fieldset>
+                        <div className="row">
+                            <label className="btn btn-default">
+                                <input className="hidden" type="file" id={this.props.id} name="fileselect[]"  onChange={this.addFile} multiple="multiple" />
+                                Click here to choose a file
+                            </label>
+                        </div>
+                        <br />
+                        <div className="row">
+
+                            <div id="draganddrop" className="col-lg-5" onChange={this.addFile} >
+                                <br /><br />
+                                or drop files here
+                                <br /><br /><br />
+                            </div>
+
+                        </div>
+                        <br />
+                        <div className="row">
+                                Uploaded files: {this.state.currentFileNames}
+                        </div>
+                        <br />
+                        <div className="row">
+                            <button type="button" className="btn btn-success" onClick={this.uploadToServer}>Upload</button>
+                            <button type="button" onClick={this.printFiles} style={{display: "none"}} >Print</button>
+
+                        </div>
+                    </fieldset>
+
+                </div>);
+
+      }
+
+    });
+
+    var NavBar = React.createClass({
+      render: function() {
+        return (<div>
+                    <ul className="nav nav-pills">
+                        <li role="presentation" className="active"><a href="#">Home</a></li>
+                        <li role="presentation"><a href="#">About</a></li>
+                        <li role="presentation"><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+        );
+      }
+    })
+
+
+
+
+    ReactDOM.render(<Upload id="fileselect"/>,  document.getElementById('upload'));
+    ReactDOM.render(<NavBar />, document.getElementById('nb'));
+
+  </script>
+
+  </body>
 </html>
