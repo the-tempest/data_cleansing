@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, url_for, jsonify
+from flask import Flask, request, render_template, url_for, jsonify, send_file, Response, make_response
 from datetime import datetime
 import os, subprocess
 import main
@@ -21,14 +21,22 @@ def process():
         f = request.files['file'+str(i)]
         if f:
             now = datetime.now()
+            noExt, ext = os.path.splitext(f.filename);
             filename = os.path.join(app.config['UPLOAD_FOLDER'], f.filename)
             f.save(filename)
-            print filename
             main.execute(filename)
+            return "output/"+noExt+"_c.txt";
 
-    return jsonify({"success":True})
 
-#@app.p
+    return "No files were uploaded";
+
+
+
+
+@app.route('/download', methods=['GET'])
+def download():
+    filename = request.args['fn'];
+    return send_file(filename, as_attachment=True);
 
 if __name__ == '__main__':
     app.run(debug=True)
