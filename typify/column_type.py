@@ -11,6 +11,7 @@ execfile("typify/features/features.py")
 execfile("typify/classifier.py")
 execfile('numeric_classifier.py')
 execfile('table.py')
+execfile("typify/tie_breaker.py")
 
 #The form strings are in the process of being totally replaced with regular expressions
 #TODO: unicode support
@@ -32,6 +33,7 @@ class column_typer:
 	def build_report(self):
 		ret = ''
 		results = self.table_typify(self.my_table)
+		print results
 		for item in results:
 			actual = item[0]
 			prediction = item[1]
@@ -60,7 +62,11 @@ class column_typer:
 			column = elem.rows
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
+			print "real guesses"
+			#print guesses
 			elem.addDict(self.generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
+			print "guesses after dict function call"
+			#print guesses
 			prediction, fraction = self.column_predict(guesses)
 			actual.append(elem.colName)
 			predictions.append(prediction)
@@ -72,9 +78,11 @@ class column_typer:
 			p = predictions[i]
 			f = fractions[i]
 
-			if p == 'misc':
+			if p == ('misc', None):
 				t = self.differentiate(i)
 			t = (a, p, f)
+			print t
+
 			results.append(t)
 		return results
 
@@ -82,15 +90,16 @@ class column_typer:
 		'''takes in a list of predictions for
 		a column and returns a tuple of the form
 		(prediction, certainty)'''
-		'''results = {}
+		results = {}
 		# populate the dictionary
 
 		for item in guesses:
-
-			if (not isinstance(item,tuple)): # same problem as in generate dict below
-				if item not in results:
-					results[item] = 1
-				results[item] += 1
+			print "this is item    "
+			print item
+			#if (not isinstance(item,tuple)): # same problem as in generate dict below
+			if item not in results:
+				results[item] = 0
+			results[item] += 1
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
@@ -99,11 +108,11 @@ class column_typer:
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
 		# ensure there actually is a good guess
-		if best_guess < .7:
-			return 'misc', None''' # this function is broken
+		if best_guess < .5:
+			return 'misc', None # this function is broken
 			# because for some guesses, all of the elements are tuples and best_guess
 			# is thus empty, need a way to deal with tuples!
-		return 0,0 #best_guess, guess_fraction
+		return best_guess, guess_fraction #best_guess, guess_fraction
 
 	def generate_dict(self, guesses):
 		'''takes in a list of predictions for
@@ -132,6 +141,7 @@ class column_typer:
 		returns a list of predictions
 		for each token'''
 		predictions = []
+		
 		for item in column:
 			guess = self.token_typify(item)
 			predictions.append(guess)
@@ -141,13 +151,18 @@ class column_typer:
 		'''takes in a token and returns a
 		prediction for its type'''
 		if no_letters(token):
-			tipe = self.numClass.classify(token)
+			tipe, probability_dictionary, mean, std_dev = self.numClass.classify(token)
+			print tipe
 			return tipe
 		certainties = {}
 		for f in heuristics:
 			tipe, value = f(token, self)
 			certainties[tipe] = value
 		prediction = dict_max(certainties)
+		print "prediction"
+		print prediction
+		
+		print "getting here"
 		return prediction
 
 	def differentiate(self, i):
@@ -167,9 +182,10 @@ class column_typer:
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
-	#we will write new heuristics in the heuristics class that weigh the column name
-	#more heavily given that we already have chosen the type to be a certain way
-
+		return tie_breaker(guesses, best_guess, best_guess2, self)
+		
+		
+		
 	#ALSO: we can use the information from previous columns to learn about the current one
 	# EX: if we already have name column, perhaps given more weight to the alternative type of a given
 	#column

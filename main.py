@@ -37,6 +37,7 @@ def execute(filename):
     fn = table_name + ".txt"
     pathToSave = os.path.join(dirToSave, fn);
     print pathToSave
+    print 'this'
     with open(pathToSave, "w") as text_file:
         text_file.write(cl);
 
