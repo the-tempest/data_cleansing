@@ -468,6 +468,28 @@ def description_heuristic(token, typer):
 
 	return 'description', value + misc_value
 
+def repetition_heuristic(column, tipe):
+	'''returns a heuristic value based on the amount of repetition in the column
+	if the column doesn't already have a strong classification'''
+	value = 0
+	length = len(column)
+
+	if tipe in ['full name', 'full address', 'street address', 'city state', 'email']:
+		return value
+
+	token_dict = {}
+	for elem in column:
+		if not token_dict.has_key(elem):
+			token_dict[elem] = 0
+		token_dict[elem] += 1
+
+	distinct_vals = len(token_dict.keys())
+	if float(length)/distinct_vals >= 10:
+		value += 100
+
+	return value
+
+
 def propname_city(token, typer):
 	'''this is not really a heuristic of the same form as the others; it functions
 	as a tie breaker'''
