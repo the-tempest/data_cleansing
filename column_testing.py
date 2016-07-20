@@ -30,7 +30,7 @@ class column_type_tester:
 
 		return confusion_matrix, matrix_indices
 
-	def test_on_file(self):
+	def test_on_file(self): # works on columns should break down further
 		
 		typify_results = self.column_typer.table_typify(self.column_typer.my_table) # list of tuples
 			
