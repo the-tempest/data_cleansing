@@ -67,7 +67,7 @@ class column_typer:
 			elem.addDict(self.generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
 			print "guesses after dict function call"
 			#print guesses
-			prediction, fraction = self.column_predict(guesses)
+			prediction, fraction = self.column_predict(guesses, column)
 			actual.append(elem.colName)
 			predictions.append(prediction)
 			fractions.append(fraction)
@@ -86,7 +86,7 @@ class column_typer:
 			results.append(t)
 		return results
 
-	def column_predict(self, guesses):
+	def column_predict(self, guesses, column):
 		'''takes in a list of predictions for
 		a column and returns a tuple of the form
 		(prediction, certainty)'''
@@ -107,6 +107,8 @@ class column_typer:
 			results[key] = fraction
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
+		if repetition_heuristic(column, best_guess) == 100:
+			return 'repetition', 1.00
 		# ensure there actually is a good guess
 		if best_guess < .5:
 			return 'misc', None # this function is broken
