@@ -48,12 +48,6 @@ class error_detector:
 			print column[item]
 
 
-
-
-
-														
-
-
 def compute_IQR(L):
 	L = sorted(L)
 	length = len(L)

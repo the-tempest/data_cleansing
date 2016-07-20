@@ -9,7 +9,11 @@ class column_type_tester:
 		table_name = extraction.extract(filepath)
 		t = getTable(table_name, user, password, host, database)
 		self.column_typer = column_typer(t)
-		self.name = '123'
+		
+		confusion_matrix, matrix_indices = self.initialize_confusion_matrix()
+
+		self.confusion_matrix = confusion_matrix
+		self.matric_indices = matric_indices
 
 	def initialize_confusion_matrix(self):
 		confusion_matrix = []
@@ -26,22 +30,59 @@ class column_type_tester:
 
 		return confusion_matrix, matrix_indices
 
-	def test_on_file(self, filepath):
+	def test_on_file(self):
 		
 		typify_results = self.column_typer.table_typify(self.column_typer.my_table) # list of tuples
-		confusion_matrix, matrix_indices = self.initialize_confusion_matrix()
 			
 		print typify_results
 		print confusion_matrix
 
 		for item in typify_results:
 			if item[0] == item[1]: # if labeled correctly
-				confusion_matrix[matrix_indices[item[0]]][matrix_indices[item[0]]] += 1
+				self.confusion_matrix[self.matrix_indices[item[0]]][self.matrix_indices[item[0]]] += 1
 			else:
-				confusion_matrix[matrix_indices[item[0]]][matrix_indices[item[1]]] += 1
+				self.confusion_matrix[self.matrix_indices[item[0]]][self.matrix_indices[item[1]]] += 1
 
-		return confusion_matrix
+		precision = self.compute_precision()
+		recall = self.compute_recall()
+		fscore = self.fscore(precision, recall)
 
+		print precision
+		print compute_recall
 
+		return fscore
 
+	def compute_precision():
+		curr_numerator = 0
+		curr_denominator = 0
+		for x in range(NUMBER_OF_CLASSES):
+			curr_numerator += self.confusion_matrix[x][x]	
+			false_positives = 0	
+			for y in range(NUMBER_OF_CLASSES): # maybe iterate this in opposite direction
+				if x != y:
+					false_positives += self.confusion_matrix[y][x]
+			curr_denominator += false_positives + self.confusion_matrix[x][x]		
+				
+
+		return curr_numerator / curr_denominator
+
+	def compute_recall():
+		curr_numerator = 0
+		curr_denominator = 0
+
+		for x in range(NUMBER_OF_CLASSES):
+			curr_numerator += self.confusion_matrix[x][x]
+			false_negatives = 0
+			for y in range(NUMBER_OF_CLASSES): 
+				if x != y:
+					false_negatives += self.confusion_matrix[x][y]
+			curr_denominator += false_negatives + self.confusion_matrix[x][x]
+
+		return curr_numerator / curr_denominator
+
+	def fscore(precision, recall):
+		numerator = precision * recall
+		denominator = precision + recall
+
+		return numerator / denominator
 
