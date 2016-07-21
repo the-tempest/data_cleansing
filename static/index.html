@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Montserrat:700,400' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
   </head>
   <script src="static/react.js"></script>
   <script src="static/react-dom.js"></script>
@@ -26,7 +27,10 @@
                 <div id="processing" class="col-lg-offset-1">
                 </div>
                 <div id="complete" class="col-lg-offset-1">
-
+                </div>
+                <div id="report" class="col-lg-offset-1">
+                </div>
+                <div id="download" class="col-lg-offset-1">
                 </div>
             </div>
         </div>
@@ -47,7 +51,7 @@
             dd.style.display = "block";
 
         } else {
-        alert('The File APIs are not fully supported in this browser.');
+            alert('The File APIs are not fully supported in this browser.');
         }
 
       },
@@ -101,20 +105,25 @@
           data: formData,
           processData: false,  // tell jQuery not to process the data
           contentType: false,  // tell jQuery not to set contentType
-          success: function (res) {
-            console.log(res);
-            console.log(typeof res);
+          success: function (res,  textstatus, req) {
+            var fname = req.getResponseHeader('file');
+            var sentences = res.split("%.");
+              console.log(sentences)
             $("#processing").fadeOut("slow", function() {
 
                 $("#complete").html('<div class="row"> \
                                         <div class="col-lg-offset-0"> \
                                             Processing Complete! <br/> <br /> \
                                         </div>\
-                                     </div> \
-                        <div class="row" style="display:flex;"> \
+                                     </div> ');
+                for (i=0; i < sentences.length; i++) {
+                    $("#report").append(sentences[i] + '<br />');
+                }
+
+                $("#download").html('<div class="row" style="display:flex;"> \
                             <div class="col-lg-offset-0"> \
                             <form action="/download" method="get"> \
-                                <input type="hidden" name="fn" value="' + res +'" /> \
+                                <input type="hidden" name="fn" value="' + fname +'" /> \
                                 <input type="submit" class="btn btn-success" value="Download Your File" />\
                             </form> \
                             </div> \
@@ -122,6 +131,7 @@
                         <div class="row">\
                             <input class="col-lg-offset-0 btn btn-info" type="button" value="Clean Another File" onclick="location.reload();"> \
                         </div>');
+
             })
           },
           error: function (t, b, err) {

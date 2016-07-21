@@ -1,6 +1,0 @@
-id: Number
-first_name: Number
-last_name: Number
-email: Latitude
-gender: Number
-ip_address: IP
