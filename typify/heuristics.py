@@ -485,6 +485,8 @@ def description_heuristic(token, typer):
 def repetition_heuristic(column, tipe):
 	'''returns a heuristic value based on the amount of repetition in the column
 	if the column doesn't already have a strong classification'''
+	# TODO figure out what to do with this
+	# it's a bit redundant
 	value = 0
 	length = len(column)
 
@@ -555,4 +557,4 @@ def propname_city(token, typer):
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
 			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
 			 city_state_heuristic, email_heuristic, location_heuristic,
-			description_heuristic]
+			 description_heuristic]

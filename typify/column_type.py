@@ -31,6 +31,8 @@ class column_typer:
 		self.numClass = numeric_classifier()
 
 	def build_report(self):
+		'''Classifies the columns in my_table and
+		returns a summary report as a string'''
 		ret = ''
 		results = self.table_typify(self.my_table)
 		print results
@@ -108,7 +110,7 @@ class column_typer:
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
 		if repetition_heuristic(column, best_guess) == 100:
-			return 'repetition', 1.00
+			return best_guess, 1.00
 		# ensure there actually is a good guess
 		if best_guess < .5:
 			return 'misc', None # this function is broken
@@ -174,10 +176,10 @@ class column_typer:
 
 		table = self.my_table
 		elem = table.column[i]
-		dict = column.dictionary
-		best_guess = dict_max(dict)
+		dyct = column.dictionary
+		best_guess = dict_max(dyct)
 		guess_fraction = results[best_guess]
-		r = dict(dict)
+		r = dict(dyct) # TODO what is this supposed to do?
 		del r[key]
 		best_guess2 = dict_max(r)
 		guess_fraction = results[best_guess2]
@@ -188,9 +190,9 @@ class column_typer:
 		
 		
 		
-	#ALSO: we can use the information from previous columns to learn about the current one
-	# EX: if we already have name column, perhaps given more weight to the alternative type of a given
-	#column
+		#ALSO: we can use the information from previous columns to learn about the current one
+		# EX: if we already have name column, perhaps given more weight to the alternative type of a given
+		#column
 
 
 
@@ -214,7 +216,6 @@ class column_typer:
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
 					 ASCII_NAME, description_pv]
-
 
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
