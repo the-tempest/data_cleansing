@@ -5,7 +5,15 @@
 # belongs to. They take in a token and a classifier,
 # which is a helper class defined in classifier.py
 
-#TODO - THINK OF MORE FEATURES TO IMPLEMENT
+# the process for each heuristic:
+# 1. check legality of characters in the token, return 0 if the token doesn't work at all
+# 2. create any required temporary variables
+# 3. assign points based on category:
+#    - 10 points for column name
+#    - 20 points for regular expression
+#    - 50 points for being a known example
+#    - 10 points for a miscellaneous classification
+# 4. return name of type being tested and point value (out of 100)
 
 NAME_LENGTH = 7
 NUM_NAME_SPACES = 1.5
@@ -190,8 +198,6 @@ def datestring_heuristic(token, typer):
 	if 'date' in typer.curr_col_name.lower():
 		value += 10
 
-	# account for datestring length
-
 	#account for the form of the token
 	if my_typer.has_form(token):
 		value += 20
@@ -244,7 +250,8 @@ def full_address_heuristic(token, typer):
 
 	# misc part ######################
 	misc_value = 0
-	# TODO come up with something
+	if len(split_token) in range(9, 12):
+		misc_value += 10
 
 	return 'full address', value + misc_value
 
@@ -285,7 +292,8 @@ def street_address_heuristic(token, typer):
 
 	# misc part #####################3
 	misc_value = 0
-	# TODO think of something
+	if len(split_token) == 2:
+		misc_value = 10
 
 	return 'street address', value + misc_value
 
@@ -326,7 +334,11 @@ def city_state_heuristic(token, typer):
 
 	# misc part ########################
 	misc_value = 0
-	# TODO implement
+	if len(split_token) == 2:
+		misc_value += 5
+		if len(split_token[1]) == 2:
+			misc_value += 5
+	
 
 	return 'city state', value + misc_value
 
@@ -414,11 +426,13 @@ def location_heuristic(token, typer):
 
 	# misc part ###################333
 	misc_value = 0
-	# TODO implement properly
+
 	# account for number of spaces
-	value += NUM_LOCATION_SPACES - abs(spaces - NUM_LOCATION_SPACES)
+	misc_value += NUM_LOCATION_SPACES - abs(spaces - NUM_LOCATION_SPACES)
 	# account for location length
-	value = LOCATION_LENGTH - abs(avg_len - LOCATION_LENGTH)
+	misc_value += LOCATION_LENGTH - abs(avg_len - LOCATION_LENGTH)
+	if misc_value < 0:
+		misc_value = 0
 
 	return 'location', value
 
@@ -471,6 +485,8 @@ def description_heuristic(token, typer):
 def repetition_heuristic(column, tipe):
 	'''returns a heuristic value based on the amount of repetition in the column
 	if the column doesn't already have a strong classification'''
+	# TODO figure out what to do with this
+	# it's a bit redundant
 	value = 0
 	length = len(column)
 
@@ -494,6 +510,7 @@ def propname_city(token, typer):
 	'''this is not really a heuristic of the same form as the others; it functions
 	as a tie breaker'''
 	# get the right classifier
+	# TODO implement
 	my_typer = typer.column_classifiers[FULL_NAME_POS]
 
 	char_val_list = []
@@ -538,6 +555,6 @@ def propname_city(token, typer):
 
 	
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
-				datestring_heuristic, full_address_heuristic, street_address_heuristic,
-				city_state_heuristic, email_heuristic, location_heuristic,
-				description_heuristic]
+			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
+			 city_state_heuristic, email_heuristic, location_heuristic,
+			 description_heuristic]

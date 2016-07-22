@@ -14,7 +14,7 @@ execfile('table.py')
 execfile("typify/tie_breaker.py")
 
 #The form strings are in the process of being totally replaced with regular expressions
-#TODO: unicode support
+#TODO: figure out what to do with unicode
 
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]
@@ -30,6 +30,8 @@ class column_typer:
 		self.my_table = table
 		self.numClass = numeric_classifier()
 	def build_report(self):
+		'''Classifies the columns in my_table and
+		returns a summary report as a string'''
 		ret = ''
 		results = self.table_typify(self.my_table)
 		#print results
@@ -109,7 +111,7 @@ class column_typer:
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
 		if repetition_heuristic(column, best_guess) == 100:
-			return 'repetition', 1.00
+			return best_guess, 1.00
 		# ensure there actually is a good guess
 		print guess_fraction
 		if float (guess_fraction) <float(.9):
@@ -176,6 +178,7 @@ class column_typer:
 		#get best two predictions
 
 		table = self.my_table
+<<<<<<< HEAD
 		elem = table.columns[i]
 		dict = elem.dictionary
 		best_guess = dict_max(dict)
@@ -183,6 +186,16 @@ class column_typer:
 		del dict[best_guess]
 		best_guess2 = dict_max(dict)
 		guess_fraction = dict[best_guess2]
+=======
+		elem = table.column[i]
+		dyct = column.dictionary
+		best_guess = dict_max(dyct)
+		guess_fraction = results[best_guess]
+		r = dict(dyct) # TODO what is this supposed to do?
+		del r[key]
+		best_guess2 = dict_max(r)
+		guess_fraction = results[best_guess2]
+>>>>>>> fe3d8c42702b3d72c7838b4475d301c208c28b7f
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
@@ -190,9 +203,9 @@ class column_typer:
 		prediction = tie_breaker1.differ()		
 		return prediction
 		
-	#ALSO: we can use the information from previous columns to learn about the current one
-	# EX: if we already have name column, perhaps given more weight to the alternative type of a given
-	#column
+		#ALSO: we can use the information from previous columns to learn about the current one
+		# EX: if we already have name column, perhaps given more weight to the alternative type of a given
+		#column
 
 
 
@@ -216,7 +229,6 @@ class column_typer:
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
 					 ASCII_NAME, description_pv]
-
 
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
