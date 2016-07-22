@@ -481,7 +481,75 @@ def description_heuristic(token, typer):
 
 	return 'description', value + misc_value
 
+def repetition_heuristic(column, tipe):
+	'''returns a heuristic value based on the amount of repetition in the column
+	if the column doesn't already have a strong classification'''
+	value = 0
+	length = len(column)
 
+	if tipe in ['full name', 'full address', 'street address', 'city state', 'email']:
+		return value
+
+	token_dict = {}
+	for elem in column:
+		if not token_dict.has_key(elem):
+			token_dict[elem] = 0
+		token_dict[elem] += 1
+
+	distinct_vals = len(token_dict.keys())
+	if float(length)/distinct_vals >= 10:
+		value += 100
+
+	return value
+
+
+def propname_city(token, typer):
+	'''this is not really a heuristic of the same form as the others; it functions
+	as a tie breaker'''
+	# get the right classifier
+	my_typer = typer.column_classifiers[FULL_NAME_POS]
+
+	char_val_list = []
+	for char in token:
+		char_val_list.append(ord(char))
+	split_token = token.split()
+	len_split_token = len(split_token)
+
+	#check if it can't be a description
+	if not my_typer.can_be(char_val_list):
+		return 'description', 0
+
+	# main part #####################
+	value = 0
+
+	# check column name
+	if 'description' in typer.curr_col_name.lower():
+		value += 10
+	elif 'note' in typer.curr_col_name.lower():
+		value += 10
+
+	#account for the form of the token
+	if my_typer.has_form(token):
+		value += 20
+
+	# looking at format of individual words
+	for word in split_token:
+		if my_typer.is_a(word.lower()):
+			value += 50
+			break
+
+	# misc part #############################
+	misc_value = 0
+	# account for description length
+	# using number of spaces
+	if len_split_token > 10:
+		misc_value += 10
+	else:
+		misc_value += len_split_token
+
+	return 'description', value + misc_value
+
+	
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
 			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
 			 city_state_heuristic, email_heuristic, location_heuristic,

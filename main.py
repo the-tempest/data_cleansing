@@ -1,14 +1,14 @@
 import sys, subprocess, json, operator, os
+import extraction
 execfile('table.py')
 execfile('typify/column_type.py')
 execfile('numeric_classifier.py')
 
 def execute(filename):
-    table_name = subprocess.check_output([sys.executable, "extraction.py", str(filename)])
-    table_name = table_name.replace("\n", "")
-    table_name = table_name.replace(" ", "_")
+    filename = filename.replace("\n", "")
+    filename = filename.replace(" ", "_")
+    table_name = extraction.extract(filename);
     t = getTable(table_name);
-    #t.build_column_index();
 
     '''numClass = numeric_classifier();
     result = "";
@@ -33,7 +33,12 @@ def execute(filename):
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);
 
-    with open("output/" + table_name + '_combined.txt', "w") as text_file:
+    dirToSave = "output";
+    fn = table_name + ".txt"
+    pathToSave = os.path.join(dirToSave, fn);
+    print pathToSave
+    print 'this'
+    with open(pathToSave, "w") as text_file:
         text_file.write(cl);
 
     #with open("output/" + table_name + '_numeric.txt', "w") as text_file:

@@ -3,7 +3,10 @@ from os import listdir
 from os.path import isfile, join
 import subprocess
 import pickle
-import time
+import extraction
+from secrets import password, port, database, user, host
+
+
 
 execfile('table.py')
 training_directory = r"uploaded/numeric_training_data"
@@ -12,17 +15,17 @@ features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points'] # default
 types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP']
 
 ''' Form of the feature_dictionary that gets built in train and is used to classify
-{'Phone_Number': {'slashes': {0: 1000}, 
-				'length': {16: 635, 17: 277, 15: 88}, 
-				'spaces': {0: 1000}, 
-				'decimal points': {0: 1000}, 
-				'dashes': {2: 1000}}, 
+{'Phone_Number': {'slashes': {0: 1000},
+				'length': {16: 635, 17: 277, 15: 88},
+				'spaces': {0: 1000},
+				'decimal points': {0: 1000},
+				'dashes': {2: 1000}},
 'Zip': {
-	'slashes': {0: 998}, 
-	'length': {4: 36, 5: 461, 6: 1, 8: 7, 9: 40, 10: 453}, 
-	'spaces': {0: 998}, 
-	'decimal points': {0: 998}, 
-	'dashes': {0: 545, 1: 453}}} 
+	'slashes': {0: 998},
+	'length': {4: 36, 5: 461, 6: 1, 8: 7, 9: 40, 10: 453},
+	'spaces': {0: 998},
+	'decimal points': {0: 998},
+	'dashes': {0: 545, 1: 453}}}
 '''
 
 class numeric_classifier:
@@ -30,22 +33,22 @@ class numeric_classifier:
 		self.features = features
 		self.numeric_types = numeric_types #list of all numeric_type classes (strings)
 
-		if os.path.isfile("training_dictionary.dat"):
-			self.trained_dictionary = self.load("training_dictionary.dat")
+		if os.path.isfile("trained_dictionary.dat"):
+			self.trained_dictionary = self.load("trained_dictionary.dat")
 		else:
 			trainer = numeric_trainer(self.numeric_types, self.features)
 			trainer.train(training_directory)
-			self.trained_dictionary = trainer.training_dictionary
+			self.trained_dictionary = trainer.trained_dictionary
 
 
 	def classify(self, nText):
 		'''Takes in a string and classifies it to one of the numeric_classifiers types '''
 		type_probabilities = {}
 
-		for t in self.numeric_types: 
-			type_probabilities[t] = 1 #initialize 
+		for t in self.numeric_types:
+			type_probabilities[t] = 1 #initialize
 			for feature in self.trained_dictionary[t]: #for a specific type compute P(feature | type)
-				
+
 				curr_dictionary = self.trained_dictionary[t][feature]
 
 				posterier_type_prob = self.type_switch(feature, nText, curr_dictionary)
@@ -53,9 +56,32 @@ class numeric_classifier:
 				type_probabilities[t] += posterier_type_prob
 
 		#find the max of all types to guess what the type of the column is
-		result = max(type_probabilities.iteritems(), key=operator.itemgetter(1))[0]
 		
-		return result
+		max_key = max(type_probabilities, key=type_probabilities.get)
+		min_key = min(type_probabilities, key = type_probabilities.get)
+		max_value = type_probabilities[max_key]
+		min_value = type_probabilities[min_key]
+
+		#print min_key
+		denominator = max_value - min_value	
+		# normalizing probabilities to be from 0 to 1
+		for item in type_probabilities:
+			type_probabilities[item] = (type_probabilities[item] - min_value) / denominator
+		
+		mean = sum(type_probabilities.itervalues())/7
+		#print mean 
+
+		#computing the standard deviation of the data. Not sure if the data is skewed or not. Seems not to be. could implment basic IQR also 
+		variance = 0 
+		for item in type_probabilities:
+			deviation = type_probabilities[item] - mean
+			deviation = deviation * deviation
+			variance += deviation
+
+		variance = variance / len(type_probabilities)
+		std_dev = math.sqrt(variance)
+		#print std_dev
+		return max_key, type_probabilities, mean , std_dev
 
 
 	def type_switch(self, feature, arg, curr_dict): # need to build this up
@@ -95,14 +121,14 @@ class numeric_trainer: # class fo holding training functions
 		''' Will train given some training data, can edit this later. must give path to directory
 				need to put r in front of training_dir for windows at least'''
 
-		
+
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
 
 			file_path = os.path.join(training_dir, training_file) # build up the whole path
 			print file_path + "\n"
-			table_name = subprocess.check_output([sys.executable, "extraction.py", file_path]) 
-			t = getTable(table_name, "root", "123", "localhost", "world") #  returns table object
+			table_name = extraction.extract(file_path);
+			t = getTable(table_name, user, password, host, database) #  returns table object
 			column_names = []
 
 			for column in t.columns:
@@ -121,7 +147,7 @@ class numeric_trainer: # class fo holding training functions
 				column_obj = t.columns[index] # we have the column object now
 				self.train_on_column(column_obj)
 
-		#self.save(self.trained_dictionary, "training_dictionary.dat")
+		self.save(self.trained_dictionary, "trained_dictionary.dat")
 
 	def train_on_column(self, col):
 		row_list = col.rows
@@ -179,4 +205,3 @@ class numeric_trainer: # class fo holding training functions
 		p = pickle.Pickler(f)
 		p.dump(dObj)
 		f.close()
-		

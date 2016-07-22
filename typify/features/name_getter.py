@@ -1,15 +1,15 @@
-output = open("adjectives.txt", "w")
+output = open("new_spec_address_testing_data.txt", "w")
 names = {}
-with open("raw_adjectives.txt", "r") as f:
+with open("spec_address_testing_data.txt", "r") as f:
 	for line in f:
-		word = line.split()[1].lower()
+		word = line.strip('\n')
 		if word not in names:
 			names[word] = 1
 ret = "["
 for name in names.keys():
-	ret += '\''
+	ret += 'r\"'
 	ret += name
-	ret += '\', '
+	ret += '\", '
 ret = ret[:-2]
 ret += "]"
 output.write(ret)

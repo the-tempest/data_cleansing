@@ -11,6 +11,7 @@ execfile("typify/features/features.py")
 execfile("typify/classifier.py")
 execfile('numeric_classifier.py')
 execfile('table.py')
+execfile("typify/tie_breaker.py")
 
 #The form strings are in the process of being totally replaced with regular expressions
 #TODO: unicode support
@@ -32,6 +33,7 @@ class column_typer:
 	def build_report(self):
 		ret = ''
 		results = self.table_typify(self.my_table)
+		print results
 		for item in results:
 			actual = item[0]
 			prediction = item[1]
@@ -39,7 +41,7 @@ class column_typer:
 			line = "The column named "
 			line += actual
 			line += " appears to be of the type "
-			line += prediction
+			line += str(prediction)
 			line += " with a certainty of "
 			line += fraction
 			line += "%.\n\n"
@@ -60,7 +62,12 @@ class column_typer:
 			column = elem.rows
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
-			prediction, fraction = self.column_predict(guesses)
+			print "real guesses"
+			#print guesses
+			elem.addDict(self.generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
+			print "guesses after dict function call"
+			#print guesses
+			prediction, fraction = self.column_predict(guesses, column)
 			actual.append(elem.colName)
 			predictions.append(prediction)
 			fractions.append(fraction)
@@ -70,17 +77,26 @@ class column_typer:
 			a = actual[i]
 			p = predictions[i]
 			f = fractions[i]
+
+			if p == ('misc', None):
+				t = self.differentiate(i)
 			t = (a, p, f)
+			print t
+
 			results.append(t)
 		return results
 
-	def column_predict(self, guesses):
+	def column_predict(self, guesses, column):
 		'''takes in a list of predictions for
 		a column and returns a tuple of the form
 		(prediction, certainty)'''
 		results = {}
 		# populate the dictionary
+
 		for item in guesses:
+			print "this is item    "
+			print item
+			#if (not isinstance(item,tuple)): # same problem as in generate dict below
 			if item not in results:
 				results[item] = 0
 			results[item] += 1
@@ -91,16 +107,43 @@ class column_typer:
 			results[key] = fraction
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
+		if repetition_heuristic(column, best_guess) == 100:
+			return 'repetition', 1.00
 		# ensure there actually is a good guess
 		if best_guess < .5:
-			return 'misc', None
-		return best_guess, guess_fraction
+			return 'misc', None # this function is broken
+			# because for some guesses, all of the elements are tuples and best_guess
+			# is thus empty, need a way to deal with tuples!
+		return best_guess, guess_fraction #best_guess, guess_fraction
+
+	def generate_dict(self, guesses):
+		'''takes in a list of predictions for
+		a column and returns a list of all the predictions and the
+		fractions corresponding for that specific column'''
+		results = {}
+		# populate the dictionary
+		# problem here is that Will's numeric classifier returns dictionaries
+		# guesses
+		for item in guesses:
+			if (not isinstance(item, tuple)): # need to get rid of this eventually
+				if item in results:
+					results[item] += 1
+				else:
+					results[item] = 1
+		size = len(guesses)
+		for key in results.keys():
+			fraction = float(results[key]) / float(size)
+			fraction = "{0:.2f}".format(fraction)
+			results[key] = fraction
+		# ensure there actually is a good guess
+		return results
 
 	def column_typify(self, column):
 		'''takes in a column and
 		returns a list of predictions
 		for each token'''
 		predictions = []
+		
 		for item in column:
 			guess = self.token_typify(item)
 			predictions.append(guess)
@@ -110,14 +153,48 @@ class column_typer:
 		'''takes in a token and returns a
 		prediction for its type'''
 		if no_letters(token):
-			tipe = self.numClass.classify(token)
+			tipe, probability_dictionary, mean, std_dev = self.numClass.classify(token)
+			print tipe
 			return tipe
 		certainties = {}
 		for f in heuristics:
 			tipe, value = f(token, self)
 			certainties[tipe] = value
 		prediction = dict_max(certainties)
+		print "prediction"
+		print prediction
+		
+		print "getting here"
 		return prediction
+
+	def differentiate(self, i):
+		'''this will address the cases where the fractions are below .7'''
+		#i indicates the index of the column in the table we are using
+		#get best two predictions
+
+		table = self.my_table
+		elem = table.column[i]
+		dict = column.dictionary
+		best_guess = dict_max(dict)
+		guess_fraction = results[best_guess]
+		r = dict(dict)
+		del r[key]
+		best_guess2 = dict_max(r)
+		guess_fraction = results[best_guess2]
+		column = elem.rows
+		self.curr_col_name = elem.colName
+		guesses = self.column_typify(column)
+		return tie_breaker(guesses, best_guess, best_guess2, self)
+		
+		
+		
+	#ALSO: we can use the information from previous columns to learn about the current one
+	# EX: if we already have name column, perhaps given more weight to the alternative type of a given
+	#column
+
+
+
+		# remember, you need to return a tuple of the form t = (a, p, f)
 
 	def build_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created
@@ -138,15 +215,16 @@ class column_typer:
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
 					 ASCII_NAME, description_pv]
 
+
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
 		ds_regex = r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$'''
-		fa_regex = r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
-		sa_regex = r'''^\d*\s(?:[NSEW]\.\s?|[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?\s)?[a-zA-Z'-]*\s[a-zA-Z][a-z]*?\.?\s(?:(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s?[Bb][Oo][Xx])(?:\s\d*[a-zA-Z]?))?$'''
+		fa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
+		sa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?$'''
 		cs_regex = r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$'''
 		em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
 		lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
-		de_regex = r'''^(?:["'<-]?[A-Za-z'-]+[>"',;:-]?(?:\s|[.?!]\s*))+$'''
+		de_regex = r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$'''
 		regex = [fn_regex, NAME_REGEX, NAME_REGEX, ds_regex,
 				fa_regex, sa_regex, cs_regex, em_regex,
 				lo_regex, de_regex]
