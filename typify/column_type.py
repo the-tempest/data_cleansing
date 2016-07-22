@@ -14,7 +14,7 @@ execfile('table.py')
 execfile("typify/tie_breaker.py")
 
 #The form strings are in the process of being totally replaced with regular expressions
-#TODO: unicode support
+#TODO: figure out what to do with unicode
 
 ASCII_NUMS = [n for n in range(48, 58)]
 ASCII_UPPER = [n for n in range(65, 91)]

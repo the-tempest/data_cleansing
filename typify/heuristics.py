@@ -334,10 +334,11 @@ def city_state_heuristic(token, typer):
 
 	# misc part ########################
 	misc_value = 0
-	if len(split_token[1]) == 2:
-		misc_value += 5
 	if len(split_token) == 2:
 		misc_value += 5
+		if len(split_token[1]) == 2:
+			misc_value += 5
+	
 
 	return 'city state', value + misc_value
 
@@ -507,6 +508,7 @@ def propname_city(token, typer):
 	'''this is not really a heuristic of the same form as the others; it functions
 	as a tie breaker'''
 	# get the right classifier
+	# TODO implement
 	my_typer = typer.column_classifiers[FULL_NAME_POS]
 
 	char_val_list = []
