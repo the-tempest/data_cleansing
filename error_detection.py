@@ -1,7 +1,8 @@
 import difflib
 from secrets import password, port, database, user, host
-import extraction
+import extraction, re
 
+em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile("table.py")
 execfile("typify/helper.py")
 d = difflib.Differ()
@@ -11,8 +12,40 @@ class error_detector:
 		table_name = extraction.extract(file_path);
 		self.t = getTable(table_name, user, password, host, database)
 		
+
+	def check_on_table(self):
+		table = self.t
+		table.build_column_index
+		column_errors = []
+		for column in table.columns:
+			if column.tentClass == "Email":
+				indices = self.email_check(column.rows)
+			else:
+				indices = self.format_checks(column.rows)
+			column_errors.append(indices)
+
+
+	def email_check(self,column):
+		''' Uses a regular expresion to see if emails are valid''' 
+		prog = re.compile(em_regexp)
+		possible_error_indices = []
+		for x in range(len(column)):
+			result = prog.findall(column[x])
+			if len(result) == 0:
+				possible_error_indices.append(x)
+
+		return possible_error_indices
+
+
+
+
+
+
+
 	def format_checks(self, column):
 		'''Looks for formating errors in a column'''
+
+
 		format_dictionary = {}
 		for x in range(len(column)):
 			string = make_form(column[x])
@@ -39,9 +72,8 @@ class error_detector:
 				list_of_diffs.append(0)
 				continue
 
-			print result
-			print cell
-			result = result[1]
+			
+			result = result[-1]
 			result = result.replace('?', '')
 			result = result.replace('\n', '')
 
@@ -60,7 +92,7 @@ class error_detector:
 		#print list_of_diffs
 		IQR, Q1, Q3, I1, I3 = self.compute_IQR(list_of_diffs)
 
-		#print list_of_diffs
+		print IQR, Q1, Q3
 
 		outlier_max_range = 1.5*IQR + Q3
 		outlier_min_range = 1.5*IQR - Q1
@@ -73,7 +105,7 @@ class error_detector:
 		for item in possible_error_indices:
 			print column[item]
 
-		return 0
+		return possible_error_indices
 
 
 	def compute_IQR(self,L):
@@ -105,3 +137,5 @@ class error_detector:
 			x1 = L[length/2]
 			x2 = L[(length/2) - 1]
 			return float(x1 + x2)/2, length/2
+
+[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}.findall
