@@ -178,7 +178,7 @@ class column_typer:
 		#get best two predictions
 
 		table = self.my_table
-<<<<<<< HEAD
+#<<<<<<< HEAD
 		elem = table.columns[i]
 		dict = elem.dictionary
 		best_guess = dict_max(dict)
@@ -186,16 +186,16 @@ class column_typer:
 		del dict[best_guess]
 		best_guess2 = dict_max(dict)
 		guess_fraction = dict[best_guess2]
-=======
-		elem = table.column[i]
-		dyct = column.dictionary
-		best_guess = dict_max(dyct)
-		guess_fraction = results[best_guess]
-		r = dict(dyct) # TODO what is this supposed to do?
-		del r[key]
-		best_guess2 = dict_max(r)
-		guess_fraction = results[best_guess2]
->>>>>>> fe3d8c42702b3d72c7838b4475d301c208c28b7f
+# =======
+# 		elem = table.column[i]
+# 		dyct = column.dictionary
+# 		best_guess = dict_max(dyct)
+# 		guess_fraction = results[best_guess]
+# 		r = dict(dyct) # TODO what is this supposed to do?
+# 		del r[key]
+# 		best_guess2 = dict_max(r)
+# 		guess_fraction = results[best_guess2]s
+# >>>>>>> fe3d8c42702b3d72c7838b4475d301c208c28b7f
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
