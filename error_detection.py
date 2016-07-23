@@ -18,7 +18,7 @@ class error_detector:
 		table.build_column_index
 		column_errors = []
 		for column in table.columns:
-			if column.tentClass == "Email":
+			if column.tentClass == "Email": # someone needs to implement this now its not that hard...
 				indices = self.email_check(column.rows)
 			else:
 				indices = self.format_checks(column.rows)
@@ -37,15 +37,8 @@ class error_detector:
 		return possible_error_indices
 
 
-
-
-
-
-
 	def format_checks(self, column):
 		'''Looks for formating errors in a column'''
-
-
 		format_dictionary = {}
 		for x in range(len(column)):
 			string = make_form(column[x])
@@ -138,4 +131,36 @@ class error_detector:
 			x2 = L[(length/2) - 1]
 			return float(x1 + x2)/2, length/2
 
-[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}.findall
+
+def make_form(inString):
+	'''Turns the input string into a string that represents the general form of the string'''
+	ret = ''
+	for char in inString:
+		ord_char = ord(char)
+		if ord_char <= 57 and ord_char >= 48:
+			ret += '0' # it's a digit
+		elif ord_char <= 90 and ord_char >= 65:
+			ret += 'X' # it's uppercase
+		elif ord_char >= 97 and ord_char <= 122:
+			ret += 'x' # it's lowercase
+		else:
+			ret += char # it's punctuation
+	return ret
+
+def condense(inString):
+	'''Turns the input form string into a standardized form string with word and number lengths removed'''
+	condString = ''
+	index = 0
+	length = len(inString)
+	while index < length:
+		condString += inString[index]
+		if inString[index] == 'x':
+			while (index < length and inString[index] == 'x'):
+				index += 1
+			continue
+		if inString[index] == '0':
+			while (index < length and inString[index] == '0'):
+				index += 1
+			continue
+		index += 1
+	return condString

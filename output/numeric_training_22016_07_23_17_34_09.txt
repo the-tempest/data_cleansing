@@ -1,0 +1,20 @@
+The column named Number appears to be of the type Number with a certainty of 1.00%.
+
+The column named Number1 appears to be of the type Number with a certainty of 1.00%.
+
+The column named Number2 appears to be of the type Number with a certainty of None%.
+
+The column named Zip appears to be of the type Zip with a certainty of 0.92%.
+
+The column named Number3 appears to be of the type Number with a certainty of 1.0%.
+
+The column named Number4 appears to be of the type Number with a certainty of 1.0%.
+
+The column named Number5 appears to be of the type Number with a certainty of 1.0%.
+
+The column named Number6 appears to be of the type Number with a certainty of 1.0%.
+
+The column named Latitude appears to be of the type Latitude with a certainty of None%.
+
+The column named Longitude appears to be of the type Longitude with a certainty of None%.
+
