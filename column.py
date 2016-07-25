@@ -4,11 +4,11 @@ class column:
         self.colName = colName; # name of the column
         self.rows = rows # the actual data inside the column (in the form of list)
         self.tentClass = None # tentative Classification
-        self.dictionary = {}  #dictionary of predictions and fractions associated
+        self.dictionary = {}  #dictionary of predictions and counts associated
 
     def tentativeClassification(self, tc):
         ''' the argument tc is the tentative classification for the column '''
-        self.tentClass = tc; #spacing here could be off
+        self.tentClass = tc
 
     def addDict(self, dyct):
 	   	  self.dictionary = dyct

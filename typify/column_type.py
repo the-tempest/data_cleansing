@@ -29,6 +29,7 @@ class column_typer:
 		self.build_classifiers()
 		self.my_table = table
 		self.numClass = numeric_classifier()
+
 	def build_report(self):
 		# TODO perhaps make this more abstracted
 		'''Classifies the columns in my_table and
@@ -50,10 +51,14 @@ class column_typer:
 			ret += line
 		return ret
 
-	def table_apply_predictions(self, table):
+	def apply_predictions(self, table):
 		''' takes in a table and returns a table
 		with the tentative classifications filled in'''
-		
+		tuples = table_typify(table)
+		for i, col in enumerate(table.getColumns()):
+			prediction = tuples[i][1]
+			col.tentativeClassification(prediction)
+		return table
 
 
 	def table_typify(self, table):
@@ -76,6 +81,8 @@ class column_typer:
 			#print "guesses after dict function call"
 			#print guesses
 			prediction, fraction = self.column_predict(guesses, column)
+
+			# values to go into the tuple
 			actual.append(elem.colName)
 			predictions.append(prediction)
 			fractions.append(fraction)
@@ -154,7 +161,6 @@ class column_typer:
 		returns a list of predictions
 		for each token'''
 		predictions = []
-		
 		for item in column:
 			guess = self.token_typify(item)
 			predictions.append(guess)
