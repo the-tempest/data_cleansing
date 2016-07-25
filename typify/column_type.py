@@ -92,10 +92,10 @@ class column_typer:
 			a = actual[i]
 			p = predictions[i]
 			f = fractions[i]
-			if p == 'misc':
-				print "got here"
-				predictions[i] = self.differentiate(i)
-				p = predictions[i]
+			#if p == 'misc':
+			#	print "got here"
+			#	predictions[i] = self.differentiate(i)
+			#	p = predictions[i]
 			t = (a, p, f)
 			print t
 			results.append(t)
