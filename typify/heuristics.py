@@ -30,6 +30,7 @@ CITY_STATE_POS     = 6
 EMAIL_POS          = 7
 LOCATION_POS       = 8
 DESCRIPTION_POS    = 9
+URL_POS            = 10
 
 def full_name_heuristic(token, typer):
 	'''returns a  name heuristic value or negative infinity
@@ -480,6 +481,52 @@ def description_heuristic(token, typer):
 
 	return 'description', value + misc_value
 
+def url_heuristic(token, typer):
+	'''returns a certainty value for token being an email
+	or zero if it definitely isn't an email'''
+	# get the right classifier
+	my_typer = typer.column_classifiers[URL_POS]
+
+	char_val_list = []
+	for char in token:
+		char_val_list.append(ord(char))
+	split_token = token.split()
+
+	#check if it can't be an email
+	if not my_typer.can_be(char_val_list):
+		return 'url', 0
+	
+	# main part ###############
+	value = 0
+
+	# check column name
+	if 'address' in typer.curr_col_name.lower():
+		value += 10
+	if 'web' in typer.curr_col_name.lower():
+		value += 10
+	if 'url' in typer.curr_col_name.lower():
+		value += 10
+	if value > 20:
+		value = 20
+
+	#account for the form of the token
+	if my_typer.has_form(token):
+		value += 30
+
+	# check examples
+	for word in split_token:
+		if my_typer.is_a(word):
+			value += 40
+			break
+
+	# misc part ####################3
+	misc_value = 0
+	if 'www' in token:
+		misc_value = 10
+
+	return 'url', value + misc_value
+
+
 def repetition_heuristic(column, tipe):
 	'''returns a heuristic value based on the amount of repetition in the column
 	if the column doesn't already have a strong classification'''
@@ -555,4 +602,4 @@ def propname_city(token, typer):
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
 			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
 			 city_state_heuristic, email_heuristic, location_heuristic,
-			 description_heuristic]
+			 description_heuristic, url_heuristic]
