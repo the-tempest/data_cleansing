@@ -8,8 +8,8 @@ from secrets import password, port, database, user, host
 
 
 
-execfile('table.py')
-training_directory = r"numeric_training_data"
+execfile('/var/www/datac/datac/table.py')
+training_directory = r"/var/www/datac/datac/numeric_training_data"
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points'] # default features and types
 types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP']
@@ -33,8 +33,8 @@ class numeric_classifier:
 		self.features = features
 		self.numeric_types = numeric_types #list of all numeric_type classes (strings)
 
-		if os.path.isfile("trained_dictionary.dat"):
-			self.trained_dictionary = self.load("trained_dictionary.dat")
+		if os.path.isfile("/var/www/datac/datac/trained_dictionary.dat"):
+			self.trained_dictionary = self.load("/var/www/datac/datac/trained_dictionary.dat")
 		else:
 			trainer = numeric_trainer(self.numeric_types, self.features)
 			trainer.train(training_directory)
@@ -147,7 +147,7 @@ class numeric_trainer: # class fo holding training functions
 				column_obj = t.columns[index] # we have the column object now
 				self.train_on_column(column_obj)
 
-		self.save(self.trained_dictionary, "trained_dictionary.dat")
+		self.save(self.trained_dictionary, "/var/www/datac/datac/trained_dictionary.dat")
 
 	def train_on_column(self, col):
 		row_list = col.rows
