@@ -21,6 +21,7 @@ class error_detector_number:
 		column_errors = []
 		for column in table.columns:
 			indices = self.range_check(column.rows)
+			indices 2 = self.misclassified(column)
 			column_errors.append(indices)
 		print column_errors
 		print "Here"
@@ -42,20 +43,21 @@ class error_detector_number:
 			variance = variance + add
 		variance = variance/len(column)
 		std = math.sqrt(variance)
-		
-		for x in range(len(column)):
-			if abs(x-mean)> 2*std:
-				flagged.append(x)
-		
+		print mean
+		print std
+		for x in column:
+			if abs(int(x)-mean)> 2*std:
+				flagged.append(int(x))
 		return flagged
-			
-
-			
-			
-		
-
-
-
+	
+	def misclassified(self, column):
+		think = column.tentClass
+		error_list = []
+		for i in column.dictionary:
+			if i!=think:
+				error_list.append(i)
+		return error_list
+				
 
 def make_form(inString):
 	'''Turns the input string into a string that represents the general form of the string'''

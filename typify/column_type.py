@@ -82,7 +82,7 @@ class column_typer:
 			#print "guesses after dict function call"
 			#print guesses
 			prediction, fraction = self.column_predict(guesses, column)
-
+			elem.
 			# values to go into the tuple
 			actual.append(elem.colName)
 			predictions.append(prediction)
