@@ -29,14 +29,13 @@ class column_typer:
 		self.build_classifiers()
 		self.my_table = table
 		self.numClass = numeric_classifier()
-
 	def build_report(self):
 		# TODO perhaps make this more abstracted
 		'''Classifies the columns in my_table and
 		returns a summary report as a string'''
 		ret = ''
 		results = self.table_typify(self.my_table)
-		print results
+		#print results
 		for item in results:
 			actual = item[0]
 			prediction = item[1]
@@ -71,10 +70,10 @@ class column_typer:
 			column = elem.rows
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
-			print "real guesses"
+			#print "real guesses"
 			#print guesses
 			elem.addDict(self.generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
-			print "guesses after dict function call"
+			#print "guesses after dict function call"
 			#print guesses
 			prediction, fraction = self.column_predict(guesses, column)
 			actual.append(elem.colName)
@@ -86,8 +85,10 @@ class column_typer:
 			a = actual[i]
 			p = predictions[i]
 			f = fractions[i]
-			if p == ('misc', None):
-				t = self.differentiate(i)
+			if p == 'misc':
+				print "got here"
+				predictions[i] = self.differentiate(i)
+				p = predictions[i]
 			t = (a, p, f)
 			print t
 			results.append(t)
@@ -102,8 +103,8 @@ class column_typer:
 		# populate the dictionary
 
 		for item in guesses:
-			print "this is item    "
-			print item
+			#print "this is item    "
+			#print item
 			#if (not isinstance(item,tuple)): # same problem as in generate dict below
 			if item not in results:
 				results[item] = 0
@@ -118,7 +119,9 @@ class column_typer:
 		if repetition_heuristic(column, best_guess) == 100:
 			return best_guess, 1.00
 		# ensure there actually is a good guess
-		if best_guess < .5:
+		print guess_fraction
+		if float (guess_fraction) <float(.9):
+			print	"here"
 			return 'misc', None # this function is broken
 			# because for some guesses, all of the elements are tuples and best_guess
 			# is thus empty, need a way to deal with tuples!
@@ -162,17 +165,17 @@ class column_typer:
 		prediction for its type'''
 		if no_letters(token):
 			tipe, probability_dictionary, mean, std_dev = self.numClass.classify(token)
-			print tipe
+			#print tipe
 			return tipe
 		certainties = {}
 		for f in heuristics:
 			tipe, value = f(token, self)
 			certainties[tipe] = value
 		prediction = dict_max(certainties)
-		print "prediction"
-		print prediction
+		#print "prediction"
+		#print prediction
 		
-		print "getting here"
+		#print "getting here"
 		return prediction
 
 	def differentiate(self, i):
@@ -181,20 +184,19 @@ class column_typer:
 		#get best two predictions
 
 		table = self.my_table
-		elem = table.column[i]
-		dyct = column.dictionary
-		best_guess = dict_max(dyct)
-		guess_fraction = results[best_guess]
-		r = dict(dyct) # TODO what is this supposed to do?
-		del r[key]
-		best_guess2 = dict_max(r)
-		guess_fraction = results[best_guess2]
+		elem = table.columns[i]
+		dict = elem.dictionary
+		best_guess = dict_max(dict)
+		guess_fraction = dict[best_guess]
+		del dict[best_guess]
+		best_guess2 = dict_max(dict)
+		guess_fraction = dict[best_guess2]
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
-		return tie_breaker(guesses, best_guess, best_guess2, self)
-		
-		
+		tie_breaker1 = tie_breaker(guesses, best_guess, best_guess2, self)
+		prediction = tie_breaker1.differ()		
+		return prediction
 		
 		#ALSO: we can use the information from previous columns to learn about the current one
 		# EX: if we already have name column, perhaps given more weight to the alternative type of a given

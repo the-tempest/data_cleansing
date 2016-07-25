@@ -1,7 +1,8 @@
 import difflib
 from secrets import password, port, database, user, host
-import extraction
+import extraction, re
 
+em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile("table.py")
 execfile("typify/helper.py")
 d = difflib.Differ()
@@ -11,6 +12,31 @@ class error_detector:
 		table_name = extraction.extract(file_path);
 		self.t = getTable(table_name, user, password, host, database)
 		
+
+	def check_on_table(self):
+		table = self.t
+		table.build_column_index
+		column_errors = []
+		for column in table.columns:
+			if column.tentClass == "Email": # someone needs to implement this now its not that hard...
+				indices = self.email_check(column.rows)
+			else:
+				indices = self.format_checks(column.rows)
+			column_errors.append(indices)
+
+
+	def email_check(self,column):
+		''' Uses a regular expresion to see if emails are valid''' 
+		prog = re.compile(em_regexp)
+		possible_error_indices = []
+		for x in range(len(column)):
+			result = prog.findall(column[x])
+			if len(result) == 0:
+				possible_error_indices.append(x)
+
+		return possible_error_indices
+
+
 	def format_checks(self, column):
 		'''Looks for formating errors in a column'''
 		format_dictionary = {}
@@ -39,9 +65,8 @@ class error_detector:
 				list_of_diffs.append(0)
 				continue
 
-			print result
-			print cell
-			result = result[1]
+			
+			result = result[-1]
 			result = result.replace('?', '')
 			result = result.replace('\n', '')
 
@@ -60,7 +85,7 @@ class error_detector:
 		#print list_of_diffs
 		IQR, Q1, Q3, I1, I3 = self.compute_IQR(list_of_diffs)
 
-		#print list_of_diffs
+		print IQR, Q1, Q3
 
 		outlier_max_range = 1.5*IQR + Q3
 		outlier_min_range = 1.5*IQR - Q1
@@ -73,7 +98,7 @@ class error_detector:
 		for item in possible_error_indices:
 			print column[item]
 
-		return 0
+		return possible_error_indices
 
 
 	def compute_IQR(self,L):
@@ -105,3 +130,37 @@ class error_detector:
 			x1 = L[length/2]
 			x2 = L[(length/2) - 1]
 			return float(x1 + x2)/2, length/2
+
+
+def make_form(inString):
+	'''Turns the input string into a string that represents the general form of the string'''
+	ret = ''
+	for char in inString:
+		ord_char = ord(char)
+		if ord_char <= 57 and ord_char >= 48:
+			ret += '0' # it's a digit
+		elif ord_char <= 90 and ord_char >= 65:
+			ret += 'X' # it's uppercase
+		elif ord_char >= 97 and ord_char <= 122:
+			ret += 'x' # it's lowercase
+		else:
+			ret += char # it's punctuation
+	return ret
+
+def condense(inString):
+	'''Turns the input form string into a standardized form string with word and number lengths removed'''
+	condString = ''
+	index = 0
+	length = len(inString)
+	while index < length:
+		condString += inString[index]
+		if inString[index] == 'x':
+			while (index < length and inString[index] == 'x'):
+				index += 1
+			continue
+		if inString[index] == '0':
+			while (index < length and inString[index] == '0'):
+				index += 1
+			continue
+		index += 1
+	return condString
