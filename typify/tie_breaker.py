@@ -17,14 +17,14 @@ DESCRIPTION_POS    = 9
 
 class tie_breaker:
 
-	def __init__(self, guesses= [0,'string'], prediction1 = 0, prediction2= 0, typer2= 0):
+	def __init__(self, guesses= [0,'string'], prediction1 = 0, prediction2= 0, predictions = 0,typer2= 0):
 		
 		self.typer = typer2
 		first = guesses[1]
 		self.token = first
 		self.prediction_1 = prediction1
 		self.prediction_2 = prediction2		
-	
+		self.predictions = predictions
 	
 #possibly this type_switch thing will be unecessary
 	def get_index(self, feature): # need to build this up
@@ -56,21 +56,21 @@ classifier in the list of classfiers'''
 					"email": ('address', 'email'),
 					"location": ('location', 'place', 'country'),
 					"description": ('description')}
-					
-
 		return switcher.get(feature)
 
 	def differ(self):
 		'''this is not really a heuristic of the same form as the others; it functions
 		as a tie breaker'''
-	
+		
+		predictions = self.predictions
+		
 		token = self.token 
 		typer = self.typer
 		prediction_1 = self.prediction_1 
 		prediction_2 = self.prediction_2
 		index1 = self.get_index(prediction_1)
 		index2 = self.get_index(prediction_2)
-	
+		
 		y = self.get_key(prediction_1)
 		x = self.get_key(prediction_2)
 	#	print x
@@ -87,13 +87,16 @@ classifier in the list of classfiers'''
 		print "prediction_1  " + prediction_1
 		print "prediction_2  " + prediction_2
 		
+		
+		
 		if index1 ==None:
 			return prediction_1
+		if index2 ==None:
+			return prediction_2
 		print "index1   " + str(index1)
 		print "index2   " + str(index2)
 		my_typer = typer.column_classifiers[index1]
 	# main part #####################
-
 	# check column name		
 		if (not isinstance(y,tuple)): # same problem as in generate dict below
 			if y in typer.curr_col_name.lower():
@@ -109,10 +112,7 @@ classifier in the list of classfiers'''
 	
 	
 	# looking at format of individual words
-		for word in split_token:
-			if my_typer.is_a(word.lower()):
-				nvalue += 50
-				break
+	
 	
 		my_typer = typer.column_classifiers[index2]
 	# main part #####################
@@ -129,16 +129,15 @@ classifier in the list of classfiers'''
 			if x[1] in typer.curr_col_name.lower():
 				col2 = 1
 	# looking at format of individual words
-		for word in split_token:
-			if my_typer.is_a(word.lower()):
-				cvalue += 50
-				break
 	
+	
+		if prediction_1 in predictions:
+			return prediction_2
 		if col1 ==1 and col2 ==1:
 			#strange
-			return 'unclear'
+			return prediction_1
 		elif col2==0 and col1 ==0:
-			return 'unclear'
+			return prediction_1
 		elif col2 ==1 and col1 ==0:
 			return prediction_2
 		elif col2 ==0 and col1 ==1:

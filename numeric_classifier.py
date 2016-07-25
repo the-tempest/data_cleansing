@@ -9,7 +9,7 @@ from secrets import password, port, database, user, host
 
 
 execfile('table.py')
-training_directory = r"uploaded/numeric_training_data"
+training_directory = r"numeric_training_data"
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points'] # default features and types
 types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP']
@@ -205,3 +205,5 @@ class numeric_trainer: # class fo holding training functions
 		p = pickle.Pickler(f)
 		p.dump(dObj)
 		f.close()
+
+

@@ -29,7 +29,9 @@ class column_typer:
 		self.build_classifiers()
 		self.my_table = table
 		self.numClass = numeric_classifier()
+
 	def build_report(self):
+		# TODO perhaps make this more abstracted
 		'''Classifies the columns in my_table and
 		returns a summary report as a string'''
 		ret = ''
@@ -45,9 +47,19 @@ class column_typer:
 			line += str(prediction)
 			line += " with a certainty of "
 			line += fraction
-			line += "%.\n\n"
+			line += ".\n\n"
 			ret += line
 		return ret
+
+	def apply_predictions(self, table):
+		''' takes in a table and returns a table
+		with the tentative classifications filled in'''
+		tuples = table_typify(table)
+		for i, col in enumerate(table.getColumns()):
+			prediction = tuples[i][1]
+			col.tentativeClassification(prediction)
+		return table
+
 
 	def table_typify(self, table):
 		'''takes in a table and returns a list
@@ -69,6 +81,8 @@ class column_typer:
 			#print "guesses after dict function call"
 			#print guesses
 			prediction, fraction = self.column_predict(guesses, column)
+
+			# values to go into the tuple
 			actual.append(elem.colName)
 			predictions.append(prediction)
 			fractions.append(fraction)
@@ -78,16 +92,16 @@ class column_typer:
 			a = actual[i]
 			p = predictions[i]
 			f = fractions[i]
-
 			if p == 'misc':
 				print "got here"
-				predictions[i] = self.differentiate(i)
+				predictions[i] = self.differentiate(i,predictions)
 				p = predictions[i]
+			
 			t = (a, p, f)
 			print t
-
 			results.append(t)
 		return results
+
 
 	def column_predict(self, guesses, column):
 		'''takes in a list of predictions for
@@ -148,7 +162,6 @@ class column_typer:
 		returns a list of predictions
 		for each token'''
 		predictions = []
-		
 		for item in column:
 			guess = self.token_typify(item)
 			predictions.append(guess)
@@ -172,13 +185,12 @@ class column_typer:
 		#print "getting here"
 		return prediction
 
-	def differentiate(self, i):
+	def differentiate(self, i, predictions):
 		'''this will address the cases where the fractions are below .7'''
 		#i indicates the index of the column in the table we are using
 		#get best two predictions
 
 		table = self.my_table
-<<<<<<< HEAD
 		elem = table.columns[i]
 		dict = elem.dictionary
 		best_guess = dict_max(dict)
@@ -186,20 +198,10 @@ class column_typer:
 		del dict[best_guess]
 		best_guess2 = dict_max(dict)
 		guess_fraction = dict[best_guess2]
-=======
-		elem = table.column[i]
-		dyct = column.dictionary
-		best_guess = dict_max(dyct)
-		guess_fraction = results[best_guess]
-		r = dict(dyct) # TODO what is this supposed to do?
-		del r[key]
-		best_guess2 = dict_max(r)
-		guess_fraction = results[best_guess2]
->>>>>>> fe3d8c42702b3d72c7838b4475d301c208c28b7f
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
-		tie_breaker1 = tie_breaker(guesses, best_guess, best_guess2, self)
+		tie_breaker1 = tie_breaker(guesses, best_guess, best_guess2, predictions,self)
 		prediction = tie_breaker1.differ()		
 		return prediction
 		
