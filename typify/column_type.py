@@ -47,7 +47,7 @@ class column_typer:
 			line += str(prediction)
 			line += " with a certainty of "
 			line += fraction
-			line += "%.\n\n"
+			line += ".\n\n"
 			ret += line
 		return ret
 
