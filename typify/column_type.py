@@ -130,7 +130,7 @@ class column_typer:
 		print guess_fraction
 		if float (guess_fraction) <float(.9):
 			print	"here"
-			return 'misc', None # this function is broken
+			return 'misc', guess_fraction # this function is broken
 			# because for some guesses, all of the elements are tuples and best_guess
 			# is thus empty, need a way to deal with tuples!
 		return best_guess, guess_fraction #best_guess, guess_fraction
@@ -201,7 +201,7 @@ class column_typer:
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
-		tie_breaker1 = tie_breaker(guesses, best_guess, best_guess2, predictions,self)
+		tie_breaker1 = tie_breaker(i,guesses, best_guess, best_guess2, predictions,self)
 		prediction = tie_breaker1.differ()		
 		return prediction
 		
