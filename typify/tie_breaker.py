@@ -56,14 +56,11 @@ classifier in the list of classfiers'''
 					"email": ('address', 'email'),
 					"location": ('location', 'place', 'country'),
 					"description": ('description')}
-					
-
 		return switcher.get(feature)
 
 	def differ(self):
 		'''this is not really a heuristic of the same form as the others; it functions
 		as a tie breaker'''
-		
 		
 		predictions = self.predictions
 		
@@ -90,6 +87,8 @@ classifier in the list of classfiers'''
 		print "prediction_1  " + prediction_1
 		print "prediction_2  " + prediction_2
 		
+		
+		
 		if index1 ==None:
 			return prediction_1
 		if index2 ==None:
@@ -113,10 +112,7 @@ classifier in the list of classfiers'''
 	
 	
 	# looking at format of individual words
-		for word in split_token:
-			if my_typer.is_a(word.lower()):
-				nvalue += 50
-				break
+	
 	
 		my_typer = typer.column_classifiers[index2]
 	# main part #####################
@@ -133,12 +129,9 @@ classifier in the list of classfiers'''
 			if x[1] in typer.curr_col_name.lower():
 				col2 = 1
 	# looking at format of individual words
-		for word in split_token:
-			if my_typer.is_a(word.lower()):
-				cvalue += 50
-				break
 	
-		if predictions.equals(predictions_1):
+	
+		if prediction_1 in predictions:
 			return prediction_2
 		if col1 ==1 and col2 ==1:
 			#strange

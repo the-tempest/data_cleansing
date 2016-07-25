@@ -94,7 +94,7 @@ class column_typer:
 			f = fractions[i]
 			if p == 'misc':
 				print "got here"
-				predictions[i] = self.differentiate(i)
+				predictions[i] = self.differentiate(i,predictions)
 				p = predictions[i]
 			t = (a, p, f)
 			print t
@@ -184,7 +184,7 @@ class column_typer:
 		#print "getting here"
 		return prediction
 
-	def differentiate(self, i):
+	def differentiate(self, i, predictions):
 		'''this will address the cases where the fractions are below .7'''
 		#i indicates the index of the column in the table we are using
 		#get best two predictions
@@ -200,7 +200,7 @@ class column_typer:
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
-		tie_breaker1 = tie_breaker(guesses, best_guess, best_guess2, self)
+		tie_breaker1 = tie_breaker(guesses, best_guess, best_guess2, predictions,self)
 		prediction = tie_breaker1.differ()		
 		return prediction
 		
