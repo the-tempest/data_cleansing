@@ -1,6 +1,6 @@
 import os, sys, csv, json, mysql.connector
 from secrets import password, port, database, user, host
-execfile('column.py');
+execfile('/var/www/datac/datac/column.py');
 def extract(f):
     def flatten_json(raw):
         val = {}

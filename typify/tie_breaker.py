@@ -17,8 +17,9 @@ DESCRIPTION_POS    = 9
 
 class tie_breaker:
 
-	def __init__(self, guesses= [0,'string'], prediction1 = 0, prediction2= 0, predictions = 0,typer2= 0):
+	def __init__(self,i, guesses= [0,'string'], prediction1 = 0, prediction2= 0, predictions = 0,typer2= 0):
 		
+		self.place = i
 		self.typer = typer2
 		first = guesses[1]
 		self.token = first
@@ -61,9 +62,8 @@ classifier in the list of classfiers'''
 	def differ(self):
 		'''this is not really a heuristic of the same form as the others; it functions
 		as a tie breaker'''
-		
+		place = self.place
 		predictions = self.predictions
-		
 		token = self.token 
 		typer = self.typer
 		prediction_1 = self.prediction_1 
@@ -130,8 +130,8 @@ classifier in the list of classfiers'''
 				col2 = 1
 	# looking at format of individual words
 	
-	
-		if prediction_1 in predictions:
+		
+		if prediction_1 in predictions[0:place]:
 			return prediction_2
 		if col1 ==1 and col2 ==1:
 			#strange

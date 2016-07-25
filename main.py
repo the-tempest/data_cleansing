@@ -1,8 +1,8 @@
 import sys, subprocess, json, operator, os
 import extraction
-execfile('table.py')
-execfile('typify/column_type.py')
-execfile('numeric_classifier.py')
+execfile('/var/www/datac/datac/table.py')
+execfile('/var/www/datac/datac/typify/column_type.py')
+execfile('/var/www/datac/datac/numeric_classifier.py')
 
 def execute(filename):
     filename = filename.replace("\n", "")
@@ -33,7 +33,7 @@ def execute(filename):
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);
 
-    dirToSave = "output";
+    dirToSave = "/var/www/datac/datac/output";
     fn = table_name + ".txt"
     pathToSave = os.path.join(dirToSave, fn);
     print pathToSave

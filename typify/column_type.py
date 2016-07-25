@@ -5,13 +5,13 @@
 # a report in the form of a string
 
 import mysql.connector, os, re
-execfile("typify/heuristics.py")
-execfile("typify/helper.py")
-execfile("typify/features/features.py")
-execfile("typify/classifier.py")
-execfile('numeric_classifier.py')
-execfile('table.py')
-execfile("typify/tie_breaker.py")
+execfile("/var/www/datac/datac/typify/heuristics.py")
+execfile("/var/www/datac/datac/typify/helper.py")
+execfile("/var/www/datac/datac/typify/features/features.py")
+execfile("/var/www/datac/datac/typify/classifier.py")
+execfile('/var/www/datac/datac/numeric_classifier.py')
+execfile('/var/www/datac/datac/table.py')
+execfile("/var/www/datac/datac/typify/tie_breaker.py")
 
 #The form strings are in the process of being totally replaced with regular expressions
 #TODO: figure out what to do with unicode
@@ -130,7 +130,7 @@ class column_typer:
 		print guess_fraction
 		if float (guess_fraction) <float(.9):
 			print	"here"
-			return 'misc', None # this function is broken
+			return 'misc', guess_fraction # this function is broken
 			# because for some guesses, all of the elements are tuples and best_guess
 			# is thus empty, need a way to deal with tuples!
 		return best_guess, guess_fraction #best_guess, guess_fraction
@@ -201,7 +201,7 @@ class column_typer:
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
-		tie_breaker1 = tie_breaker(guesses, best_guess, best_guess2, predictions,self)
+		tie_breaker1 = tie_breaker(i,guesses, best_guess, best_guess2, predictions,self)
 		prediction = tie_breaker1.differ()		
 		return prediction
 		

@@ -1,6 +1,6 @@
 import sys, mysql.connector
 from secrets import password, port, user, host, database
-execfile('column.py');
+execfile('/var/www/datac/datac/column.py');
 
 def getRows(columnName, fileName, cursor):
     query = "SELECT " + columnName + " FROM " + fileName;

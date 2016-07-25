@@ -1,18 +1,18 @@
 The column named Transaction_date appears to be of the type Date with a certainty of 1.00%.
 
-The column named Product appears to be of the type repetition with a certainty of 1.0%.
+The column named Product appears to be of the type description with a certainty of 1.0%.
 
-The column named Price appears to be of the type repetition with a certainty of 1.0%.
+The column named Price appears to be of the type Number with a certainty of 1.0%.
 
-The column named Payment_Type appears to be of the type repetition with a certainty of 1.0%.
+The column named Payment_Type appears to be of the type last name with a certainty of 1.0%.
 
 The column named Name appears to be of the type first name with a certainty of 0.58%.
 
-The column named City appears to be of the type last name with a certainty of 0.50%.
+The column named City appears to be of the type city state with a certainty of 0.56%.
 
-The column named State appears to be of the type last name with a certainty of 0.87%.
+The column named State appears to be of the type city state with a certainty of 0.87%.
 
-The column named Country appears to be of the type full name with a certainty of 0.59%.
+The column named Country appears to be of the type location with a certainty of 1.0%.
 
 The column named Account_Created appears to be of the type Date with a certainty of 1.00%.
 
