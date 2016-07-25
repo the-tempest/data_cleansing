@@ -87,11 +87,52 @@ DATESTRING_REGEXS = [r'''^[A-Z][a-z]*\.?,?\s+\d{1-4}$''',
 	r'''^[a-z]*\.?,?\s+[0-3][0-9]\s+[a-z]*\.?,?\s+\d{1-4}$''',
 	r'''^[a-z]*\.?,?\s+[a-z]*\.?\s+[0-3][0-9],?\s+\d{1-4}$''']
 
+#TODO - fill in this after street addresses are fixed
+FULL_ADDRESS_REGEXS = []
+
+#TODO - account for casing and other weird cases that were included before
+#sa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?$'''
+STREET_ADDRESS_REGEXS = [r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+[NSEW]\.?[NSEW]?\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+[NSEW]\.?[NSEW]?\.?$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)$''',	
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+[NSEW]\.?[NSEW]?\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+[NSEW]\.?[NSEW]?\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt]))\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''']
+
+#cs_regex = r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$'''
+CITYSTATE_REGEXS = [r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[A-Z][A-Z]$''',
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[A-Z][a-z]$''',
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[a-z][a-z]$''',
+	r'''^(?:ST\.?\s+)?(?:[A-Z]*(?:'S)?\s+)*?[A-Z]*(?:'S)?,\s+[A-Z][A-Z]$''',
+	r'''^(?:st\.?\s+)?(?:[a-z]*(?:'s)?\s+)*?[a-z]*(?:'s)?,\s+[a-z][a-z]$''',
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[A-Z][A-Z]$''',
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[A-Z][a-z]$''',
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[a-z][a-z]$''',
+	r'''^(?:ST\.?\s+)?(?:[A-Z]*(?:'S)?\s+)*?[A-Z]*(?:'S)?\s+[A-Z][A-Z]$''',
+	r'''^(?:st\.?\s+)?(?:[a-z]*(?:'s)?\s+)*?[a-z]*(?:'s)?\s+[a-z][a-z]$''']
+
+#em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
+EMAIL_REGEXS = [r'''^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$''',
+	r'''^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$''']
+
+#lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
+LOCATION_REGEXS = [r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$''',
+	r'''^(?:[a-z'-]*\s)*?(?:[a-z'-]*)$''',
+	r'''^(?:[A-Z'-]*\s)*?(?:[A-Z'-]*)$''']
+
+#de_regex = r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$'''
+DESCRIPTION_REGEXS = [r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$''']
+
 
 
 fa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
-sa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?$'''
-cs_regex = r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$'''
-em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
-lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
-de_regex = r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$'''
+
+
+
+
