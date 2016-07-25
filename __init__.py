@@ -2,11 +2,12 @@ from flask import Flask, request, render_template, url_for, jsonify, send_file, 
 from flask.sessions import SessionInterface
 import os, subprocess
 from datetime import datetime
+from secrets import path
 import main
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/var/www/datac/datac/uploaded/'
-app.config['OUTPUT_FOLDER'] = '/var/www/datac/datac/output/'
+app.config['UPLOAD_FOLDER'] = path+'uploaded/'
+app.config['OUTPUT_FOLDER'] = path+'output/'
 app.config['COOKIE LIST'] = {};
 
 @app.route('/')

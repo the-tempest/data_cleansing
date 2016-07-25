@@ -1,8 +1,9 @@
 import sys, subprocess, json, operator, os
+from secrets import path
 import extraction
-execfile('/var/www/datac/datac/table.py')
-execfile('/var/www/datac/datac/typify/column_type.py')
-execfile('/var/www/datac/datac/numeric_classifier.py')
+execfile(path+'table.py')
+execfile(path+'typify/column_type.py')
+execfile(path+'numeric_classifier.py')
 
 def execute(filename):
     filename = filename.replace("\n", "")

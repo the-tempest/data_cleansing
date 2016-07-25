@@ -5,13 +5,14 @@
 # a report in the form of a string
 
 import mysql.connector, os, re
-execfile("/var/www/datac/datac/typify/heuristics.py")
-execfile("/var/www/datac/datac/typify/helper.py")
-execfile("/var/www/datac/datac/typify/features/features.py")
-execfile("/var/www/datac/datac/typify/classifier.py")
-execfile('/var/www/datac/datac/numeric_classifier.py')
-execfile('/var/www/datac/datac/table.py')
-execfile("/var/www/datac/datac/typify/tie_breaker.py")
+from secrets import path
+execfile(path+"typify/heuristics.py")
+execfile(path+"typify/helper.py")
+execfile(path+"typify/features/features.py")
+execfile(path+"typify/classifier.py")
+execfile(path+'numeric_classifier.py')
+execfile(path+'table.py')
+execfile(path+"typify/tie_breaker.py")
 
 #The form strings are in the process of being totally replaced with regular expressions
 #TODO: figure out what to do with unicode
