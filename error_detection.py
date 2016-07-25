@@ -54,6 +54,7 @@ class error_detector:
 
 		general_form = max(format_dictionary, key = format_dictionary.get) # the most common format_dictionary
 		general_form = general_form.splitlines()
+		print general_form
 		#print column
 		list_of_diffs = []
 		for cell in column:
@@ -81,24 +82,27 @@ class error_detector:
 			mean = sum(list_of_diffs) / float(len(list_of_diffs)) # to avoid int division
 
 		med = 0
-
+		print list_of_diffs
 		med,index = self.medianList(list_of_diffs)
 		
-		#print list_of_diffs
+		# list_of_diffs
 		IQR, Q1, Q3, I1, I3 = self.compute_IQR(list_of_diffs)
 
-		print IQR, Q1, Q3
+		#print IQR, Q1, Q3
 
 		outlier_max_range = 1.5*IQR + Q3
 		outlier_min_range = 1.5*IQR - Q1
+		
+		print outlier_max_range
+		print outlier_min_range
 
 		possible_error_indices = []
 		for x in range(len(list_of_diffs)):
 			if list_of_diffs[x] < outlier_min_range or list_of_diffs[x] > outlier_max_range:
 				possible_error_indices.append(x) 
 				#appending indices in column that will have 
-		for item in possible_error_indices:
-			print column[item]
+		#for item in possible_error_indices:
+			#print column[item]
 
 		return possible_error_indices
 
