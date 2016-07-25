@@ -23,8 +23,8 @@ class table:
 
     def build_column_index(self):
         ''' build the column index dictionary '''
-    	  for i in range(len(self.columns)):
-    		    self.column_index[self.columns[i].colName] = i
+    	for i in range(len(self.columns)):
+    	    self.column_index[self.columns[i].colName] = i
 
     def addColumn(self, col):
         ''' add a column object to the table '''

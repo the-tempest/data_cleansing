@@ -9,9 +9,9 @@
 # 1. check legality of characters in the token, return 0 if the token doesn't work at all
 # 2. create any required temporary variables
 # 3. assign points based on category:
-#    - 10 points for column name
-#    - 20 points for regular expression
-#    - 50 points for being a known example
+#    - 20 points for column name
+#    - 30 points for regular expression
+#    - 40 points for being a known example
 #    - 10 points for a miscellaneous classification
 # 4. return name of type being tested and point value (out of 100)
 
@@ -58,7 +58,7 @@ def full_name_heuristic(token, typer):
 
 	# check column name
 	if 'name' in typer.curr_col_name.lower():
-		value += 10
+		value += 20
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -69,7 +69,7 @@ def full_name_heuristic(token, typer):
 		for word in split_token:
 			#check for common names
 			if my_typer.is_a(word.lower()):
-				value += 25
+				value += 20
 				break
 	if value > 90:
 		value = 90
@@ -111,17 +111,17 @@ def first_name_heuristic(token, typer):
 
 	# check column name
 	if 'first' in typer.curr_col_name.lower():
-		value += 5
+		value += 10
 	if 'name' in typer.curr_col_name.lower():
-		value += 5
+		value += 10
 
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# check for common names
 	if my_typer.is_a(token.lower()):
-		value += 50
+		value += 40
 
 	# misc part #############################
 	misc_value = 0
@@ -153,21 +153,21 @@ def last_name_heuristic(token, typer):
 
 	# check column name
 	if 'last' in typer.curr_col_name.lower():
-		value += 5
+		value += 10
 	if 'sur' in typer.curr_col_name.lower():
-		value += 5
+		value += 10
 	if 'name' in typer.curr_col_name.lower():
-		value += 5
-	if value > 10:
-		value = 10
+		value += 10
+	if value > 20:
+		value = 20
 
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# check for common names
 	if my_typer.is_a(token.lower()):
-		value += 50
+		value += 40
 
 	# misc part ###################
 	misc_value = 0
@@ -196,15 +196,15 @@ def datestring_heuristic(token, typer):
 
 	# check column name
 	if 'date' in typer.curr_col_name.lower():
-		value += 10
+		value += 20
 
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	for word in split_token:
 		if my_typer.is_a(word):
-			value += 50
+			value += 40
 			break
 
 	# misc part #####################3
@@ -233,19 +233,17 @@ def full_address_heuristic(token, typer):
 	value = 0
 
 	# check column name
-	if 'add' in typer.curr_col_name.lower():
-		value += 5
-		if 'address' in typer.curr_col_name.lower():
-			value += 5
+	if 'address' in typer.curr_col_name.lower():
+		value += 20
 
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# check form
 	for word in split_token:
 		if my_typer.is_a(word):
-			value += 50
+			value += 40
 			break
 
 	# misc part ######################
@@ -278,16 +276,16 @@ def street_address_heuristic(token, typer):
 	if 'street' in typer.curr_col_name.lower():
 		value += 5
 	if 'address' in typer.curr_col_name.lower():
-		value += 5
+		value += 15
 
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# check examples
 	for word in split_token:
 		if my_typer.is_a(word):
-			value += 50
+			value += 40
 			break
 
 	# misc part #####################3
@@ -318,18 +316,18 @@ def city_state_heuristic(token, typer):
 
 	# check column name
 	if 'city' in typer.curr_col_name.lower():
-		value += 5
+		value += 10
 	if 'state' in typer.curr_col_name.lower():
-		value += 5
+		value += 10
 
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# check examples
 	for word in split_token:
 		if my_typer.is_a(word):
-			value += 50
+			value += 40
 			break
 
 	# misc part ########################
@@ -362,18 +360,18 @@ def email_heuristic(token, typer):
 
 	# check column name
 	if 'address' in typer.curr_col_name.lower():
-		value += 3
+		value += 5
 	if 'email' in typer.curr_col_name.lower():
-		value += 7
+		value += 15
 
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# check examples
 	for word in split_token:
 		if my_typer.is_a(word):
-			value += 50
+			value += 40
 			break
 
 	# misc part ####################3
@@ -407,21 +405,20 @@ def location_heuristic(token, typer):
 	value = 0
 
 	# check column name
-	if 'location' in typer.curr_col_name.lower():
-		value += 10
-	elif 'place' in typer.curr_col_name.lower():
-		value += 10
-	elif 'country' in typer.curr_col_name.lower():
-		value += 10
+	possibles = ['location', 'place', 'country', 'city']
+	for x in possibles:
+		if x in typer.curr_col_name.lower():
+			value += 20
+			break
 	
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# looking at format of individual words
 	for word in split_token:
 		if my_typer.is_a(word.lower()):
-			value += 50
+			value += 40
 			break
 
 	# misc part ###################333
@@ -434,7 +431,7 @@ def location_heuristic(token, typer):
 	if misc_value < 0:
 		misc_value = 0
 
-	return 'location', value
+	return 'location', value + misc_value
 
 def description_heuristic(token, typer):
 	'''returns a certainty value for token being a description
@@ -456,19 +453,20 @@ def description_heuristic(token, typer):
 	value = 0
 
 	# check column name
-	if 'description' in typer.curr_col_name.lower():
-		value += 10
-	elif 'note' in typer.curr_col_name.lower():
-		value += 10
-
+	possibles = ['des', 'note', 'rep', 'sum', 'exp']
+	for x in possibles:
+		if x in typer.curr_col_name():
+			value += 20
+			break
+	
 	#account for the form of the token
 	if my_typer.has_form(token):
-		value += 20
+		value += 30
 
 	# looking at format of individual words
 	for word in split_token:
 		if my_typer.is_a(word.lower()):
-			value += 50
+			value += 40
 			break
 
 	# misc part #############################
