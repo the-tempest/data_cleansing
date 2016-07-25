@@ -96,6 +96,7 @@ class column_typer:
 				print "got here"
 				predictions[i] = self.differentiate(i,predictions)
 				p = predictions[i]
+			
 			t = (a, p, f)
 			print t
 			results.append(t)

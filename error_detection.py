@@ -18,7 +18,7 @@ class error_detector:
 		table.build_column_index
 		column_errors = []
 		for column in table.columns:
-			if column.tentClass == "Email": # someone needs to implement this now its not that hard...
+			if column.tentClass == "email": # someone needs to implement this now its not that hard...
 				indices = self.email_check(column.rows)
 			else:
 				indices = self.format_checks(column.rows)
