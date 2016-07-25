@@ -455,7 +455,7 @@ def description_heuristic(token, typer):
 	# check column name
 	possibles = ['des', 'note', 'rep', 'sum', 'exp']
 	for x in possibles:
-		if x in typer.curr_col_name():
+		if x in typer.curr_col_name.lower():
 			value += 20
 			break
 	
