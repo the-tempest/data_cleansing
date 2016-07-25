@@ -47,7 +47,7 @@ class column_typer:
 			line += str(prediction)
 			line += " with a certainty of "
 			line += fraction
-			line += "%.\n\n"
+			line += ".\n\n"
 			ret += line
 		return ret
 
@@ -222,15 +222,18 @@ class column_typer:
 		# names
 		names = ['full name', 'first name', 'last name', 'datestring',
 				'full address', 'street address', 'city state', 'email',
-				'location', 'description']
+				'location', 'description', 'url']
 
 		# possible values
 		datestring_pv = [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
 		email_pv = [43, 45, 46, 64, 95] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
 		description_pv = ASCII_PRINTABLE
+		url_punc = [33, 58, 59, 61, 63, 91, 93, 95, 126] + [x for x in range(35, 48)]
+		url_pv = ASCII_LOWER + ASCII_UPPER + ASCII_NUMS + url_punc
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
-					 ASCII_NAME, description_pv]
+					 ASCII_NAME, description_pv, url_pv]
+
 
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
@@ -241,9 +244,10 @@ class column_typer:
 		em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
 		lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
 		de_regex = r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$'''
+		ur_regex = r'''^\S*?.\S*'''
 		regex = [fn_regex, NAME_REGEX, NAME_REGEX, ds_regex,
 				fa_regex, sa_regex, cs_regex, em_regex,
-				lo_regex, de_regex]
+				lo_regex, de_regex, ur_regex]
 
 		# known examples
 		full_name_ex      = COMMON_PREFIXES + COMMON_SUFFIXES + COMMON_FIRST_NAMES + COMMON_LAST_NAMES
@@ -256,9 +260,10 @@ class column_typer:
 		email_ex          = COMMON_URL_EXTENSIONS + COMMON_EMAIL_DOMAINS
 		location_ex       = COMMON_CITIES + COMMON_LOCATION_FEATURES
 		description_ex    = COMMON_ADJECTIVES
+		url_ex            = COMMON_URL_EXTENSIONS + COMMON_URL
 		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
-						  location_ex, description_ex]
+						  location_ex, description_ex, url_ex]
 
 		for i in range(len(names)):
 			curr = classifier(names[i],

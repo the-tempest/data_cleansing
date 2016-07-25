@@ -25,6 +25,8 @@ class error_detector:
 			column_errors.append(indices)
 
 
+
+
 	def email_check(self,column):
 		''' Uses a regular expresion to see if emails are valid''' 
 		prog = re.compile(em_regexp)
