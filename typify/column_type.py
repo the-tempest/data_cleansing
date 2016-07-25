@@ -31,6 +31,7 @@ class column_typer:
 		self.numClass = numeric_classifier()
 
 	def build_report(self):
+		# TODO perhaps make this more abstracted
 		'''Classifies the columns in my_table and
 		returns a summary report as a string'''
 		ret = ''
@@ -49,6 +50,12 @@ class column_typer:
 			line += "%.\n\n"
 			ret += line
 		return ret
+
+	def table_apply_predictions(self, table):
+		''' takes in a table and returns a table
+		with the tentative classifications filled in'''
+		
+
 
 	def table_typify(self, table):
 		'''takes in a table and returns a list
@@ -79,14 +86,13 @@ class column_typer:
 			a = actual[i]
 			p = predictions[i]
 			f = fractions[i]
-
 			if p == ('misc', None):
 				t = self.differentiate(i)
 			t = (a, p, f)
 			print t
-
 			results.append(t)
 		return results
+
 
 	def column_predict(self, guesses, column):
 		'''takes in a list of predictions for
