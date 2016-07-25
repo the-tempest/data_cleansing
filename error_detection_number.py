@@ -53,7 +53,7 @@ class error_detector_number:
 	def misclassified(self, column):
 		think = column.tentClass
 		error_list = []
-		for i in column.dictionary:
+		for i in column.Guesses:
 			if i!=think:
 				error_list.append(i)
 		return error_list
