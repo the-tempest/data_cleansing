@@ -34,7 +34,7 @@ def execute(filename):
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);
 
-    dirToSave = "/var/www/datac/datac/output";
+    dirToSave = path+"output";
     fn = table_name + ".txt"
     pathToSave = os.path.join(dirToSave, fn);
     print pathToSave
