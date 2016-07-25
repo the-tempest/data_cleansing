@@ -106,8 +106,9 @@
           processData: false,  // tell jQuery not to process the data
           contentType: false,  // tell jQuery not to set contentType
           success: function (res,  textstatus, req) {
-            var fname = req.getResponseHeader('file');
-            var sentences = res.split("%.");
+            var fname = req.getResponseHeader('file')
+              console.log(res);
+            var sentences = res.split("\n");
               console.log(sentences)
             $("#processing").fadeOut("slow", function() {
 
@@ -117,10 +118,11 @@
                                         </div>\
                                      </div> ');
                 for (i=0; i < sentences.length; i++) {
-                    $("#report").append(sentences[i] + '<br />');
+                    $("#report").append(sentences[i]);
+                    $("#report").append("<br />");
                 }
 
-                $("#download").html('<br/><div class="row" style="display:flex;"> \
+                $("#download").html('<div class="row" style="display:flex;"> \
                             <div class="col-lg-offset-0"> \
                             <form action="/download" method="get"> \
                                 <input type="hidden" name="fn" value="' + fname +'" /> \
