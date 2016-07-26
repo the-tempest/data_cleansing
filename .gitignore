@@ -94,3 +94,4 @@ ENV/
 # authentication stuff
 secrets.py
 typify/secrets.py
+junk
