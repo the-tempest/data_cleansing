@@ -4,12 +4,11 @@ from os.path import isfile, join
 import subprocess
 import pickle
 import extraction
+
 from secrets import password, port, database, user, host, path
-
-
-
 execfile(path+'table.py')
 training_directory = (path+"numeric_training_data")
+
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points'] # default features and types
 types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP']

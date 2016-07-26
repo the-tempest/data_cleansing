@@ -5,13 +5,15 @@ class column:
         self.rows = rows # the actual data inside the column (in the form of list)
         self.tentClass = None # tentative Classification
         self.dictionary = {}  #dictionary of predictions and counts associated
-		self.guesses = []
+        self.guesses = []
+        
     def tentativeClassification(self, tc):
         ''' the argument tc is the tentative classification for the column '''
         self.tentClass = tc
 
     def addDict(self, dyct):
     	self.dictionary = dyct
+    
     def addGuess(self, g):
     	self.guesses = g
 

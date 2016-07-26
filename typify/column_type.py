@@ -14,7 +14,7 @@ execfile(path+'numeric_classifier.py')
 execfile(path+'table.py')
 execfile(path+"typify/tie_breaker.py")
 
-#The form strings are in the process of being totally replaced with regular expressions
+
 #TODO: figure out what to do with unicode
 
 ASCII_NUMS = [n for n in range(48, 58)]

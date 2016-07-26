@@ -1,9 +1,10 @@
 import sys, subprocess, json, operator, os
-from secrets import path
 import extraction
+from secrets import path
 execfile(path+'table.py')
 execfile(path+'typify/column_type.py')
 execfile(path+'numeric_classifier.py')
+
 
 def execute(filename):
     filename = filename.replace("\n", "")
