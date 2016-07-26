@@ -1,20 +1,17 @@
 import re
 
 def fingerprint_column(rows):
-	clustered_dictionary = {}
-	finger_indices = [] # column long list that will 1 to 1 match the column with just the fingerprints...
-	#could instead have dictionary with names that have list of indices
-	finger_dict = {}
+	clustered_dictionary = {} # number in each cluster
+	finger_dict = {} #index of each thing that has the same cluster
 	for x in range(len(rows)):
 		finger = fingerprint_string(rows[x])
-		finger_indices.append(finger)
 		if finger in clustered_dictionary:
 			clustered_dictionary[finger] += 1
 			finger_dict[finger].append(x)
 		else:
 			clustered_dictionary[finger] = 1
 			finger_dict[finger] = [x]
-	return clustered_dictionary	
+	return clustered_dictionary, finger_dict	
 
 
 

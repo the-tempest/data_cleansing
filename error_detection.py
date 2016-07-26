@@ -6,6 +6,7 @@ em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile("table.py")
 execfile("typify/helper.py")
 d = difflib.Differ()
+
 class error_detector:
 	def __init__(self,file_path):
 		self.name = "hi"
@@ -46,7 +47,7 @@ class error_detector:
 		column = []
 		for item in column_rows:
 			column.append(item)
-		
+
 		format_dictionary = {}
 		for x in range(len(column)):
 			string = make_form(column[x])
@@ -90,12 +91,12 @@ class error_detector:
 		med = 0
 		# print sorted(list_of_diffs)
 
-		med,index = self.medianList(list_of_diffs)
+		med,index = medianList(list_of_diffs)
 		
 		# print med
 
 		# list_of_diffs
-		IQR, Q1, Q3, I1, I3 = self.compute_IQR(list_of_diffs)
+		IQR, Q1, Q3, I1, I3 = compute_IQR(list_of_diffs)
 
 		# print IQR, Q1, Q3
 
@@ -116,11 +117,12 @@ class error_detector:
 		return possible_error_indices
 
 
-	def compute_IQR(self,L):
+	
+def compute_IQR(L):
 		L = sorted(L)
 		length = len(L)
 		#compute median
-		m, i = self.medianList(L)
+		m, i = medianList(L)
 		if m in L: # means odd sized list
 			lower = L[0:length/2]
 			upper = L[(length/2)+1:]
@@ -130,22 +132,22 @@ class error_detector:
 			upper = L[length/2:]
 		#print upper
 		#print lower
-		Q1, index1 = self.medianList(lower)
-		Q3, index2 = self.medianList(upper)
+		Q1, index1 = medianList(lower)
+		Q3, index2 = medianList(upper)
 		IQR = Q3-Q1
 
 		return IQR, Q1, Q3, index1, index2+i
 
-	def medianList(self,L):
-		L = sorted(L)
-		length = len(L)
+def medianList(L):
+	L = sorted(L)
+	length = len(L)
 
-		if (length % 2) == 1: 
-			return L[length/2], length/2
-		else:
-			x1 = L[length/2]
-			x2 = L[(length/2) - 1]
-			return float(x1 + x2)/2, length/2
+	if (length % 2) == 1: 
+		return L[length/2], length/2
+	else:
+		x1 = L[length/2]
+		x2 = L[(length/2) - 1]
+		return float(x1 + x2)/2, length/2
 
 
 def make_form(inString):
