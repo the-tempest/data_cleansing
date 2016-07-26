@@ -1,13 +1,13 @@
-output = open("new_spec_address_testing_data.txt", "w")
-names = {}
-with open("spec_address_testing_data.txt", "r") as f:
+output = open("states.txt", "w")
+names = []
+with open("raw_states.txt", "r") as f:
 	for line in f:
-		word = line.strip('\n')
+		word = line.split()[0].lower()
 		if word not in names:
-			names[word] = 1
+			names.append(word)
 ret = "["
-for name in names.keys():
-	ret += 'r\"'
+for name in names:
+	ret += '\"'
 	ret += name
 	ret += '\", '
 ret = ret[:-2]

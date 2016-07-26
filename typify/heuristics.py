@@ -31,53 +31,22 @@ EMAIL_POS          = 7
 LOCATION_POS       = 8
 DESCRIPTION_POS    = 9
 URL_POS            = 10
+CITY_POS           = 11
+STATE_POS          = 12
 
 def full_name_heuristic(token, typer):
 	'''returns a  name heuristic value or negative infinity
 	if it definitely isn't a name'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[FULL_NAME_POS]
-
-	# build a list of characteristics that will be used throughout the rest of the heuristic
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-	lengths = [len(x) for x in split_token]
-	if len(lengths) == 0: # it isn't anything if it's an empty string
+	possibles = ['name', 'person']
+	value = generic_heuristic(token, typer, possibles, FULL_NAME_POS, split_token)
+	if value == 0:
 		return 'full name', 0
+	# misc part
+	misc_value = 0
+	lengths = [len(x) for x in split_token]
 	avg_len = float(sum(lengths)) / float(len(lengths))
 	spaces = len(split_token) - 1
-
-	#check if it can't be a name
-	# uses possible values
-	if not my_typer.can_be(char_val_list):
-		return 'full name', 0
-
-	# main part ###############################################
-	value = 0
-
-	# check column name
-	if 'name' in typer.curr_col_name.lower():
-		value += 20
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# looking at format of individual words
-	if spaces > 0:
-		for word in split_token:
-			#check for common names
-			if my_typer.is_a(word.lower()):
-				value += 20
-				break
-	if value > 90:
-		value = 90
-
-	# misc part #######################################
-	# this is different for each heuristic
-	misc_value = 0
 	# account for name length
 	misc_value += NAME_LENGTH - abs(avg_len - NAME_LENGTH)
 	# account for number of spaces
@@ -91,41 +60,14 @@ def full_name_heuristic(token, typer):
 def first_name_heuristic(token, typer):
 	'''returns a  first name heuristic value or negative infinity
 	if it definitely isn't a name'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[FIRST_NAME_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-	lengths = [len(x) for x in split_token]
-
-	# check if it can't be a name
-	if not my_typer.can_be(char_val_list):
+	possibles = ['first', 'name']
+	value = generic_heuristic(token, typer, possibles, FIRST_NAME_POS, split_token)
+	if value == 0:
 		return 'first name', 0
-	# account for name length
-	if len(lengths) == 0:
-		return 'first name', 0
-
-	# main part #####################################
-	value = 0
-
-	# check column name
-	if 'first' in typer.curr_col_name.lower():
-		value += 10
-	if 'name' in typer.curr_col_name.lower():
-		value += 10
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# check for common names
-	if my_typer.is_a(token.lower()):
-		value += 40
-
 	# misc part #############################
 	misc_value = 0
+	lengths = [len(x) for x in split_token]
 	if len(lengths) == 1:
 		misc_value = 10
 
@@ -134,44 +76,14 @@ def first_name_heuristic(token, typer):
 def last_name_heuristic(token, typer):
 	'''returns a last name heuristic value or negative infinity
 	if it definitely isn't a name'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[LAST_NAME_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-	lengths = [len(x) for x in split_token]
-
-	# check if it can't be a name
-	if not my_typer.can_be(char_val_list):
+	possibles = ['last', 'sur', 'name']
+	value = generic_heuristic(token, typer, possibles, LAST_NAME_POS, split_token)
+	if value == 0:
 		return 'last name', 0
-	if len(lengths) == 0:
-		return 'last name', 0
-
-	# main part #####################
-	value = 0
-
-	# check column name
-	if 'last' in typer.curr_col_name.lower():
-		value += 10
-	if 'sur' in typer.curr_col_name.lower():
-		value += 10
-	if 'name' in typer.curr_col_name.lower():
-		value += 10
-	if value > 20:
-		value = 20
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# check for common names
-	if my_typer.is_a(token.lower()):
-		value += 40
-
-	# misc part ###################
+	# misc part
 	misc_value = 0
+	lengths = [len(x) for x in split_token]
 	if len(lengths) == 1:
 		misc_value = 10
 
@@ -180,35 +92,12 @@ def last_name_heuristic(token, typer):
 def datestring_heuristic(token, typer):
 	'''returns a certainty value for token being a date string
 	or zero if it definitely isn't a date string'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[DATESTRING_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-
-	#check if it can't be a datestring
-	if not my_typer.can_be(char_val_list):
+	possibles = ['date', 'day']
+	value = generic_heuristic(token, typer, possibles, DATESTRING_POS, split_token)
+	if value == 0:
 		return 'datestring', 0
-
-	# main part #####################
-	value = 0
-
-	# check column name
-	if 'date' in typer.curr_col_name.lower():
-		value += 20
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	for word in split_token:
-		if my_typer.is_a(word):
-			value += 40
-			break
-
-	# misc part #####################3
+	# misc part
 	misc_value = 0
 	if len(split_token) == 3:
 		misc_value = 10
@@ -218,36 +107,12 @@ def datestring_heuristic(token, typer):
 def full_address_heuristic(token, typer):
 	'''returns a certainty value for token being an address
 	or zero if it definitely isn't an address'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[FULL_ADDRESS_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-
-	#check if it can't be a full address
-	if not my_typer.can_be(char_val_list):
+	possibles = ['possibles']
+	value = generic_heuristic(token, typer, possibles, FULL_ADDRESS_POS, split_token)
+	if value == 0:
 		return 'full address', 0
-
-	# main part ######################
-	value = 0
-
-	# check column name
-	if 'address' in typer.curr_col_name.lower():
-		value += 20
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# check form
-	for word in split_token:
-		if my_typer.is_a(word):
-			value += 40
-			break
-
-	# misc part ######################
+	# misc part
 	misc_value = 0
 	if len(split_token) in range(9, 12):
 		misc_value += 10
@@ -258,38 +123,12 @@ def street_address_heuristic(token, typer):
 	'''returns a certainty value for token being a
 	street address or zero if it definitely
 	isn't an address'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[STREET_ADDRESS_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-
-	#check if it can't be a street address
-	if not my_typer.can_be(char_val_list):
+	possibles = ['street', 'address']
+	value = generic_heuristic(token, typer, possibles, STREET_ADDRESS_POS, split_token)
+	if value == 0:
 		return 'street address', 0
-
-	# main part ######################333
-	value = 0
-
-	# check column name
-	if 'street' in typer.curr_col_name.lower():
-		value += 5
-	if 'address' in typer.curr_col_name.lower():
-		value += 15
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# check examples
-	for word in split_token:
-		if my_typer.is_a(word):
-			value += 40
-			break
-
-	# misc part #####################3
+	# misc part
 	misc_value = 0
 	if len(split_token) == 2:
 		misc_value = 10
@@ -300,82 +139,29 @@ def city_state_heuristic(token, typer):
 	'''returns a certainty value for token being a
 	street address or zero if it definitely
 	isn't an address'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[CITY_STATE_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-
-	#check if it can't be a city state
-	if not my_typer.can_be(char_val_list):
-		return 'city, state', 0
-
-	# main part ##############################
-	value = 0
-
-	# check column name
-	if 'city' in typer.curr_col_name.lower():
-		value += 10
-	if 'state' in typer.curr_col_name.lower():
-		value += 10
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# check examples
-	for word in split_token:
-		if my_typer.is_a(word):
-			value += 40
-			break
-
-	# misc part ########################
+	possibles = ['city', 'state']
+	value = generic_heuristic(token, typer, possibles, CITY_STATE_POS, split_token)
+	if value == 0:
+		return 'city state', 0
+	# misc part
 	misc_value = 0
 	if len(split_token) == 2:
 		misc_value += 5
 		if len(split_token[1]) == 2:
 			misc_value += 5
 	
-
 	return 'city state', value + misc_value
 
 def email_heuristic(token, typer):
 	'''returns a certainty value for token being an email
 	or zero if it definitely isn't an email'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[EMAIL_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-
-	#check if it can't be an email
-	if not my_typer.can_be(char_val_list):
+	possibles = ['address', 'email']
+	value = generic_heuristic(token, typer, possibles, EMAIL_POS, split_token)
+	if value == 0:
 		return 'email', 0
-	
-	# main part ###############
-	value = 0
-
-	# check column name
-	if 'address' in typer.curr_col_name.lower():
-		value += 5
-	if 'email' in typer.curr_col_name.lower():
-		value += 15
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# check examples
-	for word in split_token:
-		if my_typer.is_a(word):
-			value += 40
-			break
-
-	# misc part ####################3
+	# misc part
 	misc_value = 0
 	if '@' in token:
 		misc_value = 10
@@ -385,46 +171,16 @@ def email_heuristic(token, typer):
 def location_heuristic(token, typer):
 	'''returns a certainty value for token being a location
 	or zero if it definitely isn't a location'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[LOCATION_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-	lengths = [len(x) for x in split_token]
-	if len(lengths) == 0:
+	possibles = ['location', 'place', 'country', 'county', 'territory', 'district', 'region', 'zone', 'area', 'division', 'neighborhood', 'locality', 'sector']
+	value = generic_heuristic(token, typer, possibles, LOCATION_POS, split_token)
+	if value == 0:
 		return 'location', 0
+	# misc part
+	misc_value = 0
+	lengths = [len(x) for x in split_token]
 	avg_len = float(sum(lengths)) / float(len(lengths))
 	spaces = len(split_token) - 1
-
-	#check if it can't be a location
-	if not my_typer.can_be(char_val_list):
-		return 'location', 0
-
-	# main part #####################
-	value = 0
-
-	# check column name
-	possibles = ['location', 'place', 'country', 'city']
-	for x in possibles:
-		if x in typer.curr_col_name.lower():
-			value += 20
-			break
-	
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# looking at format of individual words
-	for word in split_token:
-		if my_typer.is_a(word.lower()):
-			value += 40
-			break
-
-	# misc part ###################333
-	misc_value = 0
-
 	# account for number of spaces
 	misc_value += NUM_LOCATION_SPACES - abs(spaces - NUM_LOCATION_SPACES)
 	# account for location length
@@ -437,43 +193,14 @@ def location_heuristic(token, typer):
 def description_heuristic(token, typer):
 	'''returns a certainty value for token being a description
 	or zero if it definitely isn't a description'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[DESCRIPTION_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
 	split_token = token.split()
-	len_split_token = len(split_token)
-
-	#check if it can't be a description
-	if not my_typer.can_be(char_val_list):
-		return 'description', 0
-
-	# main part #####################
-	value = 0
-
-	# check column name
 	possibles = ['des', 'note', 'rep', 'sum', 'exp']
-	for x in possibles:
-		if x in typer.curr_col_name.lower():
-			value += 20
-			break
-	
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 30
-
-	# looking at format of individual words
-	for word in split_token:
-		if my_typer.is_a(word.lower()):
-			value += 40
-			break
-
-	# misc part #############################
+	value = generic_heuristic(token, typer, possibles, DESCRIPTION_POS, split_token)
+	if value == 0:
+		return 'description', 0
+	# misc part
 	misc_value = 0
-	# account for description length
-	# using number of spaces
+	len_split_token = len(split_token)
 	if len_split_token > 10:
 		misc_value += 10
 	else:
@@ -482,32 +209,73 @@ def description_heuristic(token, typer):
 	return 'description', value + misc_value
 
 def url_heuristic(token, typer):
-	'''returns a certainty value for token being an email
-	or zero if it definitely isn't an email'''
-	# get the right classifier
-	my_typer = typer.column_classifiers[URL_POS]
+	'''returns a certainty value for token being a url
+	or zero if it definitely isn't a url'''
+	split_token = token.split()
+	possibles = ['url', 'web', 'address']
+	value = generic_heuristic(token, typer, possibles, URL_POS, split_token)
+	if value == 0:
+		return 'url', 0
+	# misc part
+	misc_value = 0
+	if 'www' in token:
+		misc_value = 10
 
+	return 'url', value + misc_value
+
+def city_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	city or zero if it definitely
+	isn't an city'''
+	split_token = token.split()
+	possibles = ['city', 'town', 'village', 'municipality']
+	value = generic_heuristic(token, typer, possibles, CITY_POS, split_token)
+	if value == 0:
+		return 'city', 0
+	# misc part
+	misc_value = 0
+	if len(token.split()) == 1:
+		misc_value += 10
+
+	return 'city', value + misc_value
+
+def state_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	state or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['state', 'province', 'prefecture', 'territory']
+	# main part
+	value = generic_heuristic(token, typer, possibles, STATE_POS, split_token)
+	if value == 0:
+		return 'state', 0
+	# misc part
+	misc_value = 0
+	if len(split_token) in [1, 2]:
+		misc_value += 10
+
+	return 'state', value + misc_value
+
+def generic_heuristic(token, typer, possibles, pos, split_token):
+	'''returns a certainty value for token being a
+	certain type'''
+	my_typer = typer.column_classifiers[pos]
+	
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	split_token = token.split()
 
-	#check if it can't be an email
+	#check if it can't be the type
 	if not my_typer.can_be(char_val_list):
-		return 'url', 0
-	
-	# main part ###############
+		return 0
+
 	value = 0
 
 	# check column name
-	if 'address' in typer.curr_col_name.lower():
-		value += 10
-	if 'web' in typer.curr_col_name.lower():
-		value += 10
-	if 'url' in typer.curr_col_name.lower():
-		value += 10
-	if value > 20:
-		value = 20
+	for x in possibles:
+		if x in typer.curr_col_name.lower():
+			value += 20
+			break
 
 	#account for the form of the token
 	if my_typer.has_form(token):
@@ -519,12 +287,7 @@ def url_heuristic(token, typer):
 			value += 40
 			break
 
-	# misc part ####################3
-	misc_value = 0
-	if 'www' in token:
-		misc_value = 10
-
-	return 'url', value + misc_value
+	return value
 
 
 def repetition_heuristic(column, tipe):
@@ -602,4 +365,5 @@ def propname_city(token, typer):
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
 			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
 			 city_state_heuristic, email_heuristic, location_heuristic,
-			 description_heuristic, url_heuristic]
+			 description_heuristic, url_heuristic, city_heuristic,
+			 state_heuristic]

@@ -1,18 +1,18 @@
-The column named first_name appears to be of the type first name with a certainty of 0.99.
+The column named first_name appears to be of the type last name with a certainty of 1.00.
 
-The column named last_name appears to be of the type last name with a certainty of 0.99.
+The column named last_name appears to be of the type last name with a certainty of 1.00.
 
-The column named company_name appears to be of the type full name with a certainty of None.
+The column named company_name appears to be of the type city with a certainty of 0.86.
 
-The column named address appears to be of the type street address with a certainty of None.
+The column named address appears to be of the type city with a certainty of 0.78.
 
-The column named city appears to be of the type location with a certainty of 0.93.
+The column named city appears to be of the type city with a certainty of 0.71.
 
-The column named county appears to be of the type full name with a certainty of None.
+The column named county appears to be of the type location with a certainty of 0.98.
 
-The column named state appears to be of the type url with a certainty of 1.0.
+The column named state appears to be of the type state with a certainty of 1.0.
 
-The column named zip appears to be of the type Zip with a certainty of None.
+The column named zip appears to be of the type Zip with a certainty of 0.84.
 
 The column named phone1 appears to be of the type Phone_Number with a certainty of 1.00.
 

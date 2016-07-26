@@ -14,7 +14,7 @@ execfile(path+'numeric_classifier.py')
 execfile(path+'table.py')
 execfile(path+"typify/tie_breaker.py")
 
-#The form strings are in the process of being totally replaced with regular expressions
+
 #TODO: figure out what to do with unicode
 
 ASCII_NUMS = [n for n in range(48, 58)]
@@ -76,13 +76,15 @@ class column_typer:
 			column = elem.rows
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
+			dict = guesses[1]
+			guesses = guesses[0]
 			#print "real guesses"
 			#print guesses
 			elem.addDict(self.generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
 			#print "guesses after dict function call"
 			#print guesses
 			prediction, fraction = self.column_predict(guesses, column)
-			elem.addGuesses(guesses)
+			elem.addGuesses(dict)
 			# values to go into the tuple
 			actual.append(elem.colName)
 			predictions.append(prediction)
@@ -162,11 +164,15 @@ class column_typer:
 		'''takes in a column and
 		returns a list of predictions
 		for each token'''
+		dict = {}
 		predictions = []
+		i = 0
 		for item in column:
 			guess = self.token_typify(item)
+			dict[0]= guess
+			i = i+1
 			predictions.append(guess)
-		return predictions
+		return predictions, dict
 
 	def token_typify(self, token):
 		'''takes in a token and returns a
@@ -202,6 +208,7 @@ class column_typer:
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
+		guesses = guesses[0]
 		tie_breaker1 = tie_breaker(i,guesses, best_guess, best_guess2, predictions,self)
 		prediction = tie_breaker1.differ()		
 		return prediction
@@ -223,7 +230,7 @@ class column_typer:
 		# names
 		names = ['full name', 'first name', 'last name', 'datestring',
 				'full address', 'street address', 'city state', 'email',
-				'location', 'description', 'url']
+				'location', 'description', 'url', 'city', 'state']
 
 		# possible values
 		datestring_pv = [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
@@ -233,8 +240,8 @@ class column_typer:
 		url_pv = ASCII_LOWER + ASCII_UPPER + ASCII_NUMS + url_punc
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
-					 ASCII_NAME, description_pv, url_pv]
-
+					 ASCII_NAME, description_pv, url_pv, ASCII_NAME, ASCII_NAME]
+		# TODO better city and state pv
 
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
@@ -248,7 +255,9 @@ class column_typer:
 		ur_regex = r'''^\S*?.\S*'''
 		regex = [fn_regex, NAME_REGEX, NAME_REGEX, ds_regex,
 				fa_regex, sa_regex, cs_regex, em_regex,
-				lo_regex, de_regex, ur_regex]
+				lo_regex, de_regex, ur_regex, NAME_REGEX, NAME_REGEX]
+		# TODO better regex for city and state
+
 
 		# known examples
 		full_name_ex      = COMMON_PREFIXES + COMMON_SUFFIXES + COMMON_FIRST_NAMES + COMMON_LAST_NAMES
@@ -262,9 +271,11 @@ class column_typer:
 		location_ex       = COMMON_CITIES + COMMON_LOCATION_FEATURES
 		description_ex    = COMMON_ADJECTIVES
 		url_ex            = COMMON_URL_EXTENSIONS + COMMON_URL
+		city_ex           = COMMON_CITIES
+		state_ex          = COMMON_STATES
 		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
-						  location_ex, description_ex, url_ex]
+						  location_ex, description_ex, url_ex, city_ex, state_ex]
 
 		for i in range(len(names)):
 			curr = classifier(names[i],

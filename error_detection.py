@@ -1,11 +1,12 @@
 import difflib
 from secrets import password, port, database, user, host
-import extraction, re
+import extraction, re, math
 
 em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile("table.py")
 execfile("typify/helper.py")
 d = difflib.Differ()
+
 class error_detector:
 	def __init__(self,file_path):
 		self.name = "hi"
@@ -15,7 +16,9 @@ class error_detector:
 
 	def check_on_table(self):
 		table = self.t
-		table.build_column_index
+
+
+		table.build_column_index()
 		column_errors = []
 		for column in table.columns:
 			if column.tentClass == "email": # someone needs to implement this now its not that hard...
@@ -39,8 +42,12 @@ class error_detector:
 		return possible_error_indices
 
 
-	def format_checks(self, column):
+	def format_checks(self, column_rows):
 		'''Looks for formating errors in a column'''
+		column = []
+		for item in column_rows:
+			column.append(item)
+
 		format_dictionary = {}
 		for x in range(len(column)):
 			string = make_form(column[x])
@@ -54,8 +61,8 @@ class error_detector:
 
 		general_form = max(format_dictionary, key = format_dictionary.get) # the most common format_dictionary
 		general_form = general_form.splitlines()
-		print general_form
-		#print column
+		# print general_form
+		# print column
 		list_of_diffs = []
 		for cell in column:
 
@@ -82,23 +89,26 @@ class error_detector:
 			mean = sum(list_of_diffs) / float(len(list_of_diffs)) # to avoid int division
 
 		med = 0
-		print list_of_diffs
-		med,index = self.medianList(list_of_diffs)
+		# print sorted(list_of_diffs)
+
+		med,index = medianList(list_of_diffs)
 		
+		# print med
+
 		# list_of_diffs
-		IQR, Q1, Q3, I1, I3 = self.compute_IQR(list_of_diffs)
+		IQR, Q1, Q3, I1, I3 = compute_IQR(list_of_diffs)
 
-		#print IQR, Q1, Q3
+		# print IQR, Q1, Q3
 
-		outlier_max_range = 1.5*IQR + Q3
-		outlier_min_range = 1.5*IQR - Q1
+		outlier_max_range = math.floor(1.5*IQR + Q3)
+		outlier_min_range = math.ceil(Q1 - 1.5*IQR)
 		
-		print outlier_max_range
-		print outlier_min_range
+		# print outlier_max_range
+		# print outlier_min_range
 
 		possible_error_indices = []
 		for x in range(len(list_of_diffs)):
-			if list_of_diffs[x] < outlier_min_range or list_of_diffs[x] > outlier_max_range:
+			if list_of_diffs[x] <= outlier_min_range or list_of_diffs[x] >= outlier_max_range:
 				possible_error_indices.append(x) 
 				#appending indices in column that will have 
 		#for item in possible_error_indices:
@@ -107,11 +117,12 @@ class error_detector:
 		return possible_error_indices
 
 
-	def compute_IQR(self,L):
+	
+def compute_IQR(L):
 		L = sorted(L)
 		length = len(L)
 		#compute median
-		m, i = self.medianList(L)
+		m, i = medianList(L)
 		if m in L: # means odd sized list
 			lower = L[0:length/2]
 			upper = L[(length/2)+1:]
@@ -121,21 +132,22 @@ class error_detector:
 			upper = L[length/2:]
 		#print upper
 		#print lower
-		Q1, index1 = self.medianList(lower)
-		Q3, index2 = self.medianList(upper)
+		Q1, index1 = medianList(lower)
+		Q3, index2 = medianList(upper)
 		IQR = Q3-Q1
 
 		return IQR, Q1, Q3, index1, index2+i
 
-	def medianList(self,L):
-		length = len(L)
+def medianList(L):
+	L = sorted(L)
+	length = len(L)
 
-		if (length % 2) == 1: 
-			return L[length/2], length/2
-		else:
-			x1 = L[length/2]
-			x2 = L[(length/2) - 1]
-			return float(x1 + x2)/2, length/2
+	if (length % 2) == 1: 
+		return L[length/2], length/2
+	else:
+		x1 = L[length/2]
+		x2 = L[(length/2) - 1]
+		return float(x1 + x2)/2, length/2
 
 
 def make_form(inString):
