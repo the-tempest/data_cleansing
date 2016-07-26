@@ -14,8 +14,8 @@ class column:
     def addDict(self, dyct):
     	self.dictionary = dyct
     
-    def addGuess(self, g):
-    	self.guesses = g
+    def addGuesses(self, g):
+    	self.guesses.append(g)
 
 # class to represent a table
 class table:
