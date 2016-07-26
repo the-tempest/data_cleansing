@@ -3,7 +3,7 @@ from flask.sessions import SessionInterface
 import os, subprocess
 from datetime import datetime
 from secrets import path
-mport main
+import main
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = path+'uploaded/'
