@@ -15,7 +15,7 @@ class column:
     	self.dictionary = dyct
     
     def addGuesses(self, g):
-    	self.guesses.append(g)
+    	self.guesses = g
 
 # class to represent a table
 class table:
