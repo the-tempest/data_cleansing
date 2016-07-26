@@ -30,9 +30,6 @@ def process():
             main.execute(filename)
             outputFile = noExt+now+".txt"
             r = make_response(send_file(app.config['OUTPUT_FOLDER'] + outputFile), 200, {"file": outputFile} );
-            #k = os.urandom(24);
-            #app.config['COOKIE LIST'][]
-            #r.set_cookie('username', k)
             return r;
         else:
             return "wrong file extension";
