@@ -15,7 +15,9 @@ class error_detector:
 
 	def check_on_table(self):
 		table = self.t
-		table.build_column_index
+
+
+		table.build_column_index()
 		column_errors = []
 		for column in table.columns:
 			if column.tentClass == "email": # someone needs to implement this now its not that hard...
@@ -39,8 +41,9 @@ class error_detector:
 		return possible_error_indices
 
 
-	def format_checks(self, column):
+	def format_checks(self, column_rows):
 		'''Looks for formating errors in a column'''
+		column = column_rows
 		format_dictionary = {}
 		for x in range(len(column)):
 			string = make_form(column[x])
