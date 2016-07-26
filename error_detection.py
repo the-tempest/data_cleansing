@@ -43,7 +43,10 @@ class error_detector:
 
 	def format_checks(self, column_rows):
 		'''Looks for formating errors in a column'''
-		column = column_rows
+		column = []
+		for item in column_rows:
+			column.append(item)
+		
 		format_dictionary = {}
 		for x in range(len(column)):
 			string = make_form(column[x])
