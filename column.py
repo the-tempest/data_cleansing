@@ -5,7 +5,7 @@ class column:
         self.rows = rows # the actual data inside the column (in the form of list)
         self.tentClass = None # tentative Classification
         self.dictionary = {}  #dictionary of predictions and counts associated
-        self.guesses = []
+        self.guesses = {} # dictionary of index of token and guess for that token
         
     def tentativeClassification(self, tc):
         ''' the argument tc is the tentative classification for the column '''
@@ -15,7 +15,7 @@ class column:
     	self.dictionary = dyct
     
     def addGuesses(self, g):
-    	self.guesses.append(g)
+    	self.guesses = g
 
 # class to represent a table
 class table:
