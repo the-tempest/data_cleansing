@@ -2,12 +2,17 @@ import re
 
 def fingerprint_column(rows):
 	clustered_dictionary = {}
+	finger_indices = [] # column long list that will 1 to 1 match the column with just the fingerprints...
+	#could instead have dictionary with names that have list of indices
 	for item in rows:
 		finger = fingerprint_string(item)
+		finger_indices.append(finger)
 		if finger in clustered_dictionary:
 			clustered_dictionary += 1
 		else:
 			clustered_dictionary[item] = 1
+
+	return clustered_dictionary
 
 
 
@@ -25,4 +30,6 @@ def fingerprint_string(text):
 
 	fingerprint = ' '.join(text_tokens)	
 	#can normalize to ascii if you want
+	#ajdklf
 	return fingerprint
+
