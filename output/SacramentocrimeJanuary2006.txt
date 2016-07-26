@@ -1,0 +1,18 @@
+The column named cdatetime appears to be of the type Date with a certainty of 1.00.
+
+The column named address appears to be of the type street address with a certainty of 0.71.
+
+The column named district appears to be of the type Number with a certainty of 1.0.
+
+The column named beat appears to be of the type street address with a certainty of 0.99.
+
+The column named grid appears to be of the type Number with a certainty of 1.0.
+
+The column named crimedescr appears to be of the type description with a certainty of 1.0.
+
+The column named ucr_ncic_code appears to be of the type Number with a certainty of 1.0.
+
+The column named latitude appears to be of the type Latitude with a certainty of 1.00.
+
+The column named longitude appears to be of the type Longitude with a certainty of 1.00.
+

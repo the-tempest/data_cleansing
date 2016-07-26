@@ -6,11 +6,11 @@ The column named company_name appears to be of the type full name with a certain
 
 The column named address appears to be of the type street address with a certainty of 0.77.
 
-The column named city appears to be of the type location with a certainty of 0.93.
+The column named city appears to be of the type city with a certainty of 0.52.
 
-The column named county appears to be of the type full name with a certainty of 0.70.
+The column named county appears to be of the type city with a certainty of 0.50.
 
-The column named state appears to be of the type url with a certainty of 1.0.
+The column named state appears to be of the type state with a certainty of 1.0.
 
 The column named zip appears to be of the type Zip with a certainty of 0.84.
 

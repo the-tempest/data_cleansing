@@ -223,7 +223,7 @@ class column_typer:
 		# names
 		names = ['full name', 'first name', 'last name', 'datestring',
 				'full address', 'street address', 'city state', 'email',
-				'location', 'description', 'url']
+				'location', 'description', 'url', 'city', 'state']
 
 		# possible values
 		datestring_pv = [32, 44, 46] + ASCII_NUMS + ASCII_UPPER + ASCII_LOWER
@@ -233,8 +233,8 @@ class column_typer:
 		url_pv = ASCII_LOWER + ASCII_UPPER + ASCII_NUMS + url_punc
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
-					 ASCII_NAME, description_pv, url_pv]
-
+					 ASCII_NAME, description_pv, url_pv, ASCII_NAME, ASCII_NAME]
+		# TODO better city and state pv
 
 		# regular expressions
 		fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
@@ -248,7 +248,9 @@ class column_typer:
 		ur_regex = r'''^\S*?.\S*'''
 		regex = [fn_regex, NAME_REGEX, NAME_REGEX, ds_regex,
 				fa_regex, sa_regex, cs_regex, em_regex,
-				lo_regex, de_regex, ur_regex]
+				lo_regex, de_regex, ur_regex, NAME_REGEX, NAME_REGEX]
+		# TODO better regex for city and state
+
 
 		# known examples
 		full_name_ex      = COMMON_PREFIXES + COMMON_SUFFIXES + COMMON_FIRST_NAMES + COMMON_LAST_NAMES
@@ -262,9 +264,11 @@ class column_typer:
 		location_ex       = COMMON_CITIES + COMMON_LOCATION_FEATURES
 		description_ex    = COMMON_ADJECTIVES
 		url_ex            = COMMON_URL_EXTENSIONS + COMMON_URL
+		city_ex           = COMMON_CITIES
+		state_ex          = COMMON_STATES
 		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
-						  location_ex, description_ex, url_ex]
+						  location_ex, description_ex, url_ex, city_ex, state_ex]
 
 		for i in range(len(names)):
 			curr = classifier(names[i],

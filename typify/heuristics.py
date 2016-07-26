@@ -31,6 +31,8 @@ EMAIL_POS          = 7
 LOCATION_POS       = 8
 DESCRIPTION_POS    = 9
 URL_POS            = 10
+CITY_POS           = 11
+STATE_POS          = 12
 
 def full_name_heuristic(token, typer):
 	'''returns a  name heuristic value or negative infinity
@@ -526,6 +528,92 @@ def url_heuristic(token, typer):
 
 	return 'url', value + misc_value
 
+def city_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	city or zero if it definitely
+	isn't an city'''
+	# get the right classifier
+	my_typer = typer.column_classifiers[CITY_POS]
+
+	char_val_list = []
+	for char in token:
+		char_val_list.append(ord(char))
+	split_token = token.split()
+
+	#check if it can't be a city state
+	if not my_typer.can_be(char_val_list):
+		return 'city', 0
+
+	# main part ##############################
+	value = 0
+
+	# check column name
+	possibles = ['city', 'town', 'village', 'hamlet', 'municipality']
+	for x in possibles:
+		if x in typer.curr_col_name.lower():
+			value += 20
+			break
+
+	#account for the form of the token
+	if my_typer.has_form(token):
+		value += 30
+
+	# check examples
+	for word in split_token:
+		if my_typer.is_a(word):
+			value += 40
+			break
+
+	# misc part ########################
+	misc_value = 0
+	if len(split_token) == 1:
+		misc_value += 10
+
+	return 'city', value + misc_value
+
+def state_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	state or zero if it definitely
+	isn't an state'''
+	# get the right classifier
+	my_typer = typer.column_classifiers[STATE_POS]
+
+	char_val_list = []
+	for char in token:
+		char_val_list.append(ord(char))
+	split_token = token.split()
+
+	#check if it can't be a city state
+	if not my_typer.can_be(char_val_list):
+		return 'state', 0
+
+	# main part ##############################
+	value = 0
+
+	# check column name
+	possibles = ['state', 'province', 'prefecture', 'territory']
+	for x in possibles:
+		if x in typer.curr_col_name.lower():
+			value += 20
+			break
+
+	#account for the form of the token
+	if my_typer.has_form(token):
+		value += 30
+
+	# check examples
+	for word in split_token:
+		if my_typer.is_a(word):
+			value += 40
+			break
+
+	# misc part ########################
+	misc_value = 0
+	if len(split_token) in [1, 2]:
+		misc_value += 10
+
+	return 'state', value + misc_value
+
 
 def repetition_heuristic(column, tipe):
 	'''returns a heuristic value based on the amount of repetition in the column
@@ -602,4 +690,5 @@ def propname_city(token, typer):
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
 			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
 			 city_state_heuristic, email_heuristic, location_heuristic,
-			 description_heuristic, url_heuristic]
+			 description_heuristic, url_heuristic, city_heuristic,
+			 state_heuristic]

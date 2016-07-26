@@ -36,4 +36,3 @@ class table:
     def getColumns(self):
         ''' returns a list of column objects for the table '''
         return self.columns
-        
