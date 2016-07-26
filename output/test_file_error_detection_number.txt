@@ -1,0 +1,2 @@
+The column named number appears to be of the type Number with a certainty of 1.00.
+

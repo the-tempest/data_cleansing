@@ -166,7 +166,7 @@ class column_typer:
 		for each token'''
 		dict = {}
 		predictions = []
-		int i = 0
+		i = 0
 		for item in column:
 			guess = self.token_typify(item)
 			dict[0]= guess

@@ -4,8 +4,9 @@ import extraction, re
 import math
 
 em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-execfile("table.py")
-execfile("typify/helper.py")
+execfile(path+"table.py")
+execfile(path+"typify/helper.py")
+execfile(path+"main.py")
 d = difflib.Differ()
 class error_detector_number:
 	#assumes that the columns it looks at are numeric and for sales, or age or something like that
@@ -14,6 +15,8 @@ class error_detector_number:
 		table_name = extraction.extract(file_path);
 		self.t = getTable(table_name, user, password, host, database)
 		
+		execute(file_path)
+		
 	
 	def check_on_table(self):
 		table = self.t
@@ -21,7 +24,7 @@ class error_detector_number:
 		column_errors = []
 		for column in table.columns:
 			indices = self.range_check(column.rows)
-			indices 2 = self.misclassified(column)
+			indices2 = self.misclassified(column)
 			column_errors.append(indices)
 		print column_errors
 		print "Here"
@@ -52,12 +55,45 @@ class error_detector_number:
 	
 	def misclassified(self, column):
 		think = column.tentClass
+		dict = column.Guesses
 		error_list = []
-		for i in column.Guesses:
-			if i!=think:
-				error_list.append(i)
+		for i in len(dict):
+			if dict[i]!=think:
+				error_list.append(dict[i])
 		return error_list
-				
+	
+
+
+
+	def letter_check(self, column):
+		error = []
+		a = column
+		column_rows = column.rows
+		column = []
+		for item in column_rows:
+			column.append(item)
+		format_dictionary = {}
+		for x in range(len(column)):
+			string = make_form(column[x])
+			string = condense(string)
+			column[x] = string
+			if string in format_dictionary:
+				format_dictionary[string] += 1
+			else: 
+				format_dictionary[string] = 1
+
+		general_form = max(format_dictionary, key = format_dictionary.get) # the most common format_dictionary
+		general_form 
+		
+		for x in range(len(column)):
+			if column[x]==general_form:
+				error.append(x)
+		return error	
+	
+	
+	
+	
+	
 
 def make_form(inString):
 	'''Turns the input string into a string that represents the general form of the string'''
