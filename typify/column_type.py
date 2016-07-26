@@ -76,13 +76,15 @@ class column_typer:
 			column = elem.rows
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
+			dict = guesses[1]
+			guesses = guesses[0]
 			#print "real guesses"
 			#print guesses
 			elem.addDict(self.generate_dict(guesses)) #this calls a function of column and adds a dictionary to one of its elements
 			#print "guesses after dict function call"
 			#print guesses
 			prediction, fraction = self.column_predict(guesses, column)
-			elem.addGuesses(guesses)
+			elem.addGuesses(dict)
 			# values to go into the tuple
 			actual.append(elem.colName)
 			predictions.append(prediction)
@@ -162,11 +164,15 @@ class column_typer:
 		'''takes in a column and
 		returns a list of predictions
 		for each token'''
+		dict = {}
 		predictions = []
+		int i = 0
 		for item in column:
 			guess = self.token_typify(item)
+			dict[0]= guess
+			i = i+1
 			predictions.append(guess)
-		return predictions
+		return predictions, dict
 
 	def token_typify(self, token):
 		'''takes in a token and returns a
@@ -202,6 +208,7 @@ class column_typer:
 		column = elem.rows
 		self.curr_col_name = elem.colName
 		guesses = self.column_typify(column)
+		guesses = guesses[0]
 		tie_breaker1 = tie_breaker(i,guesses, best_guess, best_guess2, predictions,self)
 		prediction = tie_breaker1.differ()		
 		return prediction
