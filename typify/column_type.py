@@ -32,25 +32,33 @@ class column_typer:
 		self.numClass = numeric_classifier()
 
 	def build_report(self):
+		ret = ''
+		results = self.table_typify(self.my_table)
+
+		for item in results:
+			line = self.build_column_report(item)
+			ret += line
+		return ret
+
+	def build_column_report(self,column_tuple):
 		# TODO perhaps make this more abstracted
 		'''Classifies the columns in my_table and
 		returns a summary report as a string'''
-		ret = ''
-		results = self.table_typify(self.my_table)
+
 		#print results
-		for item in results:
-			actual = item[0]
-			prediction = item[1]
-			fraction = str(item[2])
-			line = "The column named "
-			line += actual
-			line += " appears to be of the type "
-			line += str(prediction)
-			line += " with a certainty of "
-			line += fraction
-			line += ".\n\n"
-			ret += line
-		return ret
+		
+		actual = column_tuple[0]
+		prediction = column_tuple[1]
+		fraction = str(column_tuple[2])
+		line = "The column named "
+		line += actual
+		line += " appears to be of the type "
+		line += str(prediction)
+		line += " with a certainty of "
+		line += fraction
+		line += ".\n"
+			
+		return line
 
 	def apply_predictions(self, table):
 		''' takes in a table and returns a table

@@ -28,16 +28,16 @@ class error_detector_number:
 		filename = filename.replace(" ", "_")
 		table_name = extraction.extract(filename);
 		#self.t = getTable(table_name);
-    # call Keith and Pawel's script
-    	c = column_typer(self.t);
-    	cl = c.build_report();
-    	dirToSave = path+"output";
-    	fn = table_name + ".txt"
-    	pathToSave = os.path.join(dirToSave, fn);
-    	print pathToSave
-    	print 'this'
-    	with open(pathToSave, "w") as text_file:
-    		text_file.write(cl);
+	# call Keith and Pawel's script
+		c = column_typer(self.t);
+		cl = c.build_report();
+		dirToSave = path+"output";
+		fn = table_name + ".txt"
+		pathToSave = os.path.join(dirToSave, fn);
+		print pathToSave
+		print 'this'
+		with open(pathToSave, "w") as text_file:
+			text_file.write(cl);
 	
 	def check_on_table(self):
 		table = self.t
