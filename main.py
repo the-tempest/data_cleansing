@@ -31,8 +31,8 @@ def execute(filename):
     # call Keith and Pawel's script
     c = column_typer(t);
     cl = c.build_report();
+    ///14asdfadf = 1asdf 
     
-    adfjkasldfj;k
 
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);
