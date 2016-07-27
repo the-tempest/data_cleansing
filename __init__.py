@@ -31,11 +31,10 @@ def process():
             outputFile = noExt+now+".txt"
             r = make_response(send_file(app.config['OUTPUT_FOLDER'] + outputFile), 200, {"file": outputFile} );
             return r;
-        else:
-            return "wrong file extension";
+        elif f:
+            return "wrong file extension"
 
-
-    return "No files were uploaded";
+    return "No files were uploaded"
 
 
 
