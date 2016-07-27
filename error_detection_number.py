@@ -19,6 +19,7 @@ class error_detector_number:
 		execute(file_path)
 		self.t = getTable(table_name)
 #		print self.t.columns[0].guesses
+		
 		print "above"		
 	
 	
