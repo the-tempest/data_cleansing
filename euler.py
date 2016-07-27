@@ -1,3 +1,4 @@
+import math
 def list_of_primes(mina, maxa):
 	a = []
 	for x in range(mina, maxa):
@@ -76,13 +77,27 @@ def solve9():
 				continue
 
 def solve10(max_num):
-	total = 0
-	prime_list = [2]
-	for x in range(3,max_num+1,2):
-		if isaPrimeList(x, prime_list) == True:
-			print x
-			total += x
-			prime_list.append(x)
-			#print prime_list
-	return total
+	sieve = gen_primes_sieve(max_num)
+	return find_sum(sieve)
 
+
+def gen_primes_sieve(num):
+	sieve = [True] * (num)
+	sieve[0] = False
+	sieve[1] = False
+
+	for i in range(2,int((num**0.5))):
+		if sieve[i] == True: 
+			a = i*i
+			while a < num:
+				sieve[a] = False
+				a += i
+	return sieve
+
+def find_sum(sieve):
+	total= 0 
+	for x in range(len(sieve)):
+		if sieve[x] == True:
+			total += x
+		
+	return total
