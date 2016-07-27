@@ -177,9 +177,10 @@ class column_typer:
 		i = 0
 		for item in column:
 			guess = self.token_typify(item)
-			dict[0]= guess
+			dict[i]= guess
 			i = i+1
 			predictions.append(guess)
+			print dict
 		return predictions, dict
 
 	def token_typify(self, token):
