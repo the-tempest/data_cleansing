@@ -20,7 +20,7 @@ class column_type_tester:
 		print "\n"
 		for col in self.t.getColumns():
 			print "Column name in the spreadsheet: " + col.colName + "\n"
-			print list_of_classes 
+			print list_of_classes
 			print "Here are some of the entries: \n"
 			for i in range(5):
 				print col.rows[i]
@@ -52,8 +52,13 @@ class column_type_tester:
 
 		return confusion_matrix, matrix_indices
 
-	def test_on_file(self): # works on columns should break down further
+	def clear_matrix(self):
+		for x in range(NUMBER_OF_CLASSES):
+			for y in range(NUMBER_OF_CLASSES):
+				self.confusion_matrix[x][y] = 0
 
+	def column_test(self):
+		self.clear_matrix()
 		typify_results = self.column_typer.table_typify(self.column_typer.my_table) # list of tuples
 
 		print typify_results
@@ -65,6 +70,19 @@ class column_type_tester:
 				print "MATCH"
 			self.confusion_matrix[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
 
+		return self.calcF()
+
+	def entry_test(self):
+		self.clear_matrix()
+		for col in self.t.getColumns():
+			self.column_typer.curr_col_name = col.colName
+			actual = col.actualClass
+			for entry in col.rows:
+				classified = self.column_typer.token_typify(entry)
+				self.confusion_matrix[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
+		return self.calcF();
+
+	def calcF(self):
 		precision = self.compute_precision()
 		recall = self.compute_recall()
 		fscore = self.f1score(precision, recall)
