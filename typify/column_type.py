@@ -172,16 +172,16 @@ class column_typer:
 		'''takes in a column and
 		returns a list of predictions
 		for each token'''
-		dict = {}
+		dyct = {}
 		predictions = []
 		i = 0
 		for item in column:
 			guess = self.token_typify(item)
-			dict[i]= guess
+			dyct[i]= guess
 			i = i+1
 			predictions.append(guess)
-			print dict
-		return predictions, dict
+			#print dyct
+		return predictions, dyct
 
 	def token_typify(self, token):
 		'''takes in a token and returns a

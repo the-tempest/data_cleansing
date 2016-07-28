@@ -19,19 +19,33 @@ class counter:
 	def tally_and_save(self, new_data):
 		'''takes in a table that has been fully classified 
 		and add its data to the pickled file'''
-		temp_data = self.predictions
+		temp_data = self.data
+		print 'before'
+		print temp_data
 		for tup in new_data:
-			tup[0] = actual
-			tup[1] = prediction
-			if actual not in temp_data.keys:
-				temp_data[actual][prediction] = 1
+			actual = tup[0]
+			prediction = tup[1]
+			if actual not in temp_data:
+				temp_data[actual] = {prediction: 1}
 			else:
 				if prediction not in temp_data[actual]:
 					temp_data[actual][prediction] = 1
 				else:
 					temp_data[actual][prediction] += 1
 		pickle.dump(temp_data, open("stats/statistics.p", "wb"))
+		print 'after'
+		print temp_data
 
+	def display_results(self):
+		'''prints out the statistics we have collected'''
+		print 'implement me'
+
+
+
+	def get_results(self):
+		'''returns just the dictionary of statistics, maybe
+		we can use this somewhere'''
+		return self.data
 
 
 
