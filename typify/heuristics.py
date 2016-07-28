@@ -59,7 +59,7 @@ def full_name_heuristic(token, typer):
 
 def first_name_heuristic(token, typer):
 	'''returns a  first name heuristic value or negative infinity
-	if it definitely isn't a name'''
+	if it definitely isn't first a name'''
 	split_token = token.split()
 	possibles = ['first', 'name']
 	value = generic_heuristic(token, typer, possibles, FIRST_NAME_POS, split_token)
