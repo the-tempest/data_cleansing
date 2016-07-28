@@ -83,38 +83,45 @@ class column_type_tester:
 		return self.calcF();
 
 	def calcF(self):
-		precision = self.compute_precision()
-		recall = self.compute_recall()
+		precision = self.compute_precision_avg()
+		recall = self.compute_recall_avg()
 		fscore = self.f1score(precision, recall)
 
 		print precision
 		print recall
-
+		print fscore
 		return fscore
 
-	def compute_precision(self):
-		curr_numerator = 0
-		curr_denominator = 0
-		for x in range(NUMBER_OF_CLASSES):
-			curr_numerator += self.confusion_matrix[x][x]
-			false_positives = 0
-			for y in range(NUMBER_OF_CLASSES): # maybe iterate this in opposite direction
-				if x != y:
-					false_positives += self.confusion_matrix[y][x]
-			curr_denominator += false_positives + self.confusion_matrix[x][x]
+	def compute_precision_avg(self):
+		precisions = []
+		for i in range(NUMBER_OF_CLASSES):
+			num, den = self.compute_precision(i)
+			if den != 0:
+				precisions.append(float(num)/float(den))
+		return sum(precisions)/float(len(precisions))
 
+	def compute_recall_avg(self):
+		recalls = []
+		for i in range(NUMBER_OF_CLASSES):
+			num, den = self.compute_recall(i)
+			if den != 0:
+				recalls.append(float(num)/float(den))
+		return sum(recalls)/float(len(recalls))
 
-		return (float (curr_numerator)) / (float (curr_denominator))
+	def compute_precision(self, x):
+		numerator = self.confusion_matrix[x][x]
+		false_positives = 0
+		for y in range(NUMBER_OF_CLASSES): # maybe iterate this in opposite direction
+			if x != y:
+				false_positives += self.confusion_matrix[y][x]
+		denominator = false_positives + self.confusion_matrix[x][x]
 
-	def compute_recall(self):
-		curr_numerator = 0
-		curr_denominator = 0
+		return (numerator, denominator)
 
-		for x in range(NUMBER_OF_CLASSES):
-			curr_numerator += self.confusion_matrix[x][x]
-			curr_denominator += sum(self.confusion_matrix[x])
-
-		return (float (curr_numerator)) / (float (curr_denominator))
+	def compute_recall(self, x):
+		numerator = self.confusion_matrix[x][x]
+		denominator = sum(self.confusion_matrix[x])
+		return (numerator, denominator)
 
 	def f1score(self, precision, recall):
 		numerator = 2 * precision * recall
