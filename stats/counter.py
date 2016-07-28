@@ -26,11 +26,17 @@ class counter:
 			actual = tup[0]
 			prediction = tup[1]
 			if actual not in temp_data:
+				print 'actual not found'
+				print actual, prediction
 				temp_data[actual] = {prediction: 1}
 			else:
 				if prediction not in temp_data[actual]:
+					print 'prediction not found'
+					print actual, prediction
 					temp_data[actual][prediction] = 1
 				else:
+					print 'found both'
+					print actual, prediction
 					temp_data[actual][prediction] += 1
 		pickle.dump(temp_data, open("stats/statistics.p", "wb"))
 		print 'after'
@@ -38,8 +44,20 @@ class counter:
 
 	def display_results(self):
 		'''prints out the statistics we have collected'''
-		print 'implement me'
-
+		ret = 'Statistics collected so far:\n\n'
+		for actual in self.data:
+			ret += actual
+			ret +=':\n'
+			classifications = self.data[actual]
+			for guess in classifications:
+				ret += '    '
+				ret += guess
+				ret += ': '
+				ret += str(classifications[guess])
+				ret += '\n'
+		ret += '\n'
+		print ret
+		return ret
 
 
 	def get_results(self):
