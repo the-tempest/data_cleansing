@@ -4,7 +4,9 @@ from secrets import path
 execfile(path+'table.py')
 execfile(path+'typify/column_type.py')
 execfile(path+'numeric_classifier.py')
+execfile(path+'stats/counter.py')
 
+ct = counter()
 
 def execute(filename):
     filename = filename.replace("\n", "")
@@ -32,6 +34,9 @@ def execute(filename):
     c = column_typer(t);
     cl = c.build_report();
     
+    # collect statistics
+    results = c.table_typify(t)
+    ct.tally_and_save(results)
 
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);

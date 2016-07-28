@@ -130,6 +130,8 @@ class numeric_trainer: # class fo holding training functions
 			t = getTable(table_name, user, password, host, database) #  returns table object
 			column_names = []
 
+			print "hello!"
+
 			for column in t.columns:
 				# remove characters 0-9 in column name
 				firstNum = "0"

@@ -1,14 +1,7 @@
 The column named id appears to be of the type Number with a certainty of 1.00.
-
-The column named first_name appears to be of the type first name with a certainty of 1.00.
-
+The column named first_name appears to be of the type last name with a certainty of 1.00.
 The column named last_name appears to be of the type last name with a certainty of 1.00.
-
 The column named email appears to be of the type email with a certainty of 1.00.
-
-The column named gender appears to be of the type last name with a certainty of 1.0.
-
+The column named gender appears to be of the type city with a certainty of 1.0.
 The column named ip_address appears to be of the type IP with a certainty of 1.00.
-
 The column named phone appears to be of the type Phone_Number with a certainty of 1.00.
-

@@ -9,7 +9,11 @@ def getRows(columnName, fileName, cursor):
     rows = cursor.fetchall();
     #print rows
     for j in range(len(rows)):
-        rows[j] = str(''.join(rows[j]));
+        try:
+            rows[j] = str(''.join(rows[j]));
+        except UnicodeEncodeError:  
+            rows[j] = str(''.join(rows[j][0].decode('utf-8')))
+
     return rows;
 
 def getTable(tablename, u=user, p=password, h=host, d=database, port = port ):

@@ -1,4 +1,5 @@
 import math
+
 def list_of_primes(mina, maxa):
 	a = []
 	for x in range(mina, maxa):
@@ -101,3 +102,70 @@ def find_sum(sieve):
 			total += x
 		
 	return total
+
+def gen_next_collatz(num):
+	if (num % 2 == 0):
+		return num / 2
+	else:
+		return 3*num + 1
+
+def gen_collatz_sequence(start,c_dict):
+	sequence = []
+	curr_num = start
+	
+	#print "here"
+	while True:
+		sequence.append(curr_num)
+
+		if curr_num in c_dict:
+			#print "skip!"
+			#sequence.append(1)
+			break
+		if curr_num == 1:
+			# if len(sequence) > 1:
+			# 	sequence.append(1)
+			break
+
+		curr_num = gen_next_collatz(curr_num)
+		#sequence.append(curr_num)
+
+		
+
+	for x in range(len(sequence)):
+		if sequence[x] in c_dict:
+			break
+
+		else:
+			c_dict[sequence[x]] = len(sequence[x+1:]) + c_dict[curr_num]
+	#sequence.append(1)
+	return sequence, c_dict #because it will skip 1 actually	
+
+import time
+
+
+def solve14():
+	# all number in the collatz_dictionary are keyed right just the values seem to be off by 1
+	start = time.time()
+	collatz_dict = {1:0}
+	max_len = 0
+	max_index = 0
+	for x in range(1,1000000):
+		#print x
+		if x in collatz_dict:
+			#print x
+			#print "skip!"
+			continue
+		else:
+			a,b = gen_collatz_sequence(x, collatz_dict)
+
+
+
+
+	v = list(collatz_dict.values())
+	k = list(collatz_dict.keys())
+	#print collatz_dict
+
+	elasped = time.time() - start
+	print elasped
+	print collatz_dict
+	return k[v.index(max(v))] 
