@@ -11,7 +11,7 @@ training_directory = (path+"numeric_training_data")
 
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points'] # default features and types
-types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP']
+types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP', 'Year', 'ISBN']
 
 ''' Form of the feature_dictionary that gets built in train and is used to classify
 {'Phone_Number': {'slashes': {0: 1000},

@@ -31,4 +31,3 @@ def fingerprint_string(text):
 	#can normalize to ascii if you want
 	#ajdklf
 	return fingerprint
-

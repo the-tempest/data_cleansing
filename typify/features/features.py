@@ -16,10 +16,9 @@ COMMON_ADDRESS_NAMES = ['fawn', 'summer', 'madison', 'parker', 'pheasant', 'devo
 COMMON_ADDRESS_FEATURES = ['allee', 'alley', 'ally', 'aly', 'anex', 'annex', 'annx', 'anx', 'arc', 'arcade', 'av', 'ave', 'aven', 'avenu', 'avenue', 'avn', 'avnue', 'bayoo', 'bayou', 'bch', 'beach', 'bend', 'bnd', 'blf', 'bluf', 'bluff', 'bluffs', 'btm', 'bottm', 'bottom', 'blvd', 'boul', 'boulevard', 'boulv', 'brnch', 'branch', 'brdge', 'brg', 'bridge', 'brk', 'brook', 'brooks', 'burg', 'burgs', 'byp', 'bypa', 'bypas', 'bypass', 'byps', 'camp', 'cp', 'cmp', 'canyn', 'canyon', 'cnyn', 'cape', 'cpe', 'causeway', 'causwa', 'cswy', 'cen', 'cent', 'center', 'centr', 'centre', 'cnter', 'cntr', 'ctr', 'centers', 'cir', 'circ', 'circl', 'circle', 'crcl', 'crcle', 'circles', 'clf', 'cliff', 'clfs', 'cliffs', 'clb', 'club', 'common', 'commons', 'cor', 'corner', 'corners', 'cors', 'course', 'crse', 'court', 'ct', 'courts', 'cts', 'cove', 'cv', 'coves', 'creek', 'crk', 'crescent', 'cres', 'crsent', 'crsnt', 'crest', 'crossing', 'crssng', 'xing', 'crossroad', 'crossroads', 'curve', 'dale', 'dam', 'dm', 'div', 'divide', 'dv', 'dvd', 'dr', 'driv', 'drive', 'drv', 'drives', 'est', 'estate', 'estates', 'ests', 'exp', 'expr', 'express', 'expressway', 'expw', 'expy', 'ext', 'extension', 'extn', 'extnsn', 'exts', 'fall', 'falls', 'fls', 'ferry', 'frry', 'fry', 'field', 'fld', 'fields', 'flds', 'flat', 'flt', 'flats', 'flts', 'ford', 'frd', 'fords', 'forest', 'forests', 'frst', 'forg', 'forge', 'frg', 'forges', 'fork', 'frk', 'forks', 'frks', 'fort', 'frt', 'ft', 'freeway', 'freewy', 'frway', 'frwy', 'fwy', 'garden', 'gardn', 'grden', 'grdn', 'gardens', 'gdns', 'grdns', 'gateway', 'gatewy', 'gatway', 'gtway', 'gtwy', 'glen', 'gln', 'glens', 'green', 'grn', 'greens', 'grov', 'grove', 'grv', 'groves', 'harb', 'harbor', 'harbr', 'hbr', 'hrbor', 'harbors', 'haven', 'hvn', 'ht', 'hts', 'highway', 'highwy', 'hiway', 'hiwy', 'hway', 'hwy', 'hill', 'hl', 'hills', 'hls', 'hllw', 'hollow', 'hollows', 'holw', 'holws', 'inlt', 'island', 'islnd', 'islands', 'islnds', 'iss', 'isle', 'isles', 'jct', 'jction', 'jctn', 'junction', 'junctn', 'juncton', 'jctns', 'jcts', 'junctions', 'key', 'ky', 'keys', 'kys', 'knl', 'knol', 'knoll', 'knls', 'knolls', 'lk', 'lake', 'lks', 'lakes', 'land', 'landing', 'lndg', 'lndng', 'lane', 'ln', 'lgt', 'light', 'lights', 'lf', 'loaf', 'lck', 'lock', 'lcks', 'locks', 'ldg', 'ldge', 'lodg', 'lodge', 'loop', 'loops', 'mall', 'mnr', 'manor', 'manors', 'mnrs', 'meadow', 'mdw', 'mdws', 'meadows', 'medows', 'mews', 'mill', 'mills', 'missn', 'mssn', 'motorway', 'mnt', 'mt', 'mount', 'mntain', 'mntn', 'mountain', 'mountin', 'mtin', 'mtn', 'mntns', 'mountains', 'nck', 'neck', 'orch', 'orchard', 'orchrd', 'oval', 'ovl', 'overpass', 'park', 'prk', 'parks', 'parkway', 'parkwy', 'pkway', 'pkwy', 'pky', 'parkways', 'pkwys', 'pass', 'passage', 'path', 'paths', 'pike', 'pikes', 'pine', 'pines', 'pnes', 'pl', 'plain', 'pln', 'plains', 'plns', 'plaza', 'plz', 'plza', 'point', 'pt', 'points', 'pts', 'port', 'prt', 'ports', 'prts', 'pr', 'prairie', 'prr', 'rad', 'radial', 'radiel', 'radl', 'ramp', 'ranch', 'ranches', 'rnch', 'rnchs', 'rapid', 'rpd', 'rapids', 'rpds', 'rest', 'rst', 'rdg', 'rdge', 'ridge', 'rdgs', 'ridges', 'riv', 'river', 'rvr', 'rivr', 'rd', 'road', 'roads', 'rds', 'route', 'row', 'rue', 'run', 'shl', 'shoal', 'shls', 'shoals', 'shoar', 'shore', 'shr', 'shoars', 'shores', 'shrs', 'skyway', 'spg', 'spng', 'spring', 'sprng', 'spgs', 'spngs', 'springs', 'sprngs', 'spur', 'spurs', 'sq', 'sqr', 'sqre', 'squ', 'square', 'sqrs', 'squares', 'sta', 'station', 'statn', 'stn', 'stra', 'strav', 'straven', 'stravenue', 'stravn', 'strvn', 'strvnue', 'stream', 'streme', 'strm', 'street', 'strt', 'st', 'str', 'streets', 'smt', 'sumit', 'sumitt', 'summit', 'ter', 'terr', 'terrace', 'throughway', 'trace', 'traces', 'trce', 'track', 'tracks', 'trak', 'trk', 'trks', 'trafficway', 'trail', 'trails', 'trl', 'trls', 'trailer', 'trlr', 'trlrs', 'tunel', 'tunl', 'tunls', 'tunnel', 'tunnels', 'tunnl', 'trnpk', 'turnpike', 'turnpk', 'underpass', 'un', 'union', 'unions', 'valley', 'vally', 'vlly', 'vly', 'valleys', 'vlys', 'vdct', 'via', 'viadct', 'viaduct', 'view', 'vw', 'views', 'vws', 'vill', 'villag', 'village', 'villg', 'villiage', 'vlg', 'villages', 'vlgs', 'ville', 'vl', 'vis', 'vist', 'vista', 'vst', 'vsta', 'walk', 'walks', 'wall', 'wy', 'way', 'ways', 'well', 'wells', 'wls']
 
 # location stuff
-COMMON_STATES = ["alabama", "alaska", "american samoa", "arizona", "arkansas", "baker island", "california", "colorado", "connecticut", "delaware", "district of columbia", "florida", "georgia", "guam", "hawaii", "howland island", "idaho", "illinois", "indiana", "iowa", "jarvis island", "johnston atoll", "kansas", "kentucky", "kingman reef", "louisiana", "maine", "maryland", "massachusetts", "michigan", "midway", "minnesota", "mississippi", "missouri", "montana", "navassa island", "nebraska", "nevada", "new hampshire", 'new jersey', 'new mexico', 'new york', "north carolina" 'north dakota', "northern mariana islands", "ohio", "oklahoma", "oregon", "palmyra", "pennsylvania", "puerto rico", "rhode island", "south dakota" 'south carolina', "tennessee", "texas", "utah", "vermont", "virgin islands", "virginia", "wake island", "washington", "west virginia", "wisconsin", "wyoming", "aguascalientes", "baja", "campeche", "chiapas", "chihuahua", "coahuila", "colima", "distrito federal", "durango", "guanajuato", "guerrero", "hidalgo", "jalisco", "mexico", "michoacan", "morelos", "nayarit", "nuevo leon", "oaxaca", "puebla", "queretaro", "quintana roo", "san luis potosi", "sinaloa", "sonora", "tabasco", "tamaulipas", "tlaxcala", "veracruz", "yucatan", "zacatecas", "alberta", "british columbia", "manitoba", 'new brunswick', "newfoundland", "northwest territories", "nova scotia", "nunavut", "ontario", "prince edward island", "quebec", "saskatchewan", "yukon"]
 COMMON_STATEPROV_ABBREV = ['aa', 'va', 'gu', 'ab', 'ae', 'md', 'vi', 'ak', 'al', 'oh', 'ap', 'as', 'ar', 'vt', 'il', 'ga', 'in', 'ia', 'co', 'az', 'id', 'ct', 'nh', 'ks', 'nj', 'nl', 'nm', 'tx', 'la', 'nb', 'nc', 'nd', 'ne', 'fm', 'tn', 'ny', 'pa', 'pe', 'ns', 'nt', 'ca', 'nv', 'ri', 'pr', 'wa', 'bc', 'de', 'dc', 'wi', 'wv', 'hi', 'ok', 'fl', 'yt', 'wy', 'pw', 'me', 'on', 'ma', 'mb', 'ut', 'mo', 'mn', 'mi', 'mh', 'nu', 'sk', 'mt', 'qc', 'mp', 'ms', 'sc', 'ky', 'or', 'sd']
 COMMON_CITIES = ['new york', 'los angeles', 'chicago', 'houston', 'philadelphia', 'phoenix', 'san antonio', 'san diego', 'dallas', 'san jose', 'indianapolis', 'jacksonville', 'san francisco', 'austin', 'columbus', 'fort worth', 'louisville', 'charlotte', 'detroit', 'el paso', 'memphis', 'nashville', 'baltimore', 'boston', 'seattle', 'washington', 'denver', 'milwaukee', 'portland', 'las vegas', 'franklin', 'salem', 'springfield', 'clinton', 'georgetown', 'greenville', 'madison', 'fairview', 'manchester']
-COMMON_LOCATION_FEATURES = ['plaza', 'hotel', 'tower', 'building', 'palace', 'theater', 'county']
+COMMON_LOCATION_FEATURES = ['plaza', 'hotel', 'tower', 'building', 'palace', 'theater']
 
 # email and url stuff
 COMMON_URL = ['google', 'youtube', 'facebook', 'baidu', 'yahoo', 'wikipedia', 'amazon', 'twitter', 'qq', 'live', 'taobao', 'linkedin', 'instagram', 'sina', 'bing', 'yahoo', 'weibo', 'msn', 'hao123', 'reddit', 'yandex', 'gmw', 'ebay', 'pinterest', 'netflix', 'mail', 'onclickads', 'chinadaily', 'tmall', 'sohu', 'paypal', 'microsoft', 'tumblr', 'wordpress', 'stackoverflow', 'imgur', 'blogspot']
@@ -29,64 +28,102 @@ COMMON_EMAIL_DOMAINS = ['yahoo', 'gmail', 'hotmail', 'aol', 'comcast', 'msn', 's
 # description stuff
 COMMON_ADJECTIVES = ['human', 'cold', 'fine', 'personal', 'young', 'better', 'only', 'black', 'easy', 'main', 'local', 'real', 'good', 'big', 'possible', 'dark', 'cultural', 'international', 'entire', 'large', 'bad', 'common', 'small', 'nice', 'right', 'old', 'national', 'hard', 'dead', 'past', 'likely', 'economic', 'close', 'best', 'blue', 'federal', 'religious', 'legal', 'current', 'various', 'new', 'public', 'red', 'available', 'full', 'free', 'popular', 'strong', 'great', 'central', 'foreign', 'american', 'social', 'military', 'whole', 'major', 'simple', 'private', 'financial', 'open', 'late', 'little', 'political', 'long', 'low', 'white', 'final', 'happy', 'environmental', 'true', 'similar', 'medical', 'certain', 'general', 'high', 'single', 'ready', 'physical', 'huge', 'different', 'able', 'hot', 'other', 'special', 'difficult', 'poor', 'sure', 'wrong', 'important', 'significant', 'recent', 'early', 'short', 'natural', 'clear', 'traditional', 'green', 'serious', 'democratic', 'left']
 
+
 #fn_regex = r'''^[-.a-zA-Z']*?,?\s(?:[-a-zA-Z']*\.?\s)*?[-a-zA-Z']*\.?$'''
-FULL_NAME_REGEXS = [r'''^[A-Z][a-z]*\s+(?:[A-Za-z]\.?\s+)?[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''', 
-	r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?,\s+[A-Z][a-z]*\s+(?:[A-Za-z]\.?)?$''', 
-	r'''^[A-Z][a-z]*\s+(?:[A-Z][a-z]\s+)+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''', 
-	r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?,\s+[A-Z][a-z]*\s+(?:[A-Z][a-z]\s*)+$''',
-	r'''^[A-Z]*\s+(?:[A-Za-z]\.?\s+)?[A-Z]*(?:-[A-Z]*)?$''',
-	r'''^[A-Z]*(?:-[A-Z]*)?,\s+[A-Z]*\s+(?:[A-Za-z]\.?)?$''',
-	r'''^[A-Z]*\s+(?:[A-Z]\s+)+[A-Z]*(?:-[A-Z]*)?$''',
-	r'''^[A-Z]*(?:-[A-Z]*)?,\s+[A-Z]*\s+(?:[A-Z]\s*)+$''',
-	r'''^[a-z]*\s+(?:[A-Za-z]\.?\s+)?[a-z]*(?:-[a-z]*)?$''',
-	r'''^[a-z]*(?:-[a-z]*)?,\s+[a-z]*\s+(?:[A-Za-z]\.?)?$''',
-	r'''^[a-z]*\s+(?:[a-z]\s+)+[a-z]*(?:-[a-z]*)?$''',
-	r'''^[a-z]*(?:-[a-z]*)?,\s+[a-z]*\s+(?:[a-z]\s*)+$''']
+FULL_NAME_REGEXS = [r'''^[A-Z][a-z]*\s+(?:[A-Za-z]\.?\s+)+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''', #John (m/M)(.) Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h)
+	r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?,\s+[A-Z][a-z]*\s+(?:[A-Za-z]\.?\s+)*[A-Za-z]\.?$''', #Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h), John (m/M)(.) (...)
+	r'''^[A-Z][a-z]*\s+(?:[A-Z][a-z]\s+)+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''', #John Michael Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h)
+	r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?,\s+[A-Z][a-z]*\s+(?:[A-Z][a-z]+\s+)*[A-Z][a-z]+$''',	#Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h), John Michael (...)
+	r'''^[A-Z][a-z]*\s+(?:[A-Za-z]\.?\s+)+[a-z]+\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''', #John (m/M)(.) von Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h)
+	r'''^[a-z]+\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?,\s+[A-Z][a-z]*\s+(?:[A-Za-z]\.?\s+)*[A-Za-z]\.?$''', #von Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h), John (m/M)(.) (...)
+	r'''^[A-Z][a-z]*\s+(?:[A-Z][a-z]\s+)+[a-z]+\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''', #John Michael von Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h)
+	r'''^[a-z]+\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?,\s+[A-Z][a-z]*\s+(?:[A-Z][a-z]+\s+)*[A-Z][a-z]+$''',	#von Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h), John Michael (...)
+	r'''^[A-Z][a-z]*\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''', #John Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h)
+	r'''^(?:[A-Za-z]\.?\s+)+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*(?:-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*)?$''',	#(j/J)(.) (...) Sm(i/I)(t/T)h(-Sm(i/I)(t/T)h)
+	r'''^[A-Z]+\s+(?:[A-Z]\.?\s+)+[A-Z]+(?:-[A-Z]+)?$''', #JOHN M(.) (...) SMITH(-SMITH)
+	r'''^[A-Z]+(?:-[A-Z]+)?,\s+[A-Z]+\s+(?:[A-Z]\.?\s+)*[A-Z]\.?$''',	#SMITH(-SMITH), JOHN M(.) (...)
+	r'''^[A-Z]+\s+(?:[A-Z]{2,}\s+)+[A-Z]+(?:-[A-Z]+)?$''',	#JOHN MICHAEL SMITH(-SMITH)
+	r'''^[A-Z]+(?:-[A-Z]+)?,\s+[A-Z]+\s+(?:[A-Z]{2,}\s+)*[A-Z]{2,}$''',	#SMITH(-SMITH), JOHN MICHAEL (...)
+	r'''^[A-Z]+\s+[A-Z]+(?:-[A-Z]+)?$''', #JOHN SMITH
+	r'''^(?:[A-Z]\.?\s+)+[A-Z]+(?:-[A-Z]+)?$''',	#J(.) (...) SMITH
+	r'''^[a-z]+\s+(?:[a-z]\.?\s+)+[a-z]+(?:-[a-z]+)?$''',	#john m(.) (...) smith(-smith)
+	r'''^[a-z]+(?:-[a-z]+)?,\s+[a-z]+\s+(?:[a-z]\.?\s+)*[a-z]\.?$''',	#smith(-smith), john m(.) (...)
+	r'''^[a-z]+\s+(?:[a-z]{2,}\s+)+[a-z]+(?:-[a-z]+)?$''',	#john michael (...) smith(-smith)
+	r'''^[a-z]+(?:-[a-z]*)?,\s+[a-z]*\s+(?:[a-z]{2,}\s+)*[a-z]{2,}$''',	#smith(-smith), john michael (...)
+	r'''^[a-z]+\s+[a-z]+(?:-[a-z]+)?$''', #john smith
+	r'''^(?:[a-z]\.?\s+)+[a-z]+(?:-[a-z]+)?$''']	#j(.) (...) smith
 
 #NAME_REGEX = r'''^[A-Z][a-z'-]*$'''
-FIRST_NAME_REGEXS = [r'''^[A-Z][a-z]*$''',
-	r'''^[A-Z][a-z]*\s+[a-z]$''',
-	r'''^[A-Z][a-z]*\s+[a-z]\.$''',
-	r'''^[A-Z][a-z]*\s+[A-Z]$''',
-	r'''^[A-Z][a-z]*\s+[A-Z]\.$''',
-	r'''^[A-Z][a-z]*\s+(?:[A-Z][a-z]*\s*)+$''',
-	r'''^[a-z]*$''',
-	r'''^[a-z]*\s+[a-z]$''',
-	r'''^[a-z]*\s+[a-z]\.$''',
-	r'''^[a-z]*\s+(?:[a-z]*\s*)+$''',
-	r'''^[A-Z]*$''',
-	r'''^[A-Z]*\s+[A-Z]$''',
-	r'''^[A-Z]*\s+[A-Z]\.$''',
-	r'''^[A-Z]*\s+(?:[A-Z]*\s*)+$''']
-LAST_NAME_REGEXS = [r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',
-	r'''^[A-Za-z][a-z]*\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',
-	r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',
-	r'''^[A-Za-z][a-z]*\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',
-	r'''^[a-z]*$''',
-	r'''^[a-z]*\s+[a-z]*$''',
-	r'''^[a-z]*-[a-z]*$''',
-	r'''^[a-z]*\s+[a-z]*-[a-z]*$''',
-	r'''^[A-Z]*$''',
-	r'''^[A-Z]*\s+[A-Z]*$''',
-	r'''^[A-Z]*-[A-Z]*$''',
-	r'''^[A-Z]*\s+[A-Z]*-[A-Z]*$''']
+FIRST_NAME_REGEXS = [r'''^[A-Z][a-z]*$''',	#John
+	r'''^[A-Z][a-z]*\s+[a-z]$''',	#John m
+	r'''^[A-Z][a-z]*\s+[a-z]\.$''',	#John m.
+	r'''^[A-Z][a-z]*\s+[A-Z]$''',	#John M
+	r'''^[A-Z][a-z]*\s+[A-Z]\.$''',	#John M.
+	r'''^[A-Z][a-z]*\s+(?:[A-Z][a-z]*\s*)+$''',	#John Michael
+	r'''^[a-z]+$''',	#john
+	r'''^[a-z]+\s+[a-z]$''',	#john m
+	r'''^[a-z]+\s+[a-z]\.$''',	#john m.
+	r'''^[a-z]+\s+(?:[a-z]+\s*)+$''',	#john michael
+	r'''^[A-Z]+$''',	#JOHN
+	r'''^[A-Z]+\s+[A-Z]$''',	#JOHN M
+	r'''^[A-Z]+\s+[A-Z]\.$''',	#JOHN M.
+	r'''^[A-Z]+\s+(?:[A-Z]+\s*)+$''']	#JOHN MICHAEL
+LAST_NAME_REGEXS = [r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',	#Sm(i/I)(t/T)h
+	r'''^[A-Za-z][a-z]*\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',	#(v/V)on Sm(i/I)(t/T)h
+	r'''^[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',	#Sm(i/I)(t/T)h-Sm(i/I)(t/T)h
+	r'''^[A-Za-z][a-z]*\s+[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*-[A-Z][a-z][A-Za-z]?[A-Za-z]?[a-z]*$''',	#(v/V)on Sm(i/I)(t/T)h-Sm(i/I)(t/T)h
+	r'''^[a-z]+$''',	#smith
+	r'''^[a-z]+\s+[a-z]*$''',	#von smith
+	r'''^[a-z]+-[a-z]+$''',	#smith-smith
+	r'''^[a-z]+\s+[a-z]+-[a-z]+$''',	#von smith-smith
+	r'''^[A-Z]+$''',	#SMITH
+	r'''^[A-Z]+\s+[A-Z]+$''',	#VON SMITH
+	r'''^[A-Z]+-[A-Z]+$''',	#SMITH-SMITH
+	r'''^[A-Z]+\s+[A-Z]+-[A-Z]+$''']	#VON SMITH-SMITH
 
 #ds_regex = r'''^(?:[A-Z][a-zA-Z]*\.?,?\s)?(?:[0-3][0-9]\s)?[A-Z][a-zA-Z]*\.?,?\s(?:[0-3][0-9]\.?,?\s)?[0-9]*$'''
-DATESTRING_REGEXS = [r'''^[A-Z][a-z]*\.?,?\s+\d{1-4}$''',
-	r'''^[0-3][0-9]\s+[A-Z][a-z]*\.?,?\s+\d{1-4}$''',
-	r'''^[A-Z][a-z]*\.?\s+[0-3][0-9],?\s+\d{1-4}$''',
-	r'''^[A-Z][a-z]*\.?,?\s+[0-3][0-9]\s+[A-Z][a-z]*\.?,?\s+\d{1-4}$''',
-	r'''^[A-Z][a-z]*\.?,?\s+[A-Z][a-z]*\.?\s+[0-3][0-9],?\s+\d{1-4}$''',
-	r'''^[A-Z]*\.?,?\s+\d{1-4}$''',
-	r'''^[0-3][0-9]\s+[A-Z]*\.?,?\s+\d{1-4}$''',
-	r'''^[A-Z]*\.?\s+[0-3][0-9],?\s+\d{1-4}$''',
-	r'''^[A-Z]*\.?,?\s+[0-3][0-9]\s+[A-Z]*\.?,?\s+\d{1-4}$''',
-	r'''^[A-Z]*\.?,?\s+[A-Z]*\.?\s+[0-3][0-9],?\s+\d{1-4}$''',
-	r'''^[a-z]*\.?,?\s+\d{1-4}$''',
-	r'''^[0-3][0-9]\s+[a-z]*\.?,?\s+\d{1-4}$''',
-	r'''^[a-z]*\.?\s+[0-3][0-9],?\s+\d{1-4}$''',
-	r'''^[a-z]*\.?,?\s+[0-3][0-9]\s+[a-z]*\.?,?\s+\d{1-4}$''',
-	r'''^[a-z]*\.?,?\s+[a-z]*\.?\s+[0-3][0-9],?\s+\d{1-4}$''']
+DATESTRING_REGEXS = [r'''^[A-Z][a-z]*\.?,?\s+\d{1,4}$''',	#Jul.(,) 2016
+	r'''^[A-Z][a-z]*,?\s+\d{1,4}$''',	#July(,) 2016
+	r'''^[0-3][0-9]\s+[A-Z][a-z]*\.,?\s+\d{1,4}$''',	#27 Jul.(,) 2016
+	r'''^[0-3][0-9]\s+[A-Z][a-z]*,?\s+\d{1,4}$''',	#27 July(,) 2016
+	r'''^[A-Z][a-z]*\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#Jul. 27(,) 2016
+	r'''^[A-Z][a-z]*\s+[0-3][0-9],?\s+\d{1,4}$''',	#July 27(,) 2016
+	r'''^[A-Z][a-z]*\.,?\s+[0-3][0-9]\s+[A-Z][a-z]*\.,?\s+\d{1,4}$''',	#Wed.(,) 27 Jul.(,) 2016
+	r'''^[A-Z][a-z]*\.,?\s+[A-Z][a-z]*\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#Wed.(,) Jul. 27(,) 2016
+	r'''^[A-Z][a-z]*\.,?\s+[0-3][0-9]\s+[A-Z][a-z]*,?\s+\d{1,4}$''',	#Wed.(,) 27 July(,) 2016
+	r'''^[A-Z][a-z]*\.,?\s+[A-Z][a-z]*\s+[0-3][0-9],?\s+\d{1,4}$''',	#Wed.(,) July 27(,) 2016
+	r'''^[A-Z][a-z]*,?\s+[0-3][0-9]\s+[A-Z][a-z]*\.,?\s+\d{1,4}$''',	#Wednesday(,) 27 Jul.(,) 2016
+	r'''^[A-Z][a-z]*,?\s+[A-Z][a-z]*\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#Wednesday(,) Jul. 27(,) 2016
+	r'''^[A-Z][a-z]*,?\s+[0-3][0-9]\s+[A-Z][a-z]*,?\s+\d{1,4}$''',	#Wednesday(,) 27 July(,) 2016
+	r'''^[A-Z][a-z]*,?\s+[A-Z][a-z]*\s+[0-3][0-9],?\s+\d{1,4}$''',	#Wednesday(,) July 27(,) 2016
+	r'''^[A-Z]+\.?,?\s+\d{1,4}$''',	#JUL.(,) 2016
+	r'''^[A-Z]+,?\s+\d{1,4}$''',	#JULY(,) 2016
+	r'''^[0-3][0-9]\s+[A-Z]+\.,?\s+\d{1,4}$''',	#27 JUL.(,) 2016
+	r'''^[0-3][0-9]\s+[A-Z]+,?\s+\d{1,4}$''',	#27 JULY(,) 2016
+	r'''^[A-Z]+\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#JUL. 27(,) 2016
+	r'''^[A-Z]+\s+[0-3][0-9],?\s+\d{1,4}$''',	#JULY 27(,) 2016
+	r'''^[A-Z]+\.,?\s+[0-3][0-9]\s+[A-Z]+\.,?\s+\d{1,4}$''',	#WED.(,) 27 JUL.(,) 2016
+	r'''^[A-Z]+\.,?\s+[A-Z]+\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#WED.(,) JUL. 27(,) 2016
+	r'''^[A-Z]+\.,?\s+[0-3][0-9]\s+[A-Z]+,?\s+\d{1,4}$''',	#WED.(,) 27 JULY(,) 2016
+	r'''^[A-Z]+\.,?\s+[A-Z]+\s+[0-3][0-9],?\s+\d{1,4}$''',	#WED.(,) JULY 27(,) 2016
+	r'''^[A-Z]+,?\s+[0-3][0-9]\s+[A-Z]+\.,?\s+\d{1,4}$''',	#WEDNESDAY(,) 27 JUL.(,) 2016
+	r'''^[A-Z]+,?\s+[A-Z]+\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#WEDNESDAY(,) JUL. 27(,) 2016
+	r'''^[A-Z]+,?\s+[0-3][0-9]\s+[A-Z]+,?\s+\d{1,4}$''',	#WEDNESDAY(,) 27 JULY(,) 2016
+	r'''^[A-Z]+,?\s+[A-Z]+\s+[0-3][0-9],?\s+\d{1,4}$''',	#WEDNESDAY(,) JULY 27(,) 2016
+	r'''^[a-z]+\.?,?\s+\d{1,4}$''',	#jul.(,) 2016
+	r'''^[a-z]+,?\s+\d{1,4}$''',	#july(,) 2016
+	r'''^[0-3][0-9]\s+[a-z]+\.,?\s+\d{1,4}$''',	#27 jul.(,) 2016
+	r'''^[0-3][0-9]\s+[a-z]+,?\s+\d{1,4}$''',	#27 july(,) 2016
+	r'''^[a-z]+\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#jul. 27(,) 2016
+	r'''^[a-z]+\s+[0-3][0-9],?\s+\d{1,4}$''',	#july 27(,) 2016
+	r'''^[a-z]+\.,?\s+[0-3][0-9]\s+[a-z]+\.,?\s+\d{1,4}$''',	#wed.(,) 27 jul.(,) 2016
+	r'''^[a-z]+\.,?\s+[a-z]+\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#wed.(,) jul. 27(,) 2016
+	r'''^[a-z]+\.,?\s+[0-3][0-9]\s+[a-z]+,?\s+\d{1,4}$''',	#wed.(,) 27 july(,) 2016
+	r'''^[a-z]+\.,?\s+[a-z]+\s+[0-3][0-9],?\s+\d{1,4}$''',	#wed.(,) july 27(,) 2016
+	r'''^[a-z]+,?\s+[0-3][0-9]\s+[a-z]+\.,?\s+\d{1,4}$''',	#wednesday(,) 27 jul.(,) 2016
+	r'''^[a-z]+,?\s+[a-z]+\.\s+[0-3][0-9],?\s+\d{1,4}$''',	#wednesday(,) jul. 27(,) 2016
+	r'''^[a-z]+,?\s+[0-3][0-9]\s+[a-z]+,?\s+\d{1,4}$''',	#wednesday(,) 27 july(,) 2016
+	r'''^[a-z]+,?\s+[a-z]+\s+[0-3][0-9],?\s+\d{1,4}$''']	#wednesday(,) july 27(,) 2016
 
 #TODO - fill in this after street addresses are fixed
 FULL_ADDRESS_REGEXS = []
@@ -97,39 +134,74 @@ STREET_ADDRESS_REGEXS = [r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDH
 	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)$''',
 	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+[NSEW]\.?[NSEW]?\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?$''',
 	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?$''',
-	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+[NSEW]\.?[NSEW]?\.?$''',
-	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)$''',	
-	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
-	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)+[A-Z][a-z]+\.?\s+[NSEW]\.?[NSEW]?\.?$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)+[A-Z][a-z]+\.?\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)$''',	
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)+[A-Z][a-z]+\.?,?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
+	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)+\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
 	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+[NSEW]\.?[NSEW]?\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
 	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
 	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+[NSEW]\.?[NSEW]?\.?\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''',
 	r'''^(?:One|[0-9-]*[a-zA-Z]?)\s+(?:\d*(?:[SNRTsnrt][TDHtdh])\s+|(?:St\.?\s+|Dr\.?\s+)?(?:[A-Z][a-z]+(?:'s|-[A-Z][a-z]+)?)\s+)[A-Z][a-z]+\.?\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt]))\s+(?:\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|(?:[a-zA-Z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?\s+(?:#\s*)?\w*(?:[-/: ]\w*)*)$''']
 
 #cs_regex = r'''^(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*$'''
-CITYSTATE_REGEXS = [r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[A-Z][A-Z]$''',
-	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[A-Z][a-z]$''',
-	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[a-z][a-z]$''',
-	r'''^(?:ST\.?\s+)?(?:[A-Z]*(?:'S)?\s+)*?[A-Z]*(?:'S)?,\s+[A-Z][A-Z]$''',
-	r'''^(?:st\.?\s+)?(?:[a-z]*(?:'s)?\s+)*?[a-z]*(?:'s)?,\s+[a-z][a-z]$''',
-	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[A-Z][A-Z]$''',
-	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[A-Z][a-z]$''',
-	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[a-z][a-z]$''',
-	r'''^(?:ST\.?\s+)?(?:[A-Z]*(?:'S)?\s+)*?[A-Z]*(?:'S)?\s+[A-Z][A-Z]$''',
-	r'''^(?:st\.?\s+)?(?:[a-z]*(?:'s)?\s+)*?[a-z]*(?:'s)?\s+[a-z][a-z]$''']
+CITYSTATE_REGEXS = [r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[A-Z][A-Z]$''', #(St(.) )Chicago('s) (...), IL
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[A-Z][a-z]$''',	#(St(.) )Chicago('s) (...), Il
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+[a-z][a-z]$''',	#(St(.) )Chicago('s) (...), il
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?,\s+(?:[A-Z][a-z]{2,}\s+)*[A-Z][a-z]{2,}$''',	#(St(.) )Chicago('s) (...), Illinois (...)
+	r'''^(?:ST\.?\s+)?(?:[A-Z]+(?:'S)?\s+)*?[A-Z]+(?:'S)?,\s+[A-Z][A-Z]$''',	#(ST. )CHICAGO('S) (...), IL
+	r'''^(?:ST\.?\s+)?(?:[A-Z]+(?:'S)?\s+)*?[A-Z]+(?:'S)?,\s+(?:[A-Z]{3,}\s+)*[A-Z]{3,}$''',	#(ST. )CHICAGO('S) (...), ILLINOIS (...)
+	r'''^(?:st\.?\s+)?(?:[a-z]+(?:'s)?\s+)*?[a-z]+(?:'s)?,\s+[a-z][a-z]$''',	#(st. )chicago('s) (...), il
+	r'''^(?:st\.?\s+)?(?:[a-z]+(?:'s)?\s+)*?[a-z]+(?:'s)?,\s+(?:[a-z]{3,}\s+)*[a-z]{3,}$''',	#(st. )chicago('s) (...), illinois (...)
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[A-Z][A-Z]$''', #(St(.) )Chicago('s) (...) IL
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[A-Z][a-z]$''',	#(St(.) )Chicago('s) (...) Il
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+[a-z][a-z]$''',	#(St(.) )Chicago('s) (...) il
+	r'''^(?:St\.?\s+)?(?:[A-Z][a-z]*(?:'s)?\s+)*?[A-Z][a-z]*(?:'s)?\s+(?:[A-Z][a-z]{2,}\s+)*[A-Z][a-z]{2,}$''',	#(St(.) )Chicago('s) (...) Illinois (...)
+	r'''^(?:ST\.?\s+)?(?:[A-Z]+(?:'S)?\s+)*?[A-Z]+(?:'S)?\s+[A-Z][A-Z]$''',	#(ST. )CHICAGO('S) (...) IL
+	r'''^(?:ST\.?\s+)?(?:[A-Z]+(?:'S)?\s+)*?[A-Z]+(?:'S)?\s+(?:[A-Z]{3,}\s+)*[A-Z]{3,}$''',	#(ST. )CHICAGO('S) (...) ILLINOIS (...)
+	r'''^(?:st\.?\s+)?(?:[a-z]+(?:'s)?\s+)*?[a-z]+(?:'s)?\s+[a-z][a-z]$''',	#(st. )chicago('s) (...) il
+	r'''^(?:st\.?\s+)?(?:[a-z]+(?:'s)?\s+)*?[a-z]+(?:'s)?\s+(?:[a-z]{3,}\s+)*[a-z]{3,}$''']	#(st. )chicago('s) (...) illinois (...)
 
 #em_regex = r'''^\S*?@\S*?(?:\.\S*?)+$'''
-EMAIL_REGEXS = [r'''^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$''',
-	r'''^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$''']
+EMAIL_REGEXS = [r'''^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$''',	#j.smith24@gmail.com
+	r'''^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~.]+@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z0-9-]+\.[a-zA-Z0-9-]+$''']	#j.smith24@kr.string.mymail.(...).com
 
 #lo_regex = r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$'''
-LOCATION_REGEXS = [r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$''',
-	r'''^(?:[a-z'-]*\s)*?(?:[a-z'-]*)$''',
-	r'''^(?:[A-Z'-]*\s)*?(?:[A-Z'-]*)$''']
+LOCATION_REGEXS = [r'''^(?:[A-Z][a-z'-]*\s)*?(?:[A-Z][a-z'-]*)$''',	#Golden Gate Bridge
+	r'''^(?:[a-z'-]*\s)*?(?:[a-z'-]*)$''',	#golden gate bridge
+	r'''^(?:[A-Z'-]*\s)*?(?:[A-Z'-]*)$''']	#GOLDEN GATE BRIDGE
 
 #de_regex = r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$'''
-DESCRIPTION_REGEXS = [r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$''']
+DESCRIPTION_REGEXS = [r'''^(?:["'<-]?[A-Za-z0-9'-]+[>"',;:-]?(?:\s|[.?!]\s+))+$''']	#This is a "description" example.
+	
 
+
+
+#url_regex = r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)@?)?(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?|\[(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?|(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+))(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:\?[a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$'''
+URL_REGEXS = [r'''^(?:[/][/])?(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?$''',	#(//)1.2.3.4(/8)(:8000) - actually just an ip address but included for completeness - can be removed later for efficiency or whatever
+	r'''^(?:[/][/])?\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?$''',	#(//)[1:2:3:4:5:6(1.2.3.4/:7:8)](:8000)
+	r'''^(?:[/][/])?(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+$''',	#(//)www.example.com(:8000)
+	r'''^(?:[/][/])?(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',	#(//)1.2.3.4(/8)(:8000)/path/name(?query)(#fragment)
+	r'''^(?:[/][/])?\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',	#(//)[1:2:3:4:5:6(1.2.3.4/:7:8)](:8000)/path/name(?query)(#fragment)
+	r'''^(?:[/][/])?(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',	#(//)www.example.com(:8000)/path/name(?query)(#fragment)
+	r'''^(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?$''',	#(//)user(:password)@1.2.3.4(/8)(:8000)
+	r'''^(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?$''',	#(//)user(:password)@[1:2:3:4:5:6(1.2.3.4/:7:8)](:8000)
+	r'''^(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+$''',	#(//)user(:password)@www.example.com(:8000)
+	r'''^(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',	#(//)user(:password)@1.2.3.4(/8)(:8000)/path/name(?query)(#fragment)
+	r'''^(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',	#(//)user(:password)@[1:2:3:4:5:6(1.2.3.4/:7:8)](:8000)/path/name(?query)(#fragment)
+	r'''^(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',	#(//)user(:password)@www.example.com(:8000)/path/name(?query)(#fragment)
+	#the following regexs are the same as above with a scheme: included at the beginning
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+)?(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)\[?(?:[a-eA-E0-9]*[:])+[a-eA-E0-9]*(?:(?:\d{1,3}\.){3}\d{1,3}(?:[/]\d+))?](?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''',
+	r'''^[A-Za-z][a-zA-Z0-9+.-]*:(?:[/][/])?(?:[a-zA-Z0-9!$&'()*+,;=%+-]+?(?:[:][a-zA-Z0-9!$&'()*+,;=%+-]+?)?@)(?:[0-9a-zA-Z-]\.)+[0-9a-zA-Z-]+(?:[:]\d+)?[/]?(?:[a-zA-Z0-9!$&'()*+,;=%+-:@]+[/])*[a-zA-Z0-9!$&'()*+,;=%+-:@]+(?:\.[a-zA-Z]+)?(?:[?][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?(?:[#][a-zA-Z0-9!$&'()*+,;=%+-:@?]*)?$''']
 
 
 fa_regex = r'''^(?:[Oo][Nn][Ee]|[0-9-]*[a-zA-Z]?)\s+(?:[NSEW]\.?[NSEW]?\.?\s+|(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])\s+)?(?:\d*(?:[SNRTsnrt][TDHtdh])?(?:\s+[a-zA-Z'-]*)?|(?:[a-zA-Z'-]*\s+)*?(?:[a-zA-Z'-]*))\.?(?:\s+\d*)?,?(?:\s+[NSEW]\.?[NESW]?\.?|\s+(?:[NSEWnsew][OAEoae][RUSrus][Tt][Hh]?|[NSns][Oo][RUru][Tt][Hh][EWew][EAea][Ss][Tt])?)?(?:\s+\d*(?:[SNRTsnrt][TDHtdh])?\s+[a-zA-Z]*\.?|\s+(?:[a-zA-Z][a-z]*\.?|[Pp][Oo]\.?\s+?[Bb][Oo][Xx])?(?:\s+(?:[#]\s*)?\w*(?:[-/: ]\w*)?))?,?\s(?:[a-zA-Z'-]*\s)*?[a-zA-Z'-]*,?\s[a-zA-Z]*,?\s(?:\d{5}|\d{5}(?:\s|[.-])?\d{4})(?:,?\s[A-Za-z'-]*)*$'''
