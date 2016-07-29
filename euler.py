@@ -6,7 +6,31 @@ def list_of_primes(mina, maxa):
 		if isaPrime(x):
 			a.append(x)
 
+
 	return a
+
+def solve7():
+	x = 110000
+	upper = x
+	lower = 100000
+	while True:
+		print x
+		if sum(gen_primes_sieve(x)) == 10001:
+			return x
+		elif sum(gen_primes_sieve(x)) > 10001:
+			upper = x
+			x = x - ((x-lower)/2)
+
+		else:
+			lower = x
+			x = x + ((upper-x)/2)
+
+		
+
+
+
+
+
 
 def solve27():
 	
@@ -83,6 +107,7 @@ def solve10(max_num):
 
 
 def gen_primes_sieve(num):
+	''' generates all primes up to a num via the sieve of erathsoajfkldjf;lajdfl'''
 	sieve = [True] * (num)
 	sieve[0] = False
 	sieve[1] = False

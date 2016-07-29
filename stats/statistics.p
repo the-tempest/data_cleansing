@@ -1,22 +1,33 @@
 (dp0
-S'City'
+S'city'
 p1
 (dp2
-S'city state'
+S'city'
 p3
+<<<<<<< HEAD
 I2
 ssS'last_name'
+=======
+I1
+ssS'first_name'
+>>>>>>> 8bc982f62ef052e48f2d20116c6db15284c9c271
 p4
 (dp5
 S'last name'
 p6
-I3
-ssS'ISBN'
+I1
+ssS'last_name'
 p7
 (dp8
-S'Zip'
-p9
+g6
 I1
+ssS'zip'
+p9
+(dp10
+S'Zip'
+p11
+I1
+<<<<<<< HEAD
 ssS'number'
 p10
 (dp11
@@ -27,8 +38,21 @@ ssS'county'
 p13
 (dp14
 S'location'
-p15
+=======
+ssS'web'
+p12
+(dp13
+S'url'
+p14
 I1
+ssS'phone2'
+>>>>>>> 8bc982f62ef052e48f2d20116c6db15284c9c271
+p15
+(dp16
+S'Phone_Number'
+p17
+I1
+<<<<<<< HEAD
 ssS'State'
 p16
 (dp17
@@ -263,5 +287,40 @@ ssS'phone2'
 p114
 (dp115
 g80
+=======
+ssS'phone1'
+p18
+(dp19
+g17
+I1
+ssS'county'
+p20
+(dp21
+S'location'
+p22
+I1
+ssS'state'
+p23
+(dp24
+S'state'
+p25
+I1
+ssS'company_name'
+p26
+(dp27
+S'city'
+p28
+I1
+ssS'address'
+p29
+(dp30
+g28
+I1
+ssS'email'
+p31
+(dp32
+S'email'
+p33
+>>>>>>> 8bc982f62ef052e48f2d20116c6db15284c9c271
 I1
 ss.
