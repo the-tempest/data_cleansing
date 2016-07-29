@@ -34,10 +34,13 @@ class column_typer:
 	def build_report(self):
 		ret = ''
 		results = self.table_typify(self.my_table)
-
+		i = 0
 		for item in results:
 			line = self.build_column_report(item)
 			ret += line
+			#adding in the misclassified token list
+			ret +=self.build_column_error_report(self.my_table.columns[i])
+			i = i +1
 		return ret
 
 	def build_column_report(self,column_tuple):
@@ -57,9 +60,32 @@ class column_typer:
 		line += " with a certainty of "
 		line += fraction
 		line += ".\n"
-			
 		return line
 
+	def build_column_error_report(self, column):
+		list = self.misclassified(column)
+		line = ""
+		for i in list:
+			line += "the token "
+			line+= column.rows[i]
+			line +=" was incorrectly classified as "
+			line+= column.guesses[i]
+		line += ".\n"
+
+		return line
+
+	def misclassified(self, column):
+		'''returns a list of the tokens that may
+		have been misclassfied as their classification is 
+		not the plurality type'''
+		think = column.tentClass
+		dict = column.guesses
+		error_list = []
+		for i in range(len(dict)):
+			if dict[i]!=think:
+				error_list.append(i)
+		return error_list
+			
 	def apply_predictions(self, table):
 		''' takes in a table and returns a table
 		with the tentative classifications filled in'''
@@ -107,7 +133,7 @@ class column_typer:
 				print "got here"
 				predictions[i] = self.differentiate(i,predictions)
 				p = predictions[i]
-			
+			table.getColumns()[i].tentativeClassification(p)
 			t = (a, p, f)
 			print t
 			results.append(t)
