@@ -7,7 +7,7 @@ import pickle, os
 class counter:
 	def __init__(self):
 		'''gets the current count of all predictions'''
-		self.my_path = 'statistics.p'
+		self.my_path = 'stats/statistics.p'
 		if not os.path.isfile(self.my_path):
 			self.my_file = open(self.my_path, 'w+')
 			pickle.dump( {} , self.my_file)
