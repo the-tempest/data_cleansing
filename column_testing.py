@@ -1,7 +1,9 @@
 execfile("typify/column_type.py")
 execfile("extraction.py")
 from secrets import password, port, database, user, host
-list_of_classes = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP', 'full name', 'first name', 'last name', 'datestring',
+import copy
+num_classes = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP', 'ISBN', 'Year']
+list_of_classes = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP', 'ISBN', 'Year', 'full name', 'first name', 'last name', 'datestring',
 		'full address', 'street address', 'city state', 'email', 'location', 'description', 'url', 'city', 'state']
 NUMBER_OF_CLASSES = len(list_of_classes)
 
@@ -11,10 +13,8 @@ class column_type_tester:
 		self.t = getTable(table_name, user, password, host, database)
 		self.column_typer = column_typer(self.t)
 
-		confusion_matrix, matrix_indices = self.initialize_confusion_matrix()
-
-		self.confusion_matrix = confusion_matrix
-		self.matrix_indices = matrix_indices
+		self.heur_conf_mat, self.matrix_indices = self.initialize_confusion_matrix()
+		self.bayes_conf_mat = copy.deepcopy(self.heur_conf_mat)
 		print "What class is each column? Here is the list of choices:"
 		print list_of_classes
 		print "\n"
@@ -55,20 +55,21 @@ class column_type_tester:
 	def clear_matrix(self):
 		for x in range(NUMBER_OF_CLASSES):
 			for y in range(NUMBER_OF_CLASSES):
-				self.confusion_matrix[x][y] = 0
+				self.heur_conf_mat[x][y] = 0
+				self.bayes_conf_mat[x][y] = 0
 
 	def column_test(self):
 		self.clear_matrix()
-		typify_results = self.column_typer.table_typify(self.column_typer.my_table) # list of tuples
+		typify_results = self.column_typer.table_typify(self.column_typer.my_table)
 
-		print typify_results
-		#print self.confusion_matrix
 		for i in range(len(typify_results)):
 			actual = self.t.getColumns()[i].actualClass
 			classified = typify_results[i][1]
-			if (actual == classified):
-				print "MATCH"
-			self.confusion_matrix[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
+
+			if actual in num_classes:
+				self.bayes_conf_mat[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
+			else:
+				self.heur_conf_mat[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
 
 		return self.calcF()
 
@@ -79,52 +80,70 @@ class column_type_tester:
 			actual = col.actualClass
 			for entry in col.rows:
 				classified = self.column_typer.token_typify(entry)
-				self.confusion_matrix[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
+				if actual in num_classes:
+					self.bayes_conf_mat[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
+				else:
+					self.heur_conf_mat[self.matrix_indices[actual]][self.matrix_indices[classified]] += 1
 		return self.calcF();
 
 	def calcF(self):
-		precision = self.compute_precision_avg()
-		recall = self.compute_recall_avg()
-		fscore = self.f1score(precision, recall)
+		b_precision = self.compute_precision_avg(self.bayes_conf_mat)
+		b_recall = self.compute_recall_avg(self.bayes_conf_mat)
+		b_fscore = self.f1score(b_precision, b_recall)
+		print "Bayes precision: " + str(b_precision)
+		print "Bayes recall: " + str(b_recall)
+		print "Bayes f1 score: " + str(b_fscore)
+		h_precision = self.compute_precision_avg(self.heur_conf_mat)
+		print "Heur precision: " + str(h_precision)
+		h_recall = self.compute_recall_avg(self.heur_conf_mat)
+		print "Heur recall: " + str(h_recall)
+		h_fscore = self.f1score(h_precision, h_recall)
+		print "Heur f1 score: " + str(h_fscore)
 
-		print precision
-		print recall
-		print fscore
-		return fscore
 
-	def compute_precision_avg(self):
+		return b_fscore, h_fscore
+
+	def compute_precision_avg(self, mat):
 		precisions = []
 		for i in range(NUMBER_OF_CLASSES):
-			num, den = self.compute_precision(i)
+			num, den = self.compute_precision(i, mat)
 			if den != 0:
 				precisions.append(float(num)/float(den))
-		return sum(precisions)/float(len(precisions))
+		if (len(precisions) != 0):
+			return sum(precisions)/float(len(precisions))
+		else:
+			return 0
 
-	def compute_recall_avg(self):
+	def compute_recall_avg(self, mat):
 		recalls = []
 		for i in range(NUMBER_OF_CLASSES):
-			num, den = self.compute_recall(i)
+			num, den = self.compute_recall(i, mat)
 			if den != 0:
 				recalls.append(float(num)/float(den))
-		return sum(recalls)/float(len(recalls))
+		if (len(recalls) != 0):
+			return sum(recalls)/float(len(recalls))
+		else:
+			return 0
 
-	def compute_precision(self, x):
-		numerator = self.confusion_matrix[x][x]
+	def compute_precision(self, x, mat):
+		numerator = mat[x][x]
 		false_positives = 0
 		for y in range(NUMBER_OF_CLASSES): # maybe iterate this in opposite direction
 			if x != y:
-				false_positives += self.confusion_matrix[y][x]
-		denominator = false_positives + self.confusion_matrix[x][x]
+				false_positives += mat[y][x]
+		denominator = false_positives + mat[x][x]
 
 		return (numerator, denominator)
 
-	def compute_recall(self, x):
-		numerator = self.confusion_matrix[x][x]
-		denominator = sum(self.confusion_matrix[x])
+	def compute_recall(self, x, mat):
+		numerator = mat[x][x]
+		denominator = sum(mat[x])
 		return (numerator, denominator)
 
 	def f1score(self, precision, recall):
 		numerator = 2 * precision * recall
 		denominator = precision + recall
-
-		return numerator / denominator
+		if denominator != 0:
+			return numerator / denominator
+		else:
+			return 0
