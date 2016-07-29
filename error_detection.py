@@ -5,6 +5,7 @@ import extraction, re, math
 em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile("table.py")
 execfile("typify/helper.py")
+execfile("fingerprint.py")
 d = difflib.Differ()
 
 class error_detector:
@@ -17,7 +18,6 @@ class error_detector:
 	def check_on_table(self):
 		table = self.t
 
-
 		table.build_column_index()
 		column_errors = []
 		for column in table.columns:
@@ -29,9 +29,17 @@ class error_detector:
 
 
 
-	def cluster_rows(column):
-		''' Takes in a list of elements in a column and returns ''' 
+	def cluster_rows(self,rows):
+		''' Takes in a list of elements in a column and prints out clusters'''
+		clustered_dictionary, finger_dict = fingerprint_column(rows)
 
+		for item in clustered_dictionary.keys():
+			print "Found Cluster: " + str(item)
+			print "Elements in cluster " + item + " are: " 
+			for x in range(len(finger_dict[item])):
+				print x, ": ",  rows[finger_dict[item][x]]
+
+			print "\n"
 		return 0
 
 	def email_check(self,rows):

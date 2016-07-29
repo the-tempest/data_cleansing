@@ -1,7 +1,9 @@
 import re
 
 def fingerprint_column(rows):
-	''' '''
+	''' takes in a list of rows from a column and returns 2 dictionaries
+		clustered_dictionary is the number of elements in each cluster as key
+		finger_dict has the cluster as keys and then a list of the indices that have that cluster '''
 	clustered_dictionary = {} # number in each cluster
 	finger_dict = {} #index of each thing that has the same cluster
 	for x in range(len(rows)):
