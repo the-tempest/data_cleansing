@@ -29,23 +29,27 @@ class error_detector:
 
 
 
+	def cluster_rows(column):
+		''' Takes in a list of elements in a column and returns ''' 
 
-	def email_check(self,column):
-		''' Uses a regular expresion to see if emails are valid''' 
+		return 0
+
+	def email_check(self,rows):
+		''' Takes in a list of elements in a column. Uses a regular expresion to see if emails are valid''' 
 		prog = re.compile(em_regexp)
 		possible_error_indices = []
-		for x in range(len(column)):
-			result = prog.findall(column[x])
+		for x in range(len(rows)):
+			result = prog.findall(rows[x])
 			if len(result) == 0:
 				possible_error_indices.append(x)
 
 		return possible_error_indices
 
 
-	def format_checks(self, column_rows):
-		'''Looks for formating errors in a column'''
+	def format_checks(self, rows):
+		'''Looks for formating errors in a column and takes in a list of rows in a column'''
 		column = []
-		for item in column_rows:
+		for item in rows: # i needed to do this for some reason because rows was getting edited outside of this scope 
 			column.append(item)
 
 		format_dictionary = {}

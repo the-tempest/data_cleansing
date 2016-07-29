@@ -1,6 +1,7 @@
 import re
 
 def fingerprint_column(rows):
+	''' '''
 	clustered_dictionary = {} # number in each cluster
 	finger_dict = {} #index of each thing that has the same cluster
 	for x in range(len(rows)):
@@ -16,11 +17,13 @@ def fingerprint_column(rows):
 
 
 def fingerprint_string(text):
+	''' fingerprints a string using a fingerprinting technique on 1-gram could implement n-gram'''
+
 	text = text.strip() # removes trailing and leading spaces
 	text = text.lower() # lowercased
 
-	#sub_regex = re.compile(r'''[\x00-\x08\x0A-\a1F.!,.;:'"()]''')
-	#text = sub_regex.sub('', text)
+	sub_regex = re.compile(r'''[\x00-\x08\x0A-\x1F.!,.;:'"()]''')
+	text = sub_regex.sub('', text)
 
 	text_tokens = text.split() #tokenify
 

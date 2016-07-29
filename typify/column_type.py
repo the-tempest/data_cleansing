@@ -139,7 +139,7 @@ class column_typer:
 			return best_guess, 1.00
 		# ensure there actually is a good guess
 		print guess_fraction
-		if float (guess_fraction) <float(.9):
+		if float (guess_fraction) < float(.9):
 			print	"here"
 			return 'misc', guess_fraction # this function is broken
 			# because for some guesses, all of the elements are tuples and best_guess
