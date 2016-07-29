@@ -20,13 +20,13 @@ class error_detector_number:
 		self.t = getTable(table_name)
 #		print self.t.columns[0].guesses
 		
-		print "above"		
+		#print "above"		
 	
 	
 	def execute(self, filename):
 		filename = filename.replace("\n", "")
 		filename = filename.replace(" ", "_")
-		table_name = extraction.extract(filename);
+		table_name = extraction.extract(filename)
 		#self.t = getTable(table_name);
 	# call Keith and Pawel's script
 		c = column_typer(self.t);
@@ -34,8 +34,8 @@ class error_detector_number:
 		dirToSave = path+"output";
 		fn = table_name + ".txt"
 		pathToSave = os.path.join(dirToSave, fn);
-		print pathToSave
-		print 'this'
+	#	print pathToSave
+	#	print 'this'
 		with open(pathToSave, "w") as text_file:
 			text_file.write(cl);
 	
@@ -48,10 +48,12 @@ class error_detector_number:
 			indices2 = self.misclassified(column)
 		#	column_errors.append(indices)
 			column_errors.append(indices2)
-			print column.guesses
+		#	print column.guesses
 		print column_errors
-		
-		print "Here"
+		print "here"
+		print column.tentClass
+		print column.colName
+		#print "Here"
 
 
 	def range_check(self, column):
@@ -65,9 +67,9 @@ class error_detector_number:
 				sum = int(x)+sum
 			print sum
 		mean = float(sum)/float(len(column))
-		print sum
-		print len(column)
-		print mean
+	#	print sum
+	#	print len(column)
+	#	print mean
 		variance = 0
 		for x in range(len(column)):
 			print column
@@ -80,11 +82,11 @@ class error_detector_number:
 				flagged.append(x)
 				print x
 				print "here"
-		print flagged
+		#print flagged
 		variance = variance/len(column)
 		std = math.sqrt(variance)
-		print mean
-		print std
+		#print mean
+		#print std
 		for x in range(len(column)):
 			if  no_letters(column[x]):
 				if abs(int(column[x])-mean)> 2*std:
@@ -123,7 +125,7 @@ class error_detector_number:
 				format_dictionary[string] = 1
 
 		general_form = max(format_dictionary, key = format_dictionary.get) # the most common format_dictionary
-		print general_form		
+		#print general_form		
 		for x in range(len(column)):
 			if column[x]!=general_form:
 				error.append(x)

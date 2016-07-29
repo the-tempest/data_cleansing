@@ -1,2 +1,2 @@
-The column named number appears to be of the type Number with a certainty of 0.91.
-
+The column named number appears to be of the type Number with a certainty of 0.82.
+classified as cityclassified as url
