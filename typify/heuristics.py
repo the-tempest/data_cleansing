@@ -15,6 +15,11 @@
 #    - 10 points for a miscellaneous classification
 # 4. return name of type being tested and point value (out of 100)
 
+# TODO massively simplify these
+# I think possible values should be taken totally out
+# example lists in features.py should also be much shorter
+# time complexity has been getting pretty bad lately
+
 NAME_LENGTH = 7
 NUM_NAME_SPACES = 1.5
 LOCATION_LENGTH = 9

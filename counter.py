@@ -3,16 +3,17 @@
 # classified as what
 
 import pickle, os
+from secrets import path
 
 class counter:
 	def __init__(self):
 		'''gets the current count of all predictions'''
-		self.my_path = 'stats/statistics.p'
-		if not os.path.isfile(self.my_path):
-			self.my_file = open(self.my_path, 'w+')
+		self.my_path = 'statistics.p'
+		if not os.path.isfile(path+self.my_path):
+			self.my_file = open(path+self.my_path, 'w+')
 			pickle.dump( {} , self.my_file)
 			self.my_file.close()
-		self.my_file = open(self.my_path, 'r+')
+		self.my_file = open(path+self.my_path, 'r+')
 		self.data = pickle.load(self.my_file)
 		self.my_file.close()
 
@@ -46,7 +47,7 @@ class counter:
 					temp_data[actual][prediction] = 1
 				else:
 					temp_data[actual][prediction] += 1
-		pickle.dump(temp_data, open("stats/statistics.p", "wb"))
+		pickle.dump(temp_data, open(path+"statistics.p", "wb"))
 
 	def get_results(self):
 		'''returns just the dictionary of statistics, maybe
