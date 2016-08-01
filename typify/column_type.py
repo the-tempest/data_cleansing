@@ -35,11 +35,12 @@ class column_typer:
 		ret = ''
 		results = self.table_typify(self.my_table)
 		i = 0
+		my_table.column
 		for item in results:
 			line = self.build_column_report(item)
 			ret += line
 			#adding in the misclassified token list
-			ret +=self.build_column_error_report(self.my_table.columns[i])
+	#		ret +=self.build_column_error_report(self.my_table.columns[i])
 			i = i +1
 		return ret
 
