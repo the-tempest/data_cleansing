@@ -56,3 +56,6 @@
 	font-family: 'Roboto Condensed', sans-serif;
 	font-size: 18px;
 }
+body {
+	height: 100%;
+}

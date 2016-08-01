@@ -130,9 +130,15 @@
                             </form> \
                             </div> \
                         </div> <br /> \
+                        <a id="dwnld" href=""></a>\
                         <div class="row">\
                             <input class="col-lg-offset-0 btn btn-info" type="button" value="Clean Another File" onclick="location.reload();"> \
                         </div>');
+                var jFile = JSON.stringify(req);
+                var blob = new Blob([jFile], {type: "application/octet-binary"});
+                var downloadURL = window.URL.createObjectURL(blob);
+                $("#dwnld").download = downloadURL;
+
 
             })
           },
@@ -205,7 +211,7 @@
 
     ReactDOM.render(<Upload id="fileselect"/>,  document.getElementById('upload'));
     ReactDOM.render(<NavBar />, document.getElementById('nb'));
-      //another test
+      //another test 2
   </script>
 
   </body>
