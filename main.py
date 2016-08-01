@@ -5,6 +5,7 @@ execfile(path+'table.py')
 execfile(path+'typify/column_type.py')
 execfile(path+'numeric_classifier.py')
 execfile(path+'counter.py')
+execfile(path+'error_detection.py')
 
 ct = counter()
 
@@ -39,6 +40,8 @@ def execute(filename):
 
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);
+
+
 
     dirToSave = path+"output";
     fn = table_name + ".txt"

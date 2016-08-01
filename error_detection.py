@@ -9,28 +9,54 @@ execfile("fingerprint.py")
 d = difflib.Differ()
 
 class error_detector:
-	def __init__(self,file_path):
+	def __init__(self,table):
 		self.name = "hi"
-		table_name = extraction.extract(file_path);
-		self.t = getTable(table_name, user, password, host, database)
-		
-
-	def check_on_table(self):
-		table = self.t
-
-		table.build_column_index()
-		column_errors = []
-		for column in table.columns:
-			if column.tentClass == "email": # someone needs to implement this now its not that hard...
-				indices = self.email_check(column.rows)
-			else:
-				indices = self.format_checks(column.rows)
-			column_errors.append(indices)
+		self.t = table
 
 
+	def find_table_errors(self,errors_to_check_list):
+		detective = error_detector(self.my_table)
 
-	def cluster_rows(self,rows):
+		error_dictionary = {}
+
+		for column in self.t.columns:
+			for item in errors_to_check_list:
+
+				list_of_errors = self.error_switcher(item, column)
+
+				error_dictionary[column.colName][item] = list_of_errors
+
+
+
+	def error_switcher(self, error_string, curr_column):
+		switcher = {"format checks": format_checks(curr_column.rows),
+					"email check": email_check(curr_column),
+					"column duplications": cluster_rows(curr_column.rows)
+
+		}
+		return switcher.get(error_string, "error detection not yet implemented")		
+
+		# table = self.t
+
+		# table.build_column_index()
+		# column_errors = []
+		# error_dictionary = {}
+
+		# for column in table.columns:
+		# 	for item in errors_to_check_list:
+				
+		# 		self.error_switcher(item)
+
+
+		# 	else:
+		# 		indices = self.format_checks(column.rows)
+		# 	column_errors.append(indices)
+
+
+
+	def cluster_rows(self,column):
 		''' Takes in a list of elements in a column and prints out clusters'''
+		rows = column.rows
 		clustered_dictionary, finger_dict = fingerprint_column(rows)
 
 		for item in clustered_dictionary.keys():
@@ -42,8 +68,27 @@ class error_detector:
 			print "\n"
 		return 0
 
-	def email_check(self,rows):
+
+	def email_check_table(self, table):
+		'''takes in a table's  '''
+		email_column_dictionary = {}
+		for item in table.columns:
+			if item.tentClass != 'email':
+				continue
+			else:
+				possible_email_errors = email_check(item.rows)
+				curr_index = table.column_index[item.colName]
+				email_column_dictionary[curr_index] = possible_email_errors
+
+
+
+	def email_check(self,column):
 		''' Takes in a list of elements in a column. Uses a regular expresion to see if emails are valid''' 
+		
+		if column.colName != 'email':
+			return
+
+		rows = column.rows
 		prog = re.compile(em_regexp)
 		possible_error_indices = []
 		for x in range(len(rows)):
