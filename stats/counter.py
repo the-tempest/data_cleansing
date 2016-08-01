@@ -41,10 +41,11 @@ class counter:
 			prediction = tup[1]
 			if actual not in temp_data:
 				temp_data[actual] = {prediction: 1}
-			elif prediction not in temp_data[actual]:
-				temp_data[actual][prediction] = 1
 			else:
-				temp_data[actual][prediction] += 1
+				if prediction not in temp_data[actual]:
+					temp_data[actual][prediction] = 1
+				else:
+					temp_data[actual][prediction] += 1
 		pickle.dump(temp_data, open("stats/statistics.p", "wb"))
 
 	def get_results(self):
