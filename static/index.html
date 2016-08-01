@@ -124,20 +124,16 @@
 
                 $("#download").html('<div class="row" style="display:flex;"> \
                             <div class="col-lg-offset-0"> \
-                            <form action="/download" method="get"> \
-                                <input type="hidden" name="fn" value="' + fname +'" /> \
-                                <input type="submit" class="btn btn-success" value="Download Your File" />\
-                            </form> \
+                               <a id="dwnld"> <input type="submit" class="btn btn-success" value="Download Your File" /> </a>\
                             </div> \
                         </div> <br /> \
-                        <a id="dwnld" href=""></a>\
                         <div class="row">\
                             <input class="col-lg-offset-0 btn btn-info" type="button" value="Clean Another File" onclick="location.reload();"> \
                         </div>');
-                var jFile = JSON.stringify(req);
-                var blob = new Blob([jFile], {type: "application/octet-binary"});
+                var blob = new Blob([res], {type: "application/stream"});
                 var downloadURL = window.URL.createObjectURL(blob);
-                $("#dwnld").download = downloadURL;
+                $("#dwnld").attr("href", downloadURL);
+                $("#dwnld").attr("download", fname);
 
 
             })
