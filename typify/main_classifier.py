@@ -22,7 +22,7 @@ ASCII_ADDRESS = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASC
 ASCII_NAME = [32, 44, 45, 46] + ASCII_UPPER + ASCII_LOWER
 
 class main_classifier:
-	def __init__(self, table):
+	def __init__(self):
 		self.build_classifiers()
 		self.num_class = numeric_classifier()
 		self.heu_class = heuristic_classifier()
@@ -35,6 +35,7 @@ class main_classifier:
 
 	def new_table(table):
 		'''takes in a new table and generates the data for it'''
+		# TODO once we use this one, add this function call to main
 		self.my_table     = table
 		self.results      = self.table_typify()
 		self.result_table = self.apply_predictions()
@@ -125,7 +126,6 @@ class main_classifier:
 			self.curr_col_name = elem.colName
 			guesses = self.column_typify(column)
 			prediction, fraction = self.column_predict(guesses)
-			# TODO add tentative classifications
 			# TODO add dictionaries to column
 			actual.append(elem.colName)
 			predictions.append(prediction)
@@ -154,7 +154,7 @@ class main_classifier:
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
-			fraction = "{0:.2f}".format(fraction)
+			fraction = "{0:.3f}".format(fraction)
 			results[key] = fraction
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
