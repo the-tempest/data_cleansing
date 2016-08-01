@@ -4,7 +4,7 @@ from secrets import path
 execfile(path+'table.py')
 execfile(path+'typify/column_type.py')
 execfile(path+'numeric_classifier.py')
-execfile(path+'stats/counter.py')
+execfile(path+'counter.py')
 
 ct = counter()
 
@@ -27,7 +27,6 @@ def execute(filename):
         result += col.colName + ': ' + max(diction.iteritems(), key=operator.itemgetter(1))[0];
         result += '\n'
         '''
-
 
 
     # call Keith and Pawel's script
