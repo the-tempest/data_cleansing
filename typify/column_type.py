@@ -37,11 +37,13 @@ class column_typer:
 		results = self.table_typify(self.my_table)
 		possible_errors = self.find_table_errors(self.my_table)
 		i = 0
+		if self.my_table.columns[0].tentClass==None:
+			print "ERROR"
 		for item in results:
 			line = self.build_column_report(item)
 			ret += line
 			#adding in the misclassified token list
-			ret +=self.build_column_error_report(self.my_table.columns[i])
+	#		ret +=self.build_column_misclassification_report(self.my_table.columns[i])
 			i = i +1
 		return ret
 
@@ -65,8 +67,8 @@ class column_typer:
 		return line
 
 
-	def build_column_error_report(self, column):
-		l = self.misclassified(column)
+	def build_column_misclassification_report(self, column):
+		list = self.misclassified(column)
 		line = ""
 		for i in l:
 			line += "the token "

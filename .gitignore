@@ -95,3 +95,4 @@ ENV/
 secrets.py
 typify/secrets.py
 junk
+statistics.p
