@@ -6,7 +6,7 @@ em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile(path + "table.py")
 execfile(path + "typify/helper.py")
 execfile(path + "fingerprint.py")
-execfile(path + "error_number_detection.py")
+execfile(path + "error_detection_number.py")
 d = difflib.Differ()
 
 class error_detector:
@@ -16,7 +16,6 @@ class error_detector:
 
 
 	def find_table_errors(self,errors_to_check_list):
-		detective = error_detector(self.my_table)
 
 		error_dictionary = {}
 
@@ -27,14 +26,15 @@ class error_detector:
 
 				error_dictionary[column.colName][item] = list_of_errors
 
-				
+
 
 		return error_dictionary
 
 	def error_switcher(self, error_string, curr_column):
-		switcher = {"format checks": format_checks(curr_column.rows),
-					"email check": email_check(curr_column),
-					"column duplications": cluster_rows(curr_column.rows),
+		switcher = {"format checks": self.format_checks(curr_column.rows),
+					"email check": self.email_check(curr_column),
+					"column duplications": self.cluster_rows(curr_column.rows),
+					"range check": 
 
 
 		}
