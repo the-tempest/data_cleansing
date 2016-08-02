@@ -13,7 +13,6 @@ execfile(path+"typify/classifier.py")
 execfile(path+'numeric_classifier.py')
 execfile(path+'table.py')
 execfile(path+"typify/tie_breaker.py")
-execfile(path+"error_detection.py")
 
 
 #TODO: figure out what to do with unicode

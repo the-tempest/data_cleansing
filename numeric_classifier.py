@@ -123,7 +123,7 @@ class numeric_trainer: # class fo holding training functions
 
 		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in teh training _dir
 		for training_file in training_files_list:
-
+			
 			file_path = os.path.join(training_dir, training_file) # build up the whole path
 			print file_path + "\n"
 			table_name = extraction.extract(file_path);
@@ -136,10 +136,14 @@ class numeric_trainer: # class fo holding training functions
 				for x in range(10):
 					column.colName = column.colName.replace(chr(ord(firstNum) + x), "")
 
-				t.build_column_index() #builds up index for easy access
+
+
 
 				if column.colName in self.types: #building the columns we are going to train as long as they are types we want
 					column_names.append(column.colName)
+
+			
+			t.build_column_index()
 
 			for col in column_names:
 				index = t.column_index[col]
@@ -150,6 +154,7 @@ class numeric_trainer: # class fo holding training functions
 
 	def train_on_column(self, col):
 		row_list = col.rows
+		#print row_list
 
 		for item in row_list: # each cell in a column's row list
 			if item == "NULL": # workaround for now for empty cells
@@ -181,7 +186,9 @@ class numeric_trainer: # class fo holding training functions
 
 	def build_feature_freq(self, curr_dict, nText, feature):
 		feature_result = self.feature_switch(feature, nText)
+		
 		if feature_result in curr_dict:
+
 			curr_dict[feature_result] += 1
 		else:
 			curr_dict[feature_result] = 1

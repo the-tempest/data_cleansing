@@ -9,36 +9,12 @@ execfile(path + "fingerprint.py")
 execfile(path + "error_detection_number.py")
 d = difflib.Differ()
 
-class error_detector:
+
+class error_form_detector:
 	def __init__(self,table):
 		self.name = "hi"
 		self.t = table
-
-
-	def find_table_errors(self,errors_to_check_list):
-
-		error_dictionary = {}
-
-		for column in self.t.columns:
-			for item in errors_to_check_list:
-
-				list_of_errors = self.error_switcher(item, column)
-
-				error_dictionary[column.colName][item] = list_of_errors
-
-
-
-		return error_dictionary
-
-	def error_switcher(self, error_string, curr_column):
-		switcher = {"format checks": self.format_checks(curr_column.rows),
-					"email check": self.email_check(curr_column),
-					"column duplications": self.cluster_rows(curr_column.rows),
-					"range check": 
-
-
-		}
-		return switcher.get(error_string, "error detection not yet implemented")		
+	
 
 
 	def cluster_rows(self,column):
