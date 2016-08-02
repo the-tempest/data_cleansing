@@ -35,13 +35,14 @@ class column_typer:
 		ret = ''
 		results = self.table_typify(self.my_table)
 		i = 0
-		if self.my_table.columns[0].tentClass==None:
-			print "ERROR"
+		#if self.my_table.columns[0].tentClass==None:
+		#	print "ERROR"
+		print self.my_table.columns[0].tentClass + "1"
 		for item in results:
 			line = self.build_column_report(item)
 			ret += line
 			#adding in the misclassified token list
-	#		ret +=self.build_column_misclassification_report(self.my_table.columns[i])
+	#		ret +=self.build_column_misclassificationtest_report(self.my_table.columns[i])
 			i = i +1
 		return ret
 

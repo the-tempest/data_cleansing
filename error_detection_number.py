@@ -18,12 +18,12 @@ class error_detector_number:
 		table_name = extraction.extract(file_path);		
 		execute(file_path)
 		self.t = getTable(table_name)
-#		print self.t.columns[0].guesses
+		print self.t.columns[0].guesses
 		
 		#print "above"		
 	
 	
-	def execute(self, filename):
+	def execute1(self, filename):
 		filename = filename.replace("\n", "")
 		filename = filename.replace(" ", "_")
 		table_name = extraction.extract(filename)
@@ -31,13 +31,15 @@ class error_detector_number:
 	# call Keith and Pawel's script
 		c = column_typer(self.t);
 		cl = c.build_report();
+		print self.t.columns[0].tentClass
+		print "below"
 		dirToSave = path+"output";
 		fn = table_name + ".txt"
 		pathToSave = os.path.join(dirToSave, fn);
-	#	print pathToSave
-	#	print 'this'
+		
 		with open(pathToSave, "w") as text_file:
 			text_file.write(cl);
+		
 	
 	def check_on_table(self):
 		table = self.t
@@ -45,16 +47,12 @@ class error_detector_number:
 		column_errors = []
 		for column in table.columns:
 			indices = self.format_check(column)
-			indices2 = self.misclassified(column)
-		#	column_errors.append(indices)
+			indices2 = self.format_check(column)
 			column_errors.append(indices2)
-		#	print column.guesses
-		print column_errors
 		print "here"
 		print column.tentClass
 		print column.colName
-		#print "Here"
-
+		return column_errors
 
 	def range_check(self, column):
 		'''Looks for formating errors in a column'''
@@ -80,7 +78,7 @@ class error_detector_number:
 				variance = variance + add
 			else:
 				flagged.append(x)
-				print x
+		#		print x
 				print "here"
 		#print flagged
 		variance = variance/len(column)
@@ -100,10 +98,9 @@ class error_detector_number:
 		error_list = []
 		for i in range(len(dict)):
 			if dict[i]!=think:
-				error_list.append(dict[i])
+				error_list.append(i)
 		return error_list
 	
-
 
 
 	def format_check(self, column):
