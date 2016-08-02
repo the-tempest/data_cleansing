@@ -44,7 +44,7 @@ class error_detector_number:
 		table.build_column_index
 		column_errors = []
 		for column in table.columns:
-			indices = self.format_check(column)
+			indices = self.number_format_check(column)
 			indices2 = self.misclassified(column)
 		#	column_errors.append(indices)
 			column_errors.append(indices2)
@@ -106,7 +106,7 @@ class error_detector_number:
 
 
 
-	def format_check(self, column):
+	def number_format_check(self, column):
 		print "getting here"
 		error = []
 		a = column

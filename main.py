@@ -41,9 +41,9 @@ def execute(filename):
     #with open('output/' + table_name + '.txt', 'w') as outfile:
     #    json.dump(cl, outfile);
 
-    # # errors commented to avoid gettin an email from the server
+    # errors commented to avoid gettin an email from the server
     # detective = error_detector(t)
-    # detective.find_table_errors(errors_to_check_list)
+    # possible_errors_dictionary = detective.find_table_errors(errors_to_check_list)
 
 
     dirToSave = path+"output";

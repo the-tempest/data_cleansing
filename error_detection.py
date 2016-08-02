@@ -1,11 +1,12 @@
 import difflib
-from secrets import password, port, database, user, host
+from secrets import password, port, database, user, host, path
 import extraction, re, math
 
 em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-execfile("table.py")
-execfile("typify/helper.py")
-execfile("fingerprint.py")
+execfile(path + "table.py")
+execfile(path + "typify/helper.py")
+execfile(path + "fingerprint.py")
+execfile(path + "error_number_detection.py")
 d = difflib.Differ()
 
 class error_detector:
@@ -26,32 +27,18 @@ class error_detector:
 
 				error_dictionary[column.colName][item] = list_of_errors
 
+				
 
+		return error_dictionary
 
 	def error_switcher(self, error_string, curr_column):
 		switcher = {"format checks": format_checks(curr_column.rows),
 					"email check": email_check(curr_column),
-					"column duplications": cluster_rows(curr_column.rows)
+					"column duplications": cluster_rows(curr_column.rows),
+
 
 		}
 		return switcher.get(error_string, "error detection not yet implemented")		
-
-		# table = self.t
-
-		# table.build_column_index()
-		# column_errors = []
-		# error_dictionary = {}
-
-		# for column in table.columns:
-		# 	for item in errors_to_check_list:
-				
-		# 		self.error_switcher(item)
-
-
-		# 	else:
-		# 		indices = self.format_checks(column.rows)
-		# 	column_errors.append(indices)
-
 
 
 	def cluster_rows(self,column):
