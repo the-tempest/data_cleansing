@@ -13,6 +13,7 @@ execfile(path+"typify/classifier.py")
 execfile(path+'numeric_classifier.py')
 execfile(path+'table.py')
 execfile(path+"typify/tie_breaker.py")
+execfile(path+"error_detection.py")
 
 
 #TODO: figure out what to do with unicode
@@ -34,6 +35,7 @@ class column_typer:
 	def build_report(self):
 		ret = ''
 		results = self.table_typify(self.my_table)
+		possible_errors = self.find_table_errors(self.my_table)
 		i = 0
 		#if self.my_table.columns[0].tentClass==None:
 		#	print "ERROR"
@@ -65,10 +67,11 @@ class column_typer:
 		line += ".\n"
 		return line
 
+
 	def build_column_misclassification_report(self, column):
 		list = self.misclassified(column)
 		line = ""
-		for i in list:
+		for i in l:
 			line += "the token "
 			line+= column.rows[i]
 			line +=" was incorrectly classified as "

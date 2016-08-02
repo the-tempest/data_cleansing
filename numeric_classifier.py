@@ -11,7 +11,7 @@ training_directory = (path+"numeric_training_data")
 
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points'] # default features and types
-types = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP', 'Year', 'ISBN']
+types = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
 
 ''' Form of the feature_dictionary that gets built in train and is used to classify
 {'Phone_Number': {'slashes': {0: 1000},
@@ -129,8 +129,6 @@ class numeric_trainer: # class fo holding training functions
 			table_name = extraction.extract(file_path);
 			t = getTable(table_name, user, password, host, database) #  returns table object
 			column_names = []
-
-			print "hello!"
 
 			for column in t.columns:
 				# remove characters 0-9 in column name

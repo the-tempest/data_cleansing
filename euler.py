@@ -25,13 +25,6 @@ def solve7():
 			lower = x
 			x = x + ((upper-x)/2)
 
-		
-
-
-
-
-
-
 def solve27():
 	
 	max_n = 0
@@ -194,3 +187,42 @@ def solve14():
 	print elasped
 	print collatz_dict
 	return k[v.index(max(v))] 
+
+def solve25():
+
+	max_index = 10000
+	min_index = 0
+	x = 5000
+	
+	while True:
+		print x
+		curr_num = gen_fib_list(x)[x]
+		if number_digits(curr_num) == 1000:
+			x = find_first_1000(x)
+			return x
+
+		elif(number_digits(curr_num) > 1000):
+			max_index = x
+			x = x - (x - min_index)/2
+
+		else:
+			min_index = x
+			x = x + (max_index - min_index)/2
+
+def find_first_1000(x):
+
+	while (number_digits(gen_fib_list(x)[x]) == 1000):
+		x -= 1
+
+	return x+1
+
+
+
+def gen_fib_list(max_index):
+	fibs = [0,1,1]
+	for x in range(3,max_index+1):
+		fibs.append(fibs[x-1] + fibs[x-2])
+	return fibs
+
+def number_digits(num):
+	return len(str(num))

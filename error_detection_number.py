@@ -46,8 +46,14 @@ class error_detector_number:
 		table.build_column_index
 		column_errors = []
 		for column in table.columns:
+<<<<<<< HEAD
 			indices = self.format_check(column)
 			indices2 = self.format_check(column)
+=======
+			indices = self.number_format_check(column)
+			indices2 = self.misclassified(column)
+		#	column_errors.append(indices)
+>>>>>>> 12271f2b1553d668642841e5b1df2a3132f2431a
 			column_errors.append(indices2)
 		print "here"
 		print column.tentClass
@@ -103,7 +109,12 @@ class error_detector_number:
 	
 
 
+<<<<<<< HEAD
 	def format_check(self, column):
+=======
+
+	def number_format_check(self, column):
+>>>>>>> 12271f2b1553d668642841e5b1df2a3132f2431a
 		print "getting here"
 		error = []
 		a = column
