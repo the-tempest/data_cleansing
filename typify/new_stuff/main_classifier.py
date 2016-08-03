@@ -30,7 +30,7 @@ class main_classifier:
 		'''takes in a new table and generates the data for it'''
 		# TODO once we use this one, add this function call to main
 		self.my_table     = table
-		self.results      = self.table_typify()
+		self.results      = self.classify_table()
 		self.result_table = self.apply_predictions()
 		self.report       = self.build_report()
 
@@ -50,7 +50,6 @@ class main_classifier:
 		# TODO perhaps make this more abstracted
 		'''Classifies the columns in my_table and
 		returns a summary report as a string'''
-		
 		actual = column_tuple[0]
 		prediction = column_tuple[1]
 		fraction = str(column_tuple[2])
@@ -72,7 +71,6 @@ class main_classifier:
 			line +=" was incorrectly classified as "
 			line+= column.guesses[i]
 		line += ".\n"
-
 		return line
 
 	def misclassified(self, column):
@@ -101,7 +99,7 @@ class main_classifier:
 		for col in self.table.getColumns():
 			col.tentativeClassification(None)
 
-	def table_typify(self):
+	def classify_table(self):
 		'''takes in a table and returns a list
 		of tuples of the form (a, p, f) where
 		a is the actual column name
@@ -114,13 +112,13 @@ class main_classifier:
 		size = len(cols)
 
 		# generate data for the tuples
-		for elem in cols:
-			column = elem.rows
-			self.curr_col_name = elem.colName
-			guesses = self.column_typify(column)
-			prediction, fraction = self.column_predict(guesses)
+		for col in cols:
+			column = col.rows
+			self.curr_col_name = col.colName
+			guesses = self.get_column_predictions(column)
+			prediction, fraction = self.classify_column(guesses)
 			# TODO add dictionaries to column
-			actual.append(elem.colName)
+			actual.append(col.colName)
 			predictions.append(prediction)
 			fractions.append(fraction)
 		results = []
@@ -134,7 +132,7 @@ class main_classifier:
 			results.append(t)
 		return results
 
-	def column_predict(self, guesses):
+	def classify_column(self, guesses):
 		'''takes in a list of predictions for
 		a column and returns a tuple of the form
 		(prediction, certainty)'''
@@ -147,34 +145,37 @@ class main_classifier:
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
-			fraction = "{0:.3f}".format(fraction)
+			fraction = float("{0:.3f}".format(fraction))
 			results[key] = fraction
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
 		# ensure there actually is a good guess
-		if best_guess < .5:
+		if best_guess <= .5:
 			return 'misc', None
 		return best_guess, guess_fraction
 
-	def column_typify(self, column):
+	def get_column_predictions(self, column):
 		'''takes in a column and
 		returns a list of predictions
 		for each token'''
-		dyct = {}
 		predictions = []
 		i = 0
-		for item in column:
-			guess = self.token_typify(item)
-			dyct[i]= guess
-			i = i+1
+		self.prev = {}
+		for token in column:
+			guess = self.get_token_prediction(token)
+			if token not in prev_guesses:
+				self.prev[token] = guess
 			predictions.append(guess)
-		return predictions, dyct
+		self.prev = {}
+		return predictions
 
-	def token_typify(self, token):
+	def get_token_prediction(self, token):
 		'''takes in a token and returns a
 		prediction for its type'''
-		# TODO finish implementing
-		
+		# looks at previous guesses to save time
+		if token in self.prev:
+			return self.prev[token]
+
 		# Naive Bayes part
 		# returns this tuple
 		# (guess, probability_dictionary, mean, std_dev)
