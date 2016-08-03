@@ -36,12 +36,5 @@ def process():
 
     return "No files were uploaded"
 
-
-
-@app.route('/download', methods=['GET'])
-def download():
-    filename = request.args['fn'];
-    return send_from_directory(app.config['OUTPUT_FOLDER'],filename, as_attachment=True, attachment_filename="results.txt");
-
 if __name__ == '__main__':
     app.run(debug=True)

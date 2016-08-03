@@ -1,0 +1,24 @@
+The column named Transaction_date appears to be of the type Date with a certainty of 1.00.
+
+The column named Product appears to be of the type url with a certainty of 1.0.
+
+The column named Price appears to be of the type Number with a certainty of 1.0.
+
+The column named Payment_Type appears to be of the type city with a certainty of 1.0.
+
+The column named Name appears to be of the type last name with a certainty of 0.80.
+
+The column named City appears to be of the type city state with a certainty of 0.53.
+
+The column named State appears to be of the type state with a certainty of 0.91.
+
+The column named Country appears to be of the type location with a certainty of 1.0.
+
+The column named Account_Created appears to be of the type Date with a certainty of 1.00.
+
+The column named Last_Login appears to be of the type Date with a certainty of 1.00.
+
+The column named Latitude appears to be of the type Latitude with a certainty of 0.94.
+
+The column named Longitude appears to be of the type Longitude with a certainty of 0.68.
+

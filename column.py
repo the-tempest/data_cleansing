@@ -23,6 +23,7 @@ class table:
         self.name = name; # the name of the table
         self.column_index = {} # dictionary mapping column names to indices
         self.columns = []; # the list containing the columns of the table
+        self.build_column_index()
 
     def build_column_index(self):
         ''' build the column index dictionary '''

@@ -1,36 +1,25 @@
 import difflib
-from secrets import password, port, database, user, host
+from secrets import password, port, database, user, host, path
 import extraction, re, math
 
 em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
-execfile("table.py")
-execfile("typify/helper.py")
-execfile("fingerprint.py")
+execfile(path + "table.py")
+execfile(path + "typify/helper.py")
+execfile(path + "fingerprint.py")
+execfile(path + "error_detection_number.py")
 d = difflib.Differ()
 
-class error_detector:
-	def __init__(self,file_path):
+
+class error_form_detector:
+	def __init__(self,table):
 		self.name = "hi"
-		table_name = extraction.extract(file_path);
-		self.t = getTable(table_name, user, password, host, database)
-		
-
-	def check_on_table(self):
-		table = self.t
-
-		table.build_column_index()
-		column_errors = []
-		for column in table.columns:
-			if column.tentClass == "email": # someone needs to implement this now its not that hard...
-				indices = self.email_check(column.rows)
-			else:
-				indices = self.format_checks(column.rows)
-			column_errors.append(indices)
+		self.t = table
+	
 
 
-
-	def cluster_rows(self,rows):
+	def cluster_rows(self,column):
 		''' Takes in a list of elements in a column and prints out clusters'''
+		rows = column.rows
 		clustered_dictionary, finger_dict = fingerprint_column(rows)
 
 		for item in clustered_dictionary.keys():
@@ -42,8 +31,27 @@ class error_detector:
 			print "\n"
 		return 0
 
-	def email_check(self,rows):
+
+	def email_check_table(self, table):
+		'''takes in a table's  '''
+		email_column_dictionary = {}
+		for item in table.columns:
+			if item.tentClass != 'email':
+				continue
+			else:
+				possible_email_errors = email_check(item.rows)
+				curr_index = table.column_index[item.colName]
+				email_column_dictionary[curr_index] = possible_email_errors
+
+
+
+	def email_check(self,column):
 		''' Takes in a list of elements in a column. Uses a regular expresion to see if emails are valid''' 
+		
+		if column.colName != 'email':
+			return
+
+		rows = column.rows
 		prog = re.compile(em_regexp)
 		possible_error_indices = []
 		for x in range(len(rows)):
