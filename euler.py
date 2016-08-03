@@ -187,6 +187,14 @@ def solve14():
 	print elasped
 	print collatz_dict
 	return k[v.index(max(v))] 
+from itertools import permutations
+
+def solve24():
+	a = '0123456789'
+	perms = [''.join(x) for x in permutations(a)]
+	perms.sort
+	return perms[999999]
+
 
 def solve25():
 
