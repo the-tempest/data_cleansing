@@ -177,15 +177,18 @@ class main_classifier:
 			return self.prev[token]
 
 		# Naive Bayes part
-		# returns this tuple
-		# (guess, probability_dictionary, mean, std_dev)
-		prediction1 = self.naivebayes_classifier.classify(token)[0]
+		# returns likeliest type
+		prediction1 = self.naivebayes_classifier.classify(token)
 
 		# Heuristic part
 		# one or more guesses
 		prediction2 = self.heuristic_classifier.classify(token)
 		
 		# Figure out the final guess through matching
+		print "token, prediction1, prediction2"
+		print token
+		print prediction1
+		print prediction2
 		if prediction1 in prediction2:
 			return prediction1
 		
