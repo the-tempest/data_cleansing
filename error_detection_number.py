@@ -12,11 +12,9 @@ execfile(path+'numeric_classifier.py')
 d = difflib.Differ()
 class error_detector_number:
 	#assumes that the columns it looks at are numeric and for sales, or age or something like that
-	def __init__(self,file_path):
+	def __init__(self,tt):
 		self.name = "hi"
-		table_name = extraction.extract(file_path);		
-		execute(file_path)
-		self.t = getTable(table_name)
+		self.t = tt
 		print self.t.columns[0].guesses
 		
 		#print "above"		
