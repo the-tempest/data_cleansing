@@ -15,6 +15,10 @@ class table:
         self.columns = []; # the list containing the columns of the table
         self.build_column_index()
 
+        self.transaction = False # are we editing and in a transaction?
+
+        self.query_list = []
+
         cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
         self.cursor = cnx.cursor()
 
@@ -31,26 +35,21 @@ class table:
         ''' returns a list of column objects for the table '''
         return self.columns
 
-    def edit_cell(self,column_name,index, new_val):
-        self.rows[index] = new_val
-        # need to edit sql database
-        query = 'Update ' + self.name + ' \n' +  "Set " + column_name + '=' + new_val + '\n' + "Where " + "TableID = " + index
-
-        cursor.execute(query)
-
-        return
+    
 
 
 class column(table):
-    def __init__(self, rows, colName):
+    def __init__(self, rows, colName, table):
         self.colName = colName; # name of the column
         self.rows = rows # the actual data inside the column (in the form of list)
         self.tentClass = None # tentative Classification
         self.dictionary = {}  #dictionary of predictions and counts associated
+
         self.guesses = {} # dictionary of index of token and guess for that token
         
-        cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
-        self.cursor = cnx.cursor()
+        self.table = table
+        # cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
+        # self.cursor = cnx.cursor()
 
 
     def tentativeClassification(self, tc):
@@ -62,3 +61,17 @@ class column(table):
     
     def addGuesses(self, g):
         self.guesses = g
+
+    def edit_cell(self,index, new_val):
+        if self.t.transaction == False: # need to know if at beginning of transaction
+            self.t.transaction = True
+            
+            query = "START TRANSACTION;" + "\n" # execute the command
+            self.t.query_list.append(query)
+            self.t.cursor.execute(query)
+
+        self.rows[index] = new_val # python easy change
+        # need to edit sql database
+        query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + new_val + '\n' + "Where " + "TableID = " + index + ';'
+        self.t.cursor.execute(query)
+        return
