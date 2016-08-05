@@ -1,8 +1,8 @@
-output = open("states.txt", "w")
+output = open("url_examples.txt", "w")
 names = []
-with open("raw_states.txt", "r") as f:
+with open("url_example_list.txt", "r") as f:
 	for line in f:
-		word = line.split()[0].lower()
+		word = line.strip('\n')
 		if word not in names:
 			names.append(word)
 ret = "["

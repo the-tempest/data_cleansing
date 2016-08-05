@@ -6,16 +6,18 @@ class classifier:
 		1. A name of the type (Ex: 'names')
 		2. A list of possible ascii values that can be contained in the type (Ex: names can contain lower_case_letters
 			97-122 but cannot contain '=' 61)
-		3. A regular expression representing the form of the type
+		3. A list of regular expressions representing forms of the type
 		4. A list of a set of known examples for the particular type (Ex: John)'''
-	def __init__(self, n, pv, reg, ke):
+	def __init__(self, n, pv, regs, ke):
 		self.name = n
 
 		self.possVals = {}
 		for elem in pv:
 			self.possVals[elem] = 1
 
-		self.regEx = re.compile(reg)
+		self.regExs = []
+		for regex in regs:
+			self.regExs.append(re.compile(regex))
 
 		self.knownExamples = {}
 		for elem in ke:
@@ -30,8 +32,9 @@ class classifier:
 
 	def has_form(self, token):
 		'''Tests whether the given token is in the form of the regular expression for the type'''
-		if len(re.findall(self.regEx, token)) == 1:
-			return True
+		for regex in self.regEx:
+			if regex.match(token) != None:
+				return True
 		return False
 
 	def is_a(self, token):
