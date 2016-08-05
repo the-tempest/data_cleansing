@@ -11,11 +11,11 @@ execfile(path+'table.py')
 training_directory = (path+"typify/new_stuff/training_data")
 
 
-features = ['length', 'slashes', 'dashes', 'spaces', 'dots',
-			'letters', 'numbers', 'punctuation'] # default features and types
-types = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone number', 'ip', 'year', 'isbn',
-		'full name', 'first name', 'last name', 'datestring',
-		'full address', 'street address', 'city state', 'email',
+features = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas'
+			'upper', 'lower', 'numbers'] # default features and types
+types = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn',
+		'full_name', 'first_name', 'last_name',
+		'address', 'email',
 		'location', 'description', 'url', 'city', 'state']
 LEN_TYPES = len(types)
 
@@ -39,8 +39,8 @@ class naivebayes_classifier:
 		self.features = features
 		self.types = types #list of all numeric_type classes (strings)
 
-		if os.path.isfile(path+"trained_dictionary.dat"):
-			self.trained_dictionary = self.load(path+"trained_dictionary.dat")
+		if os.path.isfile(path+"new_trained_dictionary.dat"):
+			self.trained_dictionary = self.load(path+"new_trained_dictionary.dat")
 		else:
 			trainer = naivebayes_trainer(self.types, self.features)
 			trainer.train(training_directory)
@@ -49,8 +49,7 @@ class naivebayes_classifier:
 	def classify(self, nText):
 		'''Takes in a string and classifies it to one of the classifiers types '''
 		type_probabilities = {}
-
-		for t in self.numeric_types:
+		for t in self.types:
 			type_probabilities[t] = 1 #initialize
 			for feature in self.trained_dictionary[t]: #for a specific type compute P(feature | type)
 				curr_dictionary = self.trained_dictionary[t][feature]
@@ -64,8 +63,9 @@ class naivebayes_classifier:
 		switcher = {"length" : self.compute_feature_prob(len(arg), curr_dict ),
 					"slashes" : self.compute_feature_prob(arg.count("/"), curr_dict),
 					"dashes" : self.compute_feature_prob(arg.count("-"), curr_dict),
-					"decimal points": self.compute_feature_prob(arg.count("."), curr_dict),
+					"dots": self.compute_feature_prob(arg.count("."), curr_dict),
 					"spaces": self.compute_feature_prob(arg.count(" "), curr_dict),
+					"commas": self.compute_feature_prob(arg.count(","), curr_dict),
 					"letters": self.compute_feature_prob(len(re.findall('[a-zA-z]', arg)), curr_dict),
 					"numbers": self.compute_feature_prob(len(re.findall('[\d]', arg)), curr_dict)
 					}
@@ -90,7 +90,7 @@ class trainer: # class fo holding training functions
 		self.types = types
 		self.trained_dictionary = {} # a dictionary of feature dictionaries
 
-	def train(self, training_dir):
+	def train(self, training_dir=r"/training_data"):
 		''' Will train given some training data, can edit this later. must give path to directory
 				need to put r in front of training_dir for windows at least'''
 
@@ -116,7 +116,7 @@ class trainer: # class fo holding training functions
 				column_obj = t.columns[index] # we have the column object now
 				self.train_on_column(column_obj)
 
-		self.save(self.trained_dictionary, path+"trained_dictionary.dat")
+		self.save(self.trained_dictionary, path+"new_trained_dictionary.dat")
 
 	def train_on_column(self, col):
 		row_list = col.rows
@@ -157,11 +157,12 @@ class trainer: # class fo holding training functions
 		switcher = {"length" :  len(arg),
 					"slashes" : arg.count("/"),
 					"dashes" : arg.count("-"),
-					"decimal points" : arg.count("."),
+					"dots" : arg.count("."),
 					"spaces": arg.count(" "),
-					"letters": len(re.findall("[a-zA-z]", arg)),
+					"commas": arg.count(","),
+					"upper": len(re.findall("[A-z]", arg)),
+					"lower": len(re.findall("[a-z]", arg)),
 					"numbers": len(re.findall("[\d]", arg))
-
 					}
 
 		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented

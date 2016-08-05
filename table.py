@@ -11,9 +11,8 @@ def getRows(columnName, fileName, cursor):
     for j in range(len(rows)):
         try:
             rows[j] = str(''.join(rows[j]));
-        except UnicodeEncodeError:  
+        except UnicodeEncodeError:
             rows[j] = str(''.join(rows[j][0].decode('utf-8')))
-
     return rows;
 
 def getTable(tablename, u=user, p=password, h=host, d=database, port = port ):
