@@ -4,6 +4,7 @@ import os, subprocess
 from datetime import datetime
 from secrets import path
 import main
+import column_testing as ct
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = path+'uploaded/'
@@ -30,6 +31,24 @@ def process():
             main.execute(filename)
             outputFile = noExt+now+".txt"
             r = make_response(send_file(app.config['OUTPUT_FOLDER'] + outputFile), 200, {"file": outputFile} );
+            return r;
+        elif f:
+            return "wrong file extension"
+
+    return "No files were uploaded"
+
+@app.route('/evaluate', methods=['POST'])
+def evaluate():
+    for i in range(len(request.files)):
+        f = request.files['file'+str(i)]
+        if f and allowed_file(f.filename):
+            now = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+            noExt, ext = os.path.splitext(f.filename);
+            filename = os.path.join(app.config['UPLOAD_FOLDER'], noExt+now+ext)
+            f.save(str(filename));
+            evaluator = ct.column_type_tester(filename)
+            output = evaluator.entry_test()
+            r = make_response(output );
             return r;
         elif f:
             return "wrong file extension"

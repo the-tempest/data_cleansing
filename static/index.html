@@ -89,7 +89,10 @@
         }
         console.log(this.state.currentFileNames);
       },
-      uploadToServer: function () {
+      uploadToServer: function (met) {
+        var uRL = "/process"
+        if (met == "eval")
+            uRL = "/evaluate"
         var formData = new FormData();
         for  (var i = 0; i < this.state.files.length; i++ ) {
             formData.append('file'+i, this.state.files[i]);
@@ -101,7 +104,7 @@
           $.ajax({
           //dataType: 'json',
           type: "POST",
-          url: "/process",
+          url: uRL,
           data: formData,
           processData: false,  // tell jQuery not to process the data
           contentType: false,  // tell jQuery not to set contentType
@@ -177,8 +180,9 @@
                         </div>
                         <br />
                         <div className="row">
-                            <button type="button" className="btn btn-success" onClick={this.uploadToServer}>Upload</button>
+                            <button type="button" className="btn btn-success" onClick={() => this.uploadToServer("up")}>Upload</button>
                             <button type="button" onClick={this.printFiles} style={{display: "none"}} >Print</button>
+                            <button type="button" className="btn btn-warning col-sm-offset-1" onClick={() => this.uploadToServer("eval")}>Evaluate</button>
 
                         </div>
                     </fieldset>
