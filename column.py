@@ -70,8 +70,10 @@ class column(table):
             self.t.query_list.append(query)
             self.t.cursor.execute(query)
 
+        index = index+1 # auto increment starts at 1 but python users will index at 0 
+
         self.rows[index] = new_val # python easy change
         # need to edit sql database
-        query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + new_val + '\n' + "Where " + "TableID = " + index + ';'
+        query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + new_val + '\n' + "Where " + "TableIndex = " + index + ';'
         self.t.cursor.execute(query)
         return

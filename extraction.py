@@ -30,17 +30,23 @@ def extract(f):
             columns = next(reader)
             columnsToInitialize = []
             columnNames = []
+
+            columnsToInitialize.append("TableIndex int primary key NOT NULL AUTO_INCREMENT") # putting in a mysql index 
+            # auto increment starts at 1 but python users will index at 0. 
             for i in range(len(columns)):
                 columns[i] = columns[i].replace(" ", "_")
                 columnsToInitialize.append(columns[i]+ ' TEXT');
             # creating new database
             query = 'drop table if exists ' + filename;
 
+            
+
             cursor.execute(query)
 
             # new table and headers
             query = 'create table ' + filename + '({0})'
             query = query.format(', '.join(columnsToInitialize))
+
             cursor.execute(query)
 
             s = []
