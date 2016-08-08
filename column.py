@@ -93,12 +93,28 @@ class column(table):
         # need to edit sql database
         query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + new_val + '\n' + "Where " + "TableIndex = " + index + ';'
         self.t.cursor.execute(query)
+        self.t.query_list.append(query)
         selt.t.num_queries += 1
-
-
 
         return
 
-    def undo_previous_changes(self,restore_index):
+    def revert_previous_changes_to_index(self,restore_index):
+        ''' Will revert all changes and revert to a previous savepoint '''
+        self.t.cursor.execute("ROLLBACK TO " + str(restore_index) + "a") # a is there to satisfy mysql syntax
+        # not sure exactly what to do with the python object at this point
+
+
+    def undo_single_change(self, command_index):
+        ''' will undo a single change and attempt to re execute all the other commands ASSUME INDEX OF COMMAND IS INDEXED BY 0'''
+
+        #savepoint_number = command_index - 1 # want to go to the savepoint just before
+
+        self.t.cursor.execute("ROLLBACK TO " + str(command_index) + "a")
+
+        for x in range(command_index + 1, len(self.t.query_list)):
+            self.t.cursor.execute(self.t.query_list[x])
+            #hopefully no dependencies. what to do with python object?
+
+        return
 
 
