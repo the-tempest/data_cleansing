@@ -234,3 +234,39 @@ def gen_fib_list(max_index):
 
 def number_digits(num):
 	return len(str(num))
+
+
+letter_number_count = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+
+single_digits = "onetwothreefourfivesixseveneightnine"
+
+tens = ["twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" ]
+other_tens = "twentythirtyfourtyfiftysixtyseventyeightyninety"
+
+hundred = "hundred"
+ands = "and"
+one_thousand = "onethousand"
+
+def solve17():
+	sums = 0
+	number_len_list = []
+	for item in letter_number_count:
+		sums += len(item)
+		number_len_list.append(len(item))
+
+
+	for item in tens:
+		sums += len(item)* 10
+		sums += len(single_digits)
+
+	first_100 = sums
+
+	for x in range(0,9):
+		sums += (len(letter_number_count[x]) + len(hundred)) * 100
+		sums += len(ands) * 99
+		sums += first_100
+
+	sums += len(one_thousand)
+
+	return sums
