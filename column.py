@@ -100,5 +100,4 @@ class column(table):
         return
 
     def undo_previous_changes(self,restore_index):
-
-
+        return None
