@@ -107,6 +107,7 @@ class column(table):
     def undo_single_change(self, command_index):
         ''' will undo a single change and attempt to re execute all the other commands ASSUME INDEX OF COMMAND IS INDEXED BY 0'''
 
+
         #savepoint_number = command_index - 1 # want to go to the savepoint just before
 
         self.t.cursor.execute("ROLLBACK TO " + str(command_index) + "a")
@@ -116,5 +117,3 @@ class column(table):
             #hopefully no dependencies. what to do with python object?
 
         return
-
-

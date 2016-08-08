@@ -23,13 +23,16 @@ ASCII_LOWER = [n for n in range(97, 123)]
 ASCII_PRINTABLE = [n for n in range(32, 128)]
 ASCII_ADDRESS = [32, 39, 44, 45, 46] + ASCII_NUMS + [58, 59] + ASCII_UPPER + ASCII_LOWER
 ASCII_NAME = [32, 44, 45, 46] + ASCII_UPPER + ASCII_LOWER
-NAME_REGEX = r'''^[A-Z][a-z'-]*$'''
+NAME_REGEX = [r'''^[A-Z][a-z'-]*$''']
 
 class column_typer:
 	def __init__(self, table):
 		self.build_classifiers()
 		self.my_table = table
 		self.numClass = numeric_classifier()
+
+	def find_table_errors(self, table):
+		return None
 
 	def build_report(self):
 		ret = ''
