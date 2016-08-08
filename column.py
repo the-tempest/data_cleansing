@@ -2,11 +2,6 @@
 import mysql.connector
 from secrets import password, port, database, user, host, path
 
-
-
-    
-
-
 # class to represent a table
 class table:
     def __init__(self, name):
@@ -18,6 +13,7 @@ class table:
         self.transaction = False # are we editing and in a transaction?
 
         self.query_list = []
+        self.num_queries = 0
 
         cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
         self.cursor = cnx.cursor()
@@ -36,8 +32,6 @@ class table:
         return self.columns
 
     
-
-
 class column(table):
     def __init__(self, rows, colName, table):
         self.colName = colName; # name of the column
@@ -62,13 +56,36 @@ class column(table):
     def addGuesses(self, g):
         self.guesses = g
 
+    def start_transaction(self):
+
+        self.t.transaction = True
+        
+        query = "START TRANSACTION;" + "\n" # execute the command
+        self.t.query_list.append(query)
+        self.t.cursor.execute(query)
+        self.t.num_queries += 1
+
+        savepoint_name = savepoint_generator() # this executes the command but also returns the name
+
+        return 
+
+    def savepoint_generator(self):
+        '''returns the name of the savepoint but also executes ''' 
+        letter = self.t.num_queries #make sure t normalize to 0 A = 65 
+        letter = str(letter)
+
+        letter += 'a'
+
+        query = "SAVEPOINT " + letter + ";"
+        self.t.cursor.execute(query)
+
+        return letter
+
+
+       
     def edit_cell(self,index, new_val):
         if self.t.transaction == False: # need to know if at beginning of transaction
-            self.t.transaction = True
-            
-            query = "START TRANSACTION;" + "\n" # execute the command
-            self.t.query_list.append(query)
-            self.t.cursor.execute(query)
+            self.start_transaction()
 
         index = index+1 # auto increment starts at 1 but python users will index at 0 
 
@@ -76,4 +93,12 @@ class column(table):
         # need to edit sql database
         query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + new_val + '\n' + "Where " + "TableIndex = " + index + ';'
         self.t.cursor.execute(query)
+        selt.t.num_queries += 1
+
+
+
         return
+
+    def undo_previous_changes(self,restore_index):
+
+
