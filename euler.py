@@ -5,9 +5,42 @@ def list_of_primes(mina, maxa):
 	for x in range(mina, maxa):
 		if isaPrime(x):
 			a.append(x)
-
-
 	return a
+
+
+def solve4():
+	prime_list = gen_primes_sieve(998002)
+	lst = []
+	for x in range(998001,10000,-1):
+		#print x
+		if prime_list[x] == True:
+			continue
+		elif str(x) == str(x)[::-1]:
+			lst.append(x)
+
+	for item in lst:
+		factors = return_factors(item)
+		for x in range(0,len(factors), 2):
+			if (factors[x]>=100 and factors[x]<=999) and (factors[x+1]>=100 and factors[x+1]<=999):
+				return item, factors[x], factors[x+1]
+
+	return "fail"
+
+
+def return_factors(num):
+	lst = []
+	for x in range(1,num/2):
+		if x in lst:
+			break
+		if num % x == 0:
+			val = num/x
+			lst.append(x)
+			if x == val:
+				continue 
+			lst.append(val)
+
+	return lst 
+
 
 def solve7():
 	x = 110000
@@ -187,6 +220,38 @@ def solve14():
 	print elasped
 	print collatz_dict
 	return k[v.index(max(v))] 
+
+
+def solve21():
+	lst = []
+	for x in range(1,10000):
+		factors1 = return_factors(x)
+
+		if x in factors1:
+			factors1.remove(x)
+
+		d_a = sum(factors1)
+
+		factors2 = return_factors(d_a)
+		
+		if d_a in factors2:
+			factors2.remove(d_a)
+
+		d_b = sum(factors2)
+
+		#print d_b, x
+
+		if (d_b == x) and (x != d_a) :
+			if x not in lst:
+				lst.append(x)
+			if d_a not in lst:
+				lst.append(d_a)
+
+	return sum(lst)
+
+
+
+
 from itertools import permutations
 
 def solve24():
@@ -234,3 +299,39 @@ def gen_fib_list(max_index):
 
 def number_digits(num):
 	return len(str(num))
+
+
+letter_number_count = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine",
+"ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+
+single_digits = "onetwothreefourfivesixseveneightnine"
+
+tens = ["twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" ]
+other_tens = "twentythirtyfourtyfiftysixtyseventyeightyninety"
+
+hundred = "hundred"
+ands = "and"
+one_thousand = "onethousand"
+
+def solve17():
+	sums = 0
+	number_len_list = []
+	for item in letter_number_count:
+		sums += len(item)
+		number_len_list.append(len(item))
+
+
+	for item in tens:
+		sums += len(item)* 10
+		sums += len(single_digits)
+
+	first_100 = sums
+
+	for x in range(0,9):
+		sums += (len(letter_number_count[x]) + len(hundred)) * 100
+		sums += len(ands) * 99
+		sums += first_100
+
+	sums += len(one_thousand)
+
+	return sums
