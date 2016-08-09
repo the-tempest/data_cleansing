@@ -76,23 +76,26 @@ class error_detection:
 				
 		
 	def info_for_user(self):
-		
 		i = 0
+		dict = {}
 		dict_errors  = self.make_other_format()
 		for c in dict_errors:
 			column = c
+			l = []
 			for index in column:
+				s= ""
 				if column[index]!=[]:
 					for error in column[index]:
-						s = ""
-						s = 0
-#	def date_errors(self):
+						s = s +str(error)
+				#can make more calls to other functions here
+				l.append(s)
+			dict[c] = l
+		return dict
+	
+	def date(self, error):
+		'''given information about errors for a date says something meaningful'''
 		
-		
-
-
-#	def 
-					
+											
 		
 					
 		
