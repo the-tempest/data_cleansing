@@ -68,6 +68,8 @@ def extract(f):
             columns = list(set(columns))
 
             columnsToInitialize = []
+            columnsToInitialize.append("TableIndex int primary key NOT NULL AUTO_INCREMENT") # putting in a mysql index 
+
             for i in range(len(columns)):
                 columns[i] = columns[i].replace(" ", "_")
                 columnsToInitialize.append(columns[i]+ ' TEXT');

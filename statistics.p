@@ -4,7 +4,7 @@ p1
 (dp2
 S'city'
 p3
-I1
+I2
 ssS'last_name'
 p4
 (dp5
@@ -28,7 +28,7 @@ p13
 (dp14
 S'state'
 p15
-I1
+I2
 ssS'street'
 p16
 (dp17
@@ -46,7 +46,7 @@ p22
 (dp23
 S'latitude'
 p24
-I1
+I2
 ssS'city'
 p25
 (dp26
@@ -75,7 +75,7 @@ p36
 (dp37
 S'year'
 p38
-I1
+I2
 ssS'sale_date'
 p39
 (dp40
@@ -93,7 +93,7 @@ p45
 (dp46
 S'date'
 p47
-I1
+I2
 ssS'company_name'
 p48
 (dp49
@@ -128,7 +128,7 @@ ssS'Account_Created'
 p63
 (dp64
 g47
-I1
+I2
 ssS'REVIEW_DATE'
 p65
 (dp66
@@ -139,7 +139,7 @@ p67
 (dp68
 S'last name'
 p69
-I1
+I2
 ssS'web'
 p70
 (dp71
@@ -157,7 +157,7 @@ p76
 (dp77
 S'location'
 p78
-I1
+I2
 ssS'price'
 p79
 (dp80
@@ -172,18 +172,18 @@ ssS'Product'
 p83
 (dp84
 g35
-I1
+I2
 ssS'Longitude'
 p85
 (dp86
 S'longitude'
 p87
-I1
+I2
 ssS'Transaction_date'
 p88
 (dp89
 g47
-I1
+I2
 ssS'address'
 p90
 (dp91
@@ -209,5 +209,5 @@ ssS'Payment_Type'
 p99
 (dp100
 g3
-I1
+I2
 ss.
