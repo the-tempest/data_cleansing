@@ -16,7 +16,7 @@ class classifier:
 			self.possVals[elem] = 1
 
 		self.regExs = []
-		for regex in regs:
+		for regex in regs:	
 			self.regExs.append(re.compile(regex))
 
 		self.knownExamples = {}
@@ -32,7 +32,7 @@ class classifier:
 
 	def has_form(self, token):
 		'''Tests whether the given token is in the form of the regular expression for the type'''
-		for regex in self.regEx:
+		for regex in self.regExs:
 			if regex.match(token) != None:
 				return True
 		return False

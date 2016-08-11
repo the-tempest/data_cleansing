@@ -1,6 +1,7 @@
 # class to represent a column in the table
 import mysql.connector
 from secrets import password, port, database, user, host, path
+import table
 
 # class to represent a table
 class table:
@@ -13,9 +14,10 @@ class table:
         self.transaction = False # are we editing and in a transaction?
 
         self.query_list = []
+        self.num_queries = 0
 
-        cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
-        self.cursor = cnx.cursor()
+        self.cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
+        self.cursor = self.cnx.cursor()
 
     def build_column_index(self):
         ''' build the column index dictionary '''
@@ -30,9 +32,69 @@ class table:
         ''' returns a list of column objects for the table '''
         return self.columns
 
+
+    def start_transaction(self):
+
+        self.transaction = True
+        
+        query = "START TRANSACTION;" + "\n" # execute the command
+        self.query_list.append(query)
+        self.cursor.execute(query)
+        self.num_queries += 1
+
+        savepoint_name = self.savepoint_generator() # this executes the command but also returns the name
+
+        return 
+
+    def savepoint_generator(self):
+        '''returns the name of the savepoint but also executes ''' 
+        letter = self.num_queries #make sure t normalize to 0 A = 65 
+        letter = str(letter)
+
+        letter += 'a'
+
+        query = "SAVEPOINT " + letter + ";"
+        self.cursor.execute(query)
+
+        return letter
+
+    def revert_previous_changes_to_index(self,restore_index):
+        ''' Will revert all changes and revert to a previous savepoint '''
+        self.cursor.execute("ROLLBACK TO " + str(restore_index) + "a") # a is there to satisfy mysql syntax
+        # not sure exactly what to do with the python object at this point
+        return
+
+    def undo_single_change(self, command_index):
+        ''' will undo a single change and attempt to re execute all the other commands ASSUME INDEX OF COMMAND IS INDEXED BY 0'''
+
+        self.cursor.execute("ROLLBACK TO " + str(command_index) + "a")
+
+        for x in range(command_index + 1, len(self.query_list)):
+            self.cursor.execute(self.query_list[x])
+            #hopefully no dependencies. what to do with python object?
+
+        return
+
+    def end_transaction(self):
+        ''' A function to permanently save all the changes you've made. 
+            Will flush the query_list so you cannot undo small changes ''' 
+
+        self.transaction = False
+
+        query = "COMMIT;"
+        self.cursor.execute(query) # commit changes
+        self.num_queries = 0 # reset num_queries
+
+        self.query_list = [] # remove all queries from list, means you can't go back but maybe allow you to go all the way back at this point
     
+        new_table = getTable(self.name, user, password,host, database)
+
+        self.columns = new_table.columns; # the list containing the columns of the table
+        self.build_column_index()
 
 
+
+    
 class column(table):
     def __init__(self, rows, colName, table):
         self.colName = colName; # name of the column
@@ -42,7 +104,7 @@ class column(table):
 
         self.guesses = {} # dictionary of index of token and guess for that token
         
-        self.table = table
+        self.t = table
         # cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
         # self.cursor = cnx.cursor()
 
@@ -57,16 +119,31 @@ class column(table):
     def addGuesses(self, g):
         self.guesses = g
 
+
+       
     def edit_cell(self,index, new_val):
+        ''' index is python 0 indexed value that user wants to update. new_value is a string that is getting put into table. string becuase table is all strings'''
+
         if self.t.transaction == False: # need to know if at beginning of transaction
-            self.t.transaction = True
-            
-            query = "START TRANSACTION;" + "\n" # execute the command
-            self.t.query_list.append(query)
-            self.t.cursor.execute(query)
+            self.t.start_transaction()
 
         self.rows[index] = new_val # python easy change
+        index = index+1 # auto increment starts at 1 but python users will index at 0 
+
+        
+        new_val = "'" + new_val + "'"
+
         # need to edit sql database
-        query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + new_val + '\n' + "Where " + "TableID = " + index + ';'
+        query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + str(new_val) + '\n' + "Where " + "TableIndex = " + str(index) + ';'
+        # need to index+1 because auto_increment starts at 1 not 0. 
+        #print query
         self.t.cursor.execute(query)
+        self.t.query_list.append(query)
+        self.t.num_queries += 1
+
+        self.t.savepoint_generator()
+
+
+
         return
+
