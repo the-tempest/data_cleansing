@@ -5,7 +5,7 @@
 
 import mysql.connector, os, re
 from secrets import path
-execfile(path+"typify/heuristics.py")
+execfile(path+"typify/new_stuff/heuristics.py")
 execfile(path+"typify/helper.py")
 execfile(path+"typify/features/features.py")
 execfile(path+"typify/classifier.py")

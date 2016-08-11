@@ -36,7 +36,7 @@ def getTable(tablename, u=user, p=password, h=host, d=database, port = port ):
         # for x in range(10): # not working.
         # 	colName.replace(chr(ord(firstNum) + x), "") # remove characters 0-9 in column name
 
-        newCol = column(data, colName);
+        newCol = column(data, colName, tablename);
         newTable.addColumn(newCol);
     cnx.commit()
     cursor.close()

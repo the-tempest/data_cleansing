@@ -2,11 +2,6 @@
 import mysql.connector
 from secrets import password, port, database, user, host, path
 
-
-
-    
-
-
 # class to represent a table
 class table:
     def __init__(self, name):

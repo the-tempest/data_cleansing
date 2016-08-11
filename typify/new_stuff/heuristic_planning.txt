@@ -1,0 +1,25 @@
+numeric:
+- zip
+- misc number
+- date
+- longitude
+- latitude
+- phone_number
+- ip
+- year
+- isbn
+
+name:
+- full_name
+- first_name
+- last_name
+- city
+- state
+- city state
+
+string:
+- datestring
+- address
+- email
+- description
+- url

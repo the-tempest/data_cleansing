@@ -8,15 +8,14 @@ import re
 
 from secrets import password, port, database, user, host, path
 execfile(path+'table.py')
-training_directory = (path+"typify/new_stuff/training_data")
+training_directory = (path+"training_data")
 
-
+# TODO put location back into types once data is found
 MY_FEATURES = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas',
 			'upper', 'lower', 'numbers'] # default features and types
-MY_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn',
-		'full_name', 'first_name', 'last_name',
-		'address', 'email',
-		'location', 'description', 'url', 'city', 'state']
+MY_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn', # numerics are built in
+		    'name', # this is made more specific by heuristics
+		    'string'] # this is made more specific by heuristics
 LEN_TYPES = len(MY_TYPES)
 
 
@@ -42,7 +41,8 @@ class naivebayes_classifier:
 		if os.path.isfile(path+"new_trained_dictionary.dat"):
 			self.trained_dictionary = self.load(path+"new_trained_dictionary.dat")
 		else:
-			t = trainer(self.types, self.features)
+			print 'have to train'
+			t = trainer()
 			t.train(training_directory)
 			self.trained_dictionary = t.trained_dictionary
 

@@ -366,9 +366,10 @@ def propname_city(token, typer):
 
 	return 'description', value + misc_value
 
-	
-heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
-			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
-			 city_state_heuristic, email_heuristic, location_heuristic,
-			 description_heuristic, url_heuristic, city_heuristic,
-			 state_heuristic]
+name_heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
+				   city_state_heuristic, city_heuristic, state_heuristic]
+
+string_heuristics = [datestring_heuristic, full_address_heuristic, street_address_heuristic,
+					 email_heuristic, location_heuristic, description_heuristic, url_heuristic]
+
+heuristics = {'name': name_heuristics, 'string': string_heuristics}
