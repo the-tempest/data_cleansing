@@ -77,7 +77,7 @@ class error_detection:
 		
 	def info_for_user(self):
 		i = 0
-		dict = {}
+		dyct = {}
 		dict_errors  = self.make_other_format()
 		for c in dict_errors:
 			column = c
@@ -89,8 +89,8 @@ class error_detection:
 						s = s + " " + str(error)
 				#can make more calls to other functions here
 				l.append(s)
-			dict[c] = l
-		return dict
+			dyct[c] = l
+		return dyct
 	
 	# essentially we are using inference rules, not really machine learning, but hardcoding ideas into the code
 	def error_information_generator(self, type, errors):
