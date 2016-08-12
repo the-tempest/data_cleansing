@@ -16,7 +16,7 @@ def execute(filename):
 
     # call column classifier script
     x = main_classifier();
-    x.new_tabe(t)
+    x.new_table(t)
     cl = x.report
     
     # collect statistics
