@@ -8,16 +8,15 @@ import re
 
 from secrets import password, port, database, user, host, path
 execfile(path+'table.py')
-training_directory = (path+"typify/new_stuff/training_data")
+training_directory = (path+"training_data")
 
-
-features = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas'
+# TODO put location back into types once data is found
+MY_FEATURES = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas',
 			'upper', 'lower', 'numbers'] # default features and types
-types = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn',
-		'full_name', 'first_name', 'last_name',
-		'address', 'email',
-		'location', 'description', 'url', 'city', 'state']
-LEN_TYPES = len(types)
+MY_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn', # numerics are built in
+		    'name', # this is made more specific by heuristics
+		    'string'] # this is made more specific by heuristics
+LEN_TYPES = len(MY_TYPES)
 
 
 ''' Form of the feature_dictionary that gets built in train and is used to classify
@@ -35,16 +34,17 @@ LEN_TYPES = len(types)
 '''
 
 class naivebayes_classifier:
-	def __init__(self, types = types, features = features):
-		self.features = features
-		self.types = types #list of all numeric_type classes (strings)
+	def __init__(self):
+		self.features = MY_FEATURES
+		self.types = MY_TYPES #list of all numeric_type classes (strings)
 
 		if os.path.isfile(path+"new_trained_dictionary.dat"):
 			self.trained_dictionary = self.load(path+"new_trained_dictionary.dat")
 		else:
-			trainer = naivebayes_trainer(self.types, self.features)
-			trainer.train(training_directory)
-			self.trained_dictionary = trainer.trained_dictionary
+			print 'have to train'
+			t = trainer()
+			t.train(training_directory)
+			self.trained_dictionary = t.trained_dictionary
 
 	def classify(self, nText):
 		'''Takes in a string and classifies it to one of the classifiers types '''
@@ -66,7 +66,8 @@ class naivebayes_classifier:
 					"dots": self.compute_feature_prob(arg.count("."), curr_dict),
 					"spaces": self.compute_feature_prob(arg.count(" "), curr_dict),
 					"commas": self.compute_feature_prob(arg.count(","), curr_dict),
-					"letters": self.compute_feature_prob(len(re.findall('[a-zA-z]', arg)), curr_dict),
+					"lower": self.compute_feature_prob(len(re.findall('[a-z]', arg)), curr_dict),
+					"upper": self.compute_feature_prob(len(re.findall('[A-z]', arg)), curr_dict),
 					"numbers": self.compute_feature_prob(len(re.findall('[\d]', arg)), curr_dict)
 					}
 		return switcher.get(feature, "feature not yet implemented") #base case
@@ -85,9 +86,9 @@ class naivebayes_classifier:
 
 
 class trainer: # class fo holding training functions
-	def __init__(self, types = [], features =[]):
-		self.features = features
-		self.types = types
+	def __init__(self):
+		self.features = MY_FEATURES
+		self.types = MY_TYPES
 		self.trained_dictionary = {} # a dictionary of feature dictionaries
 
 	def train(self, training_dir=r"/training_data"):
@@ -108,6 +109,7 @@ class trainer: # class fo holding training functions
 				firstNum = "0"
 				for x in range(10):
 					column.colName = column.colName.replace(chr(ord(firstNum) + x), "")
+				print column.colName
 				if column.colName in self.types: #building the columns we are going to train as long as they are types we want
 					column_names.append(column.colName)
 			t.build_column_index()

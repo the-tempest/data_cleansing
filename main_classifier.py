@@ -6,13 +6,13 @@
 
 import mysql.connector, os, re, random
 from secrets import path
-execfile(path+"typify/heuristics.py")
+execfile(path+"typify/new_stuff/heuristics.py")
 execfile(path+"typify/helper.py")
 execfile(path+"typify/features/features.py")
 execfile(path+"typify/classifier.py")
-execfile(path+'numeric_classifier.py')
+execfile(path+'naivebayes_classifier.py')
+execfile(path+'heuristic_classifier.py')
 execfile(path+'table.py')
-execfile(path+"typify/tie_breaker.py")
 
 class main_classifier:
 	def __init__(self):
@@ -27,7 +27,6 @@ class main_classifier:
 
 	def new_table(table):
 		'''takes in a new table and generates the data for it'''
-		# TODO once we use this one, add this function call to main
 		self.my_table     = table
 		self.results      = self.classify_table()
 		self.result_table = self.apply_predictions()
