@@ -22,6 +22,7 @@ ASCII_NAME = [32, 44, 45, 46] + ASCII_UPPER + ASCII_LOWER
 class heuristic_classifier:
 	def __init__(self):
 		self.build_heuristic_classifiers()
+		self.curr_col_name = ''
 
 	def classify(self, token, classification):
 		'''takes in a token and returns
