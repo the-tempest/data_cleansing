@@ -90,9 +90,9 @@ class numeric_classifier:
 					"dashes" : self.compute_feature_prob(arg.count("-"), curr_dict),
 					"decimal points": self.compute_feature_prob(arg.count("."), curr_dict),
 					"spaces": self.compute_feature_prob(arg.count(" "), curr_dict),
-					"pound sign": self.compute_feature_prod(arg.count("#"), curr_dict),
-					"percent sign": self.compute)feature_prod(arg.count("%"), curr_dict),
-					"dollar sign": self.compute) feature_prod(arg.count("%"), curr_dict)
+					"pound sign": self.compute_feature_prob(arg.count("#"), curr_dict),
+					"percent sign": self.compute_feature_prob(arg.count("%"), curr_dict),
+					"dollar sign": self.compute_feature_prob(arg.count("$"), curr_dict)
 					}
 
 		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented

@@ -114,8 +114,8 @@ class error_detection:
 	
 	
 	def returns_switcher(self, type):
-		numeric_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
-		decider{'date':"", 'longitude':"", 'latitude':"", 'number':"",'zip':"",'phone_number':"", 'ip':"", 'year':"", 'isbn':""}
+		#numeric_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
+		decider = {'date':"", 'longitude':"", 'latitude':"", 'number':"",'zip':"",'phone_number':"", 'ip':"", 'year':"", 'isbn':""}
 		decider['date'] = {"range check" : "probably not applicable", #so far the only values that can be out of range are amounts like age and weigh
 					"misclassified number": "misclassified number",
 					"number format check": "the format of this date may be off a bit"
@@ -152,7 +152,7 @@ class error_detection:
 				'full address', 'street address', 'city state', 'email',
 				'location', 'description', 'url', 'city', 'state']
 		
-		decider = {'':}
+		decider = {}
 		
 		
 	def format_into_binary(errors):
