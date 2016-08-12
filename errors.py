@@ -152,7 +152,10 @@ class error_detection:
 				'full address', 'street address', 'city state', 'email',
 				'location', 'description', 'url', 'city', 'state']
 		
-		decider = {}
+		decider['full name'] = {"format checks": didYouMean(token),
+					"email check": detective.email_check(curr_column),
+					"column duplications": detective.cluster_rows(curr_column.rows)}
+		
 		
 		
 	def format_into_binary(errors):
