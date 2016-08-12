@@ -264,7 +264,7 @@ def state_heuristic(token, typer):
 def generic_heuristic(token, typer, possibles, pos, split_token):
 	'''returns a certainty value for token being a
 	certain type'''
-	my_typer = typer.column_classifiers[pos]
+	my_typer = typer.heuristic_classifiers[pos]
 	
 	char_val_list = []
 	for char in token:
@@ -324,7 +324,7 @@ def propname_city(token, typer):
 	as a tie breaker'''
 	# get the right classifier
 	# TODO implement
-	my_typer = typer.column_classifiers[FULL_NAME_POS]
+	my_typer = typer.heuristic_classifiers[FULL_NAME_POS]
 
 	char_val_list = []
 	for char in token:

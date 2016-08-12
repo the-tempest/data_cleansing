@@ -23,9 +23,9 @@ class main_classifier:
 		self.my_table     = None
 		self.results      = None
 		self.result_table = None
-		self.report       = None
+		self.report       = ''
 
-	def new_table(table):
+	def new_table(self, table):
 		'''takes in a new table and generates the data for it'''
 		self.my_table     = table
 		self.results      = self.classify_table()
@@ -86,15 +86,15 @@ class main_classifier:
 	def apply_predictions(self):
 		''' takes in a table and returns a table
 		with the tentative classifications filled in'''
-		for i, col in enumerate(self.table.getColumns()):
+		for i, col in enumerate(self.my_table.getColumns()):
 			prediction = self.results[i][1]
 			col.tentativeClassification(prediction)
-		return self.table
+		return self.my_table
 
 	def reset_table(self):
 		'''sets the tentative classifications
 		in the table to None'''
-		for col in self.table.getColumns():
+		for col in self.my_table.getColumns():
 			col.tentativeClassification(None)
 
 	def classify_table(self):
@@ -106,13 +106,13 @@ class main_classifier:
 		actual = []
 		predictions = []
 		fractions = []
-		cols = self.table.getColumns()
+		cols = self.my_table.getColumns()
 		size = len(cols)
 
 		# generate data for the tuples
 		for col in cols:
 			column = col.rows
-			self.curr_col_name = col.colName
+			self.heuristic_class.curr_col_name = col.colName
 			guesses = self.get_column_predictions(column)
 			prediction, fraction = self.classify_column(guesses)
 			# TODO add dictionaries to column
@@ -161,7 +161,7 @@ class main_classifier:
 		self.prev = {}
 		for token in column:
 			guess = self.get_token_prediction(token)
-			if token not in prev_guesses:
+			if token not in self.prev:
 				self.prev[token] = guess
 			predictions.append(guess)
 		self.prev = {}
@@ -176,11 +176,11 @@ class main_classifier:
 
 		# Naive Bayes part
 		# classifies numerics
-		classification = self.naivebayes_classifier.classify(token)
+		classification = self.naivebayes_class.classify(token)
 		if classification not in ['name', 'string']:
 			return classification
 
 		# Heuristic part
 		# one or more guesses
-		prediction = self.heuristic_classifier.classify(token, classification)
+		prediction = self.heuristic_class.classify(token, classification)
 		return random.choice(prediction)
