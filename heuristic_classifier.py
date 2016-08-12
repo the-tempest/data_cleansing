@@ -31,8 +31,7 @@ class heuristic_classifier:
 			tipe, value = f(token, self)
 			certainties[tipe] = value
 		top_score = dict_max(certainties)
-		prediction = [x for x in certainties if x == top_score]
-		return prediction
+		return top_score
 
 	def build_heuristic_classifiers(self):
 		'''builds the self.column_classifiers data member by creating classifier objects created

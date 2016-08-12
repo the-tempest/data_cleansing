@@ -20,6 +20,7 @@ name:
 string:
 - datestring
 - address
+- location
 - email
 - description
 - url

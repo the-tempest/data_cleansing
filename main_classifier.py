@@ -27,7 +27,6 @@ class main_classifier:
 
 	def new_table(table):
 		'''takes in a new table and generates the data for it'''
-		# TODO once we use this one, add this function call to main
 		self.my_table     = table
 		self.results      = self.classify_table()
 		self.result_table = self.apply_predictions()
