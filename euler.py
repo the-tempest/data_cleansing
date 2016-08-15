@@ -335,3 +335,204 @@ def solve17():
 	sums += len(one_thousand)
 
 	return sums
+import time
+
+def solve28():
+	start = time.clock()
+	square_start = 3
+	sub_tract = 2
+	sums = 1
+	while square_start <= 10001:
+		a = square_start**2
+		for x in range(4):
+			sums +=  a - x*sub_tract
+		sub_tract += 2
+		square_start +=2
+	end = time.clock()
+
+	print end-start
+	return sums
+
+import collections
+
+def solve32():
+	lst10 = []
+	lst100 = []
+	lst1000 = []
+	pandigital = []
+	for x in range(10,99):
+		if (x%10 != 0) and (x%11 != 0 ):
+			lst10.append(x)
+
+	for x in range(100,999):
+		num = str(x)
+		if ("0" not in num):
+			results = collections.Counter(num)
+			values = results.values()
+			if (2 not in values) and (3 not in values):
+				lst100.append(x)
+
+	#return lst100
+
+	for i in lst10:
+		for j in lst100:
+			i_str = str(i)
+			j_str = str(j)
+			tot_string = i_str + j_str
+
+			results = collections.Counter(tot_string)
+			values = results.values()
+			if max(values) > 1: # means that some value occurs 2 or more times
+				continue
+
+
+			x = i*j
+			tot_string = str(x) + tot_string
+
+			results = collections.Counter(tot_string)
+			values = results.values()
+			if (max(values) > 1) or ("0" in tot_string): # means that some value occurs 2 or more times
+				continue
+			
+			else:
+				print i,j,x
+				if (x not in pandigital):
+					pandigital.append(x)
+
+
+
+	for x in range(1000,9999):
+		num = str(x)
+		if ("0" not in num):
+			results = collections.Counter(num)
+			values = results.values()
+			if max(values) == 1:
+				lst1000.append(x)
+
+	for i in range(1,10):
+		for j in lst1000:
+			i_str = str(i)
+			j_str = str(j)
+			tot_string = i_str + j_str
+
+			results = collections.Counter(tot_string)
+			values = results.values()
+			if max(values) > 1: # means that some value occurs 2 or more times
+				continue
+
+
+			x = i*j
+			tot_string = str(x) + tot_string
+
+			results = collections.Counter(tot_string)
+			values = results.values()
+			if (max(values) > 1) or ("0" in tot_string): # means that some value occurs 2 or more times
+				continue
+			
+			else:
+				print i,j,x
+				if (x not in pandigital):
+					pandigital.append(x)
+
+
+	#return lst1000
+	return pandigital
+
+import itertools
+
+def solve35():
+	big_sieve = gen_primes_sieve(1000000)
+	lst = []
+	primes = []
+
+	for x in range(len(big_sieve)):
+		if big_sieve[x] == True:
+			primes.append(x)
+
+	#print primes
+
+	for item in primes:
+		#print item
+		if item in lst:
+			continue
+
+		a = str(item)
+		if (item != 2) and ("2" in a) or ("4" in a) or ("6" in a) or ("8" in a) or ("0" in a): 
+			continue 
+
+		perms = [item]
+		rotator = item
+		count = 0
+		while count < len(a):
+			rotator = rotate1(rotator)
+			perms.append(rotator)
+			count += 1
+
+		total = 0
+		for x in range(len(perms)): # item is a string
+
+			if big_sieve[perms[x]] == False:
+				break
+			else:
+				total += 1
+
+		print total, len(perms)
+
+		if total == len(perms):
+			print "here"
+			for item2 in perms:
+				if item2 not in lst:
+					lst.append(item2)
+			print lst
+
+
+	return lst
+
+def rotate1(x):
+
+	num = str(x)
+
+	first = num[0]
+
+	num = num[1:]
+	num += first
+
+	return int(num)
+
+
+def solve36():
+	sums = 0
+
+	for x in range(10000000):
+		num = str(x)
+		rev_num = num[::-1]
+
+		base_hex = hex(x)
+		base_hex = base_hex[2:]
+
+		rev_hex = base_hex[::-1]
+
+		if rev_hex != base_hex:
+			continue
+
+		
+
+		if num != rev_num:
+			continue
+
+
+		
+
+		binary = bin(x)
+
+		#strip 0b from it
+		binary = binary[2:]
+
+		rev_binary = binary[::-1]
+
+		if binary == rev_binary:
+			print x
+			sums += x
+
+	return sums
+		

@@ -11,7 +11,6 @@ class table:
         self.columns = []; # the list containing the columns of the table
         self.build_column_index()
 
-        self.transaction = False # are we editing and in a transaction?
 
         self.query_list = []
         self.num_queries = 0
@@ -33,13 +32,15 @@ class table:
         return self.columns
 
 
-    def start_transaction(self):
+    def startTransaction(self):
 
-        self.transaction = True
+        #self.transaction = True
         
-        query = "START TRANSACTION;" + "\n" # execute the command
+        query = "START TRANSACTION;" # execute the command
         self.query_list.append(query)
-        self.cursor.execute(query)
+        #self.cursor.execute(query)
+        self.cnx.start_transaction()
+
         self.num_queries += 1
 
         savepoint_name = self.savepoint_generator() # this executes the command but also returns the name
@@ -56,12 +57,27 @@ class table:
         query = "SAVEPOINT " + letter + ";"
         self.cursor.execute(query)
 
+        #self.print_fetchall()
         return letter
+
 
     def revert_previous_changes_to_index(self,restore_index):
         ''' Will revert all changes and revert to a previous savepoint '''
         self.cursor.execute("ROLLBACK TO " + str(restore_index) + "a") # a is there to satisfy mysql syntax
         # not sure exactly what to do with the python object at this point
+        #self.print_fetchall()
+
+
+        return
+
+    def print_fetchall(self):
+        i = self.cursor.fetchall()
+        print i
+        return
+
+    def reset_connection(self):
+        self.cnx.cmd_reset_connection()
+        self.cursor = self.cnx.cursor()
         return
 
     def undo_single_change(self, command_index):
@@ -70,7 +86,10 @@ class table:
         self.cursor.execute("ROLLBACK TO " + str(command_index) + "a")
 
         for x in range(command_index + 1, len(self.query_list)):
-            self.cursor.execute(self.query_list[x])
+            if self.query_list[x] == "START TRANSACTION;":
+                self.cnx.start_transaction()
+            else:
+                self.cursor.execute(self.query_list[x])
             #hopefully no dependencies. what to do with python object?
 
         return
@@ -79,14 +98,14 @@ class table:
         ''' A function to permanently save all the changes you've made. 
             Will flush the query_list so you cannot undo small changes ''' 
 
-        self.transaction = False
 
-        query = "COMMIT;"
-        self.cursor.execute(query) # commit changes
+        self.cnx.commit()
+
+        #self.print_fetchall()
+
         self.num_queries = 0 # reset num_queries
 
         self.query_list = [] # remove all queries from list, means you can't go back but maybe allow you to go all the way back at this point
-    
         new_table = getTable(self.name, user, password,host, database)
 
         self.columns = new_table.columns; # the list containing the columns of the table
@@ -124,8 +143,8 @@ class column(table):
     def edit_cell(self,index, new_val):
         ''' index is python 0 indexed value that user wants to update. new_value is a string that is getting put into table. string becuase table is all strings'''
 
-        if self.t.transaction == False: # need to know if at beginning of transaction
-            self.t.start_transaction()
+        if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
+            self.t.startTransaction()
 
         self.rows[index] = new_val # python easy change
         index = index+1 # auto increment starts at 1 but python users will index at 0 
@@ -138,6 +157,9 @@ class column(table):
         # need to index+1 because auto_increment starts at 1 not 0. 
         #print query
         self.t.cursor.execute(query)
+
+        #self.print_fetchall()
+
         self.t.query_list.append(query)
         self.t.num_queries += 1
 
