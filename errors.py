@@ -3,6 +3,7 @@ from secrets import password, port, database, user, host, path
 execfile(path + "error_detection_number.py")
 execfile(path + "error_form_detection.py")
 execfile(path + "didYouMean.py")
+execfile(path + "/typify/features/features.py")
 numeric_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
 names = ['full name', 'first name', 'last name', 'datestring',
 				'full address', 'street address', 'city state', 'email',
@@ -24,33 +25,57 @@ class error_detection:
 		error_dictionary = {}
 		i = 0
 		for column in self.t.columns:
-			for item in errors_to_check_list[i]:
-				if column.colName in numeric_classes:
-					list_of_errors = self.numeric_error_switcher(number_detective, item, column)
-					error_dictionary[column.colName][item] = list_of_errors #may want to modify so as to go by
+			error_dictionary[column.colName] = {}
+			forms = regex_form_finder(column)
+			for error in errors_to_check_list[i]:
+				if column.tentClass in numeric_classes:
+					list_of_error_indexes = self.numeric_error_switcher(number_detective, error, column)
+					error_dictionary[column.colName][error] = list_of_error_indexes #may want to modify so as to go by
 					#column.colName, index , List of errors
 
 				else: # if we get a third catagory not numbers or stirngs we need to change this
-					list_of_errors = self.string_error_switcher(item, column)
-					error_dictionary[column.colName][item] = list_of_errors
+					list_of_error_indexes = self.string_error_switcher(error, column)
+					error_dictionary[column.colName][error] = list_of_error_indexes
+					#{column_name: {error_type: [list_of_indexes]}}
 			i+=1
 
 		self.ed = error_dictionary
 		return error_dictionary
+
+	def regex_form_finder(self, column):
+		column_rows = column.rows
+		column_len = len(column_rows)
+		regex_dict = {}
+		regex_list = []
+		for regex in get_regex_list(column.tentClass):
+			regex_dict[regex] = 0
+			regex_list.append(re.compile(regex))
+		for item in column_rows:
+			for regexObj in regex_list:
+				if regexObj.match(item) != None:
+					regex_dict[regexObj.pattern] += 1
+
+		form_list = []
+		for key in regex_dict.keys():
+			if float(regex_dict[key])/float(column_len) > .05:
+				form_list.append(key)
+
+		return form_list
+			
 
 	def numeric_error_switcher(self, detective, error_string, curr_column):
 		switcher = {"range check": detective.range_check(curr_column.rows),
 					"misclassified number": detective.misclassified_number(curr_column), # as in the heuristic incorrectly classified
 					"number format check": detective.number_format_check(curr_column)}
 
-		return switcher.get(error_string, )
+		return switcher.get(error_string)
 
 	def string_error_switcher(self, detective, error_string, curr_column):
 		switcher = {"format checks": detective.format_checks(curr_column.rows),
 					"email check": detective.email_check(curr_column),
 					"column duplications": detective.cluster_rows(curr_column.rows)}
 
-		return switcher.get(error_string, ) # second argument blank so that if trying to call a numeric error checker on a non numeric column	
+		return switcher.get(error_string) # second argument blank so that if trying to call a numeric error checker on a non numeric column	
 	
 	def make_other_format(self):
 		''' Notice that the format of the first dictionary called ed goes by

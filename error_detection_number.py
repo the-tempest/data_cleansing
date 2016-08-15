@@ -40,7 +40,6 @@ class error_detector_number:
 	
 	def check_on_table(self):
 		table = self.t
-		table.build_column_index
 		column_errors = []
 		for column in table.columns:
 
@@ -94,10 +93,10 @@ class error_detector_number:
 	
 	def misclassified(self, column):
 		think = column.tentClass
-		dict = column.guesses
+		dyct = column.guesses
 		error_list = []
 		for i in range(len(dict)):
-			if dict[i]!=think:
+			if dyct[i]!=think:
 				error_list.append(i)
 		return error_list
 	
