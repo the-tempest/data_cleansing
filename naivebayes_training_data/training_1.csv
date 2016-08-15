@@ -1,4 +1,4 @@
-date,product,number,payment_type,name,name2,name3,string,latitude,longitude,year
+date,product,number,payment_type,first name,last name,location,country,latitude,longitude,year
 1/2/2009 6:17,Product1,1200,Mastercard,carolina,Basildon,England,United Kingdom,51.5,-1.1166667,2009
 1/2/2009 4:53,Product1,1200,Visa,Betina,Parkville                   ,MO,United States,39.195,-94.68194,2009
 1/2/2009 13:08,Product1,1200,Mastercard,Federica e Andrea,Astoria                     ,OR,United States,46.18806,-123.83,2009
