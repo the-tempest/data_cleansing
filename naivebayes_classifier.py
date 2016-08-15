@@ -8,42 +8,45 @@ import re
 
 from secrets import password, port, database, user, host, path
 execfile(path+'table.py')
-training_directory = (path+"typify/new_stuff/training_data")
+MY_DIRECTORY = (path+r"naivebayes_training_data")
 
-
+# TODO put location back into types once data is found
 MY_FEATURES = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas',
 			'upper', 'lower', 'numbers'] # default features and types
-MY_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn',
-		'full_name', 'first_name', 'last_name',
-		'address', 'email',
-		'location', 'description', 'url', 'city', 'state']
+MY_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn', # numerics are built in
+		    'name', # this is made more specific by heuristics
+		    'string'] # this is made more specific by heuristics
 LEN_TYPES = len(MY_TYPES)
 
-
+print 'MY_DIRECTORY'
+print MY_DIRECTORY
 ''' Form of the feature_dictionary that gets built in train and is used to classify
 {'Phone_Number': {'slashes': {0: 1000},
-				'length': {16: 635, 17: 277, 15: 88},
-				'spaces': {0: 1000},
-				'decimal points': {0: 1000},
-				'dashes': {2: 1000}},
-'Zip': {
-	'slashes': {0: 998},
-	'length': {4: 36, 5: 461, 6: 1, 8: 7, 9: 40, 10: 453},
-	'spaces': {0: 998},
-	'decimal points': {0: 998},
-	'dashes': {0: 545, 1: 453}}}
+				 'length': {16: 635, 17: 277, 15: 88},
+				 'spaces': {0: 1000},
+				 'decimal points': {0: 1000},
+				 'dashes': {2: 1000}},
+'Zip': { 'slashes': {0: 998},
+	     'length': {4: 36, 5: 461, 6: 1, 8: 7, 9: 40, 10: 453},
+	     'spaces': {0: 998},
+	     'decimal points': {0: 998},
+	     'dashes': {0: 545, 1: 453}}}
 '''
 
 class naivebayes_classifier:
 	def __init__(self):
 		self.features = MY_FEATURES
 		self.types = MY_TYPES #list of all numeric_type classes (strings)
+		self.training_directory = MY_DIRECTORY
+		print 'in naivebayes init'
+		print training_directory
 
 		if os.path.isfile(path+"new_trained_dictionary.dat"):
 			self.trained_dictionary = self.load(path+"new_trained_dictionary.dat")
 		else:
-			t = trainer(self.types, self.features)
-			t.train(training_directory)
+			print 'have to train'
+			t = naivebayes_trainer(self.training_directory)
+			t.train()
 			self.trained_dictionary = t.trained_dictionary
 
 	def classify(self, nText):
@@ -85,20 +88,23 @@ class naivebayes_classifier:
 		return dObj
 
 
-class trainer: # class fo holding training functions
-	def __init__(self):
+class naivebayes_trainer: # class fo holding training functions
+	def __init__(self, in_dir):
+		self.training_dir = in_dir
+		print 'in trainer init'
+		print self.training_dir
 		self.features = MY_FEATURES
 		self.types = MY_TYPES
 		self.trained_dictionary = {} # a dictionary of feature dictionaries
 
-	def train(self, training_dir=r"/training_data"):
+	def train(self):
 		''' Will train given some training data, can edit this later. must give path to directory
 				need to put r in front of training_dir for windows at least'''
-
-		training_files_list = [f for f in listdir(training_dir) if isfile(join(training_dir, f))] # gets list of files in the training _dir
+		print self.training_dir
+		training_files_list = [f for f in listdir(self.training_dir) if isfile(join(self.training_dir, f))] # gets list of files in the training _dir
+		print training_files_list
 		for training_file in training_files_list:
-			
-			file_path = os.path.join(training_dir, training_file) # build up the whole path
+			file_path = os.path.join(self.training_dir, training_file) # build up the whole path
 			print file_path + "\n"
 			table_name = extraction.extract(file_path);
 			t = getTable(table_name, user, password, host, database) #  returns table object

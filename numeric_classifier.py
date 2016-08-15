@@ -10,7 +10,7 @@ execfile(path+'table.py')
 training_directory = (path+"numeric_training_data")
 
 
-features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points'] # default features and types
+features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points','pound sign', 'percent sign', 'dollar sign'] # default features and types
 types = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
 
 ''' Form of the feature_dictionary that gets built in train and is used to classify
@@ -89,14 +89,18 @@ class numeric_classifier:
 					"slashes" : self.compute_feature_prob(arg.count("/"), curr_dict),
 					"dashes" : self.compute_feature_prob(arg.count("-"), curr_dict),
 					"decimal points": self.compute_feature_prob(arg.count("."), curr_dict),
-					"spaces": self.compute_feature_prob(arg.count(" "), curr_dict)
+					"spaces": self.compute_feature_prob(arg.count(" "), curr_dict),
+					"pound sign": self.compute_feature_prob(arg.count("#"), curr_dict),
+					"percent sign": self.compute_feature_prob(arg.count("%"), curr_dict),
+					"dollar sign": self.compute_feature_prob(arg.count("$"), curr_dict)
 					}
 
 		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented
 
 	def compute_feature_prob(self, feature, feature_dict):
 		if feature in feature_dict:
-			return float((feature_dict[feature])) / float((sum(feature_dict.itervalues()))) # float this or log this?
+			#return float((feature_dict[feature])) / float((sum(feature_dict.itervalues()))) # float this or log this?
+			return math.log(float((feature_dict[feature]))) / math.log(float((sum(feature_dict.itervalues()))))
 		else:
 			return 0 # or mabye 1
 
@@ -201,7 +205,10 @@ class numeric_trainer: # class fo holding training functions
 					"slashes" : arg.count("/"),
 					"dashes" : arg.count("-"),
 					"decimal points" : arg.count("."),
-					"spaces": arg.count(" ")
+					"spaces": arg.count(" "),
+					"pound sign":arg.count("#"),
+					"percent sign":arg.count("%"),
+					"dollar sign": arg.count("%")
 					}
 
 		return switcher.get(feature, "feature not yet implemented") #base case for a feature not yet implemented

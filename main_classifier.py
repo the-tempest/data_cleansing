@@ -4,19 +4,18 @@
 # classify each column in it, returning
 # a report in the form of a string
 
-import mysql.connector, os, re
+import mysql.connector, os, re, random
 from secrets import path
-execfile(path+"typify/heuristics.py")
+execfile(path+"typify/new_stuff/heuristics.py")
 execfile(path+"typify/helper.py")
 execfile(path+"typify/features/features.py")
 execfile(path+"typify/classifier.py")
-execfile(path+'numeric_classifier.py')
+execfile(path+'naivebayes_classifier.py')
+execfile(path+'heuristic_classifier.py')
 execfile(path+'table.py')
-execfile(path+"typify/tie_breaker.py")
 
 class main_classifier:
 	def __init__(self):
-		self.build_classifiers()
 		self.naivebayes_class = naivebayes_classifier()
 		self.heuristic_class = heuristic_classifier()
 
@@ -24,11 +23,10 @@ class main_classifier:
 		self.my_table     = None
 		self.results      = None
 		self.result_table = None
-		self.report       = None
+		self.report       = ''
 
-	def new_table(table):
+	def new_table(self, table):
 		'''takes in a new table and generates the data for it'''
-		# TODO once we use this one, add this function call to main
 		self.my_table     = table
 		self.results      = self.classify_table()
 		self.result_table = self.apply_predictions()
@@ -88,15 +86,15 @@ class main_classifier:
 	def apply_predictions(self):
 		''' takes in a table and returns a table
 		with the tentative classifications filled in'''
-		for i, col in enumerate(self.table.getColumns()):
+		for i, col in enumerate(self.my_table.getColumns()):
 			prediction = self.results[i][1]
 			col.tentativeClassification(prediction)
-		return self.table
+		return self.my_table
 
 	def reset_table(self):
 		'''sets the tentative classifications
 		in the table to None'''
-		for col in self.table.getColumns():
+		for col in self.my_table.getColumns():
 			col.tentativeClassification(None)
 
 	def classify_table(self):
@@ -108,13 +106,13 @@ class main_classifier:
 		actual = []
 		predictions = []
 		fractions = []
-		cols = self.table.getColumns()
+		cols = self.my_table.getColumns()
 		size = len(cols)
 
 		# generate data for the tuples
 		for col in cols:
 			column = col.rows
-			self.curr_col_name = col.colName
+			self.heuristic_class.curr_col_name = col.colName
 			guesses = self.get_column_predictions(column)
 			prediction, fraction = self.classify_column(guesses)
 			# TODO add dictionaries to column
@@ -163,7 +161,7 @@ class main_classifier:
 		self.prev = {}
 		for token in column:
 			guess = self.get_token_prediction(token)
-			if token not in prev_guesses:
+			if token not in self.prev:
 				self.prev[token] = guess
 			predictions.append(guess)
 		self.prev = {}
@@ -177,19 +175,12 @@ class main_classifier:
 			return self.prev[token]
 
 		# Naive Bayes part
-		# returns likeliest type
-		prediction1 = self.naivebayes_classifier.classify(token)
+		# classifies numerics
+		classification = self.naivebayes_class.classify(token)
+		if classification not in ['name', 'string']:
+			return classification
 
 		# Heuristic part
 		# one or more guesses
-		prediction2 = self.heuristic_classifier.classify(token)
-		
-		# Figure out the final guess through matching
-		print "token, prediction1, prediction2"
-		print token
-		print prediction1
-		print prediction2
-		if prediction1 in prediction2:
-			return prediction1
-		
-		return 'misc'
+		prediction = self.heuristic_class.classify(token, classification)
+		return random.choice(prediction)
