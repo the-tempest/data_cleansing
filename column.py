@@ -11,6 +11,7 @@ class table:
         self.columns = []; # the list containing the columns of the table
         self.build_column_index()
 
+        self.forms = []
 
         self.query_list = []
         self.num_queries = 0

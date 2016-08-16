@@ -15,7 +15,6 @@ class error_detector_number:
 	def __init__(self,tt):
 		self.name = "hi"
 		self.t = tt
-		print self.t.columns[0].guesses
 		
 		#print "above"		
 	
@@ -53,42 +52,52 @@ class error_detector_number:
 		print column.colName
 		return column_errors
 
-	def range_check(self, column):
+	def range_check(self, rows):
 		'''Looks for formating errors in a column'''
 		flagged = []
 		format_dictionary = {}
 		mean = 0
-		sum = 0
-		for x in column:
-			if no_letters(x):
-				sum = int(x)+sum
-			print sum
-		mean = float(sum)/float(len(column))
-	#	print sum
-	#	print len(column)
-	#	print mean
-		variance = 0
-		for x in range(len(column)):
-			print column
-			if no_letters(column[x]):
-				print "not"
-				add = int (column[x])- mean
-				add = add * add
-				variance = variance + add
-			else:
-				flagged.append(x)
-		#		print x
-				print "here"
-		#print flagged
-		variance = variance/len(column)
-		std = math.sqrt(variance)
-		#print mean
-		#print std
-		for x in range(len(column)):
-			if  no_letters(column[x]):
-				if abs(int(column[x])-mean)> 2*std:
-					flagged.append(x)
-		
+		total = 0
+
+		split_rows = []
+		max_length = 0
+		for row in rows:
+			split = row.split()
+			split_rows.append(split)
+			length = len(split)
+			if length > max_length:
+				max_length = length
+
+		for curr_num in range(max_length):
+			for x in split_rows:
+				if no_letters(x[curr_num]):
+					sub_regex = re.compile(r'''[^0-9]''')
+					x[curr_num] = sub_regex.sub('', x[curr_num])
+					total += int(x[curr_num])
+			mean = float(total)/float(len(rows))
+		#	print total
+		#	print len(column)
+		#	print mean
+			variance = 0.0
+			for x in range(len(split_rows)):
+				if no_letters(split_rows[x][curr_num]):
+					add = int(split_rows[x][curr_num]) - mean
+					add = add * add
+					variance += add
+				else:
+					if x not in flagged:
+						flagged.append(x)
+			#print flagged
+			variance = variance/len(split_rows)
+			std = math.sqrt(variance)
+			#print mean
+			#print std
+			for x in range(len(split_rows)):
+				if  no_letters(split_rows[x][curr_num]):
+					if abs(int(split_rows[x][curr_num])-mean)> 2*std:
+						if x not in flagged:
+							flagged.append(x)
+			
 		return flagged
 	
 	def misclassified(self, column):
@@ -106,16 +115,12 @@ class error_detector_number:
 	def number_format_check(self, column):
 		print "getting here"
 		error = []
-		a = column
 		column_rows = column.rows
-		column = []
-		for item in column_rows:
-			column.append(item)
 		format_dictionary = {}
-		for x in range(len(column)):
-			string = make_form(column[x])
+		for x in range(len(column_rows)):
+			string = make_form(column_rows[x])
 			string = condense(string)
-			column[x] = string
+			column_rows[x] = string
 			if string in format_dictionary:
 				format_dictionary[string] += 1
 			else: 
@@ -123,7 +128,7 @@ class error_detector_number:
 
 		general_form = max(format_dictionary, key = format_dictionary.get) # the most common format_dictionary
 		#print general_form		
-		for x in range(len(column)):
+		for x in range(len(column_rows)):
 			if column[x]!=general_form:
 				error.append(x)
 		return error	

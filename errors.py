@@ -3,7 +3,7 @@ from secrets import password, port, database, user, host, path
 execfile(path + "error_detection_number.py")
 execfile(path + "error_form_detection.py")
 execfile(path + "didYouMean.py")
-execfile(path + "/typify/features/features.py")
+execfile(path + "typify/features/features.py")
 numeric_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
 names = ['full name', 'first name', 'last name', 'datestring',
 				'full address', 'street address', 'city state', 'email',
@@ -26,7 +26,7 @@ class error_detection:
 		i = 0
 		for column in self.t.columns:
 			error_dictionary[column.colName] = {}
-			forms = regex_form_finder(column)
+			column.forms = self.regex_form_finder(column)
 			for error in errors_to_check_list[i]:
 				if column.tentClass in numeric_classes:
 					list_of_error_indexes = self.numeric_error_switcher(number_detective, error, column)
@@ -43,11 +43,14 @@ class error_detection:
 		return error_dictionary
 
 	def regex_form_finder(self, column):
+		if (column.tentClass == None or column.tentClass == 'misc'):
+			return []
+
 		column_rows = column.rows
 		column_len = len(column_rows)
 		regex_dict = {}
 		regex_list = []
-		for regex in get_regex_list(column.tentClass):
+		for regex in self.get_regex_list(column.tentClass):
 			regex_dict[regex] = 0
 			regex_list.append(re.compile(regex))
 		for item in column_rows:
@@ -61,7 +64,15 @@ class error_detection:
 				form_list.append(key)
 
 		return form_list
-			
+
+	def get_regex_list(self, classification):
+		switcher = {'full name': FULL_NAME_REGEXS, 'first name': FIRST_NAME_REGEXS, 'last name': LAST_NAME_REGEXS, 'datestring': DATESTRING_REGEXS,
+					'full address': FULL_ADDRESS_REGEXS, 'street address': STREET_ADDRESS_REGEXS, 'city state': CITYSTATE_REGEXS, 'email': EMAIL_REGEXS, 
+					'location': LOCATION_REGEXS, 'description': DESCRIPTION_REGEXS, 'url': URL_REGEXS, 'city': NAME_REGEX, 'state': NAME_REGEX,
+					'date': DATE_REGEXS, 'longitdue': LONGITUDE_REGEXS, 'latitude': LATITUDE_REGEXS, 'number': NUMBER_REGEXS, 'zip': ZIP_REGEXS,
+					'ip': IP_REGEXS, 'phone_number': PHONE_REGEXS, 'year': YEAR_REGEXS, 'isbn': ISBN_REGEXS}
+
+		return switcher.get(classification)
 
 	def numeric_error_switcher(self, detective, error_string, curr_column):
 		switcher = {"range check": detective.range_check(curr_column.rows),
@@ -71,8 +82,8 @@ class error_detection:
 		return switcher.get(error_string)
 
 	def string_error_switcher(self, detective, error_string, curr_column):
-		switcher = {"format checks": detective.format_checks(curr_column.rows),
-					"email check": detective.email_check(curr_column),
+		switcher = {"format checks": detective.format_check(curr_column.rows),
+					#"email check": detective.email_check(curr_column),
 					"column duplications": detective.cluster_rows(curr_column.rows)}
 
 		return switcher.get(error_string) # second argument blank so that if trying to call a numeric error checker on a non numeric column	
