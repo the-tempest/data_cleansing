@@ -104,7 +104,7 @@ class error_detector_number:
 		think = column.tentClass
 		dyct = column.guesses
 		error_list = []
-		for i in range(len(dict)):
+		for i in range(len(dyct)):
 			if dyct[i]!=think:
 				error_list.append(i)
 		return error_list
@@ -129,7 +129,7 @@ class error_detector_number:
 		general_form = max(format_dictionary, key = format_dictionary.get) # the most common format_dictionary
 		#print general_form		
 		for x in range(len(column_rows)):
-			if column[x]!=general_form:
+			if column_rows[x]!=general_form:
 				error.append(x)
 		return error	
 	

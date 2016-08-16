@@ -27,7 +27,6 @@ class error_form_detector:
 			print "Elements in cluster " + item + " are: " 
 			for x in range(len(finger_dict[item])):
 				print x, ": ",  rows[finger_dict[item][x]]
-
 			print "\n"
 		return 0
 
@@ -79,7 +78,7 @@ class error_form_detector:
 					matched = True
 					break
 			if not matched:
-				possible_error_indices.append(index)
+				possible_error_indices.append(column_rows[index])
 
 		return possible_error_indices
 

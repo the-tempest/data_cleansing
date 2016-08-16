@@ -27,14 +27,14 @@ class error_detection:
 		for column in self.t.columns:
 			error_dictionary[column.colName] = {}
 			column.forms = self.regex_form_finder(column)
-			for error in errors_to_check_list[i]:
+			for error in errors_to_check_list:
 				if column.tentClass in numeric_classes:
 					list_of_error_indexes = self.numeric_error_switcher(number_detective, error, column)
 					error_dictionary[column.colName][error] = list_of_error_indexes #may want to modify so as to go by
 					#column.colName, index , List of errors
 
 				else: # if we get a third catagory not numbers or stirngs we need to change this
-					list_of_error_indexes = self.string_error_switcher(error, column)
+					list_of_error_indexes = self.string_error_switcher(form_detective, error, column)
 					error_dictionary[column.colName][error] = list_of_error_indexes
 					#{column_name: {error_type: [list_of_indexes]}}
 			i+=1
@@ -45,7 +45,7 @@ class error_detection:
 	def regex_form_finder(self, column):
 		if (column.tentClass == None or column.tentClass == 'misc'):
 			return []
-
+		print column.tentClass
 		column_rows = column.rows
 		column_len = len(column_rows)
 		regex_dict = {}
@@ -69,22 +69,22 @@ class error_detection:
 		switcher = {'full name': FULL_NAME_REGEXS, 'first name': FIRST_NAME_REGEXS, 'last name': LAST_NAME_REGEXS, 'datestring': DATESTRING_REGEXS,
 					'full address': FULL_ADDRESS_REGEXS, 'street address': STREET_ADDRESS_REGEXS, 'city state': CITYSTATE_REGEXS, 'email': EMAIL_REGEXS, 
 					'location': LOCATION_REGEXS, 'description': DESCRIPTION_REGEXS, 'url': URL_REGEXS, 'city': NAME_REGEX, 'state': NAME_REGEX,
-					'date': DATE_REGEXS, 'longitdue': LONGITUDE_REGEXS, 'latitude': LATITUDE_REGEXS, 'number': NUMBER_REGEXS, 'zip': ZIP_REGEXS,
+					'date': DATE_REGEXS, 'longitude': LONGITUDE_REGEXS, 'latitude': LATITUDE_REGEXS, 'number': NUMBER_REGEXS, 'zip': ZIP_REGEXS,
 					'ip': IP_REGEXS, 'phone_number': PHONE_REGEXS, 'year': YEAR_REGEXS, 'isbn': ISBN_REGEXS}
 
 		return switcher.get(classification)
 
 	def numeric_error_switcher(self, detective, error_string, curr_column):
 		switcher = {"range check": detective.range_check(curr_column.rows),
-					"misclassified number": detective.misclassified_number(curr_column), # as in the heuristic incorrectly classified
+					"misclassified number": detective.misclassified(curr_column), # as in the heuristic incorrectly classified
 					"number format check": detective.number_format_check(curr_column)}
 
 		return switcher.get(error_string)
 
 	def string_error_switcher(self, detective, error_string, curr_column):
-		switcher = {"format checks": detective.format_check(curr_column.rows),
+		switcher = {"format checks": detective.format_check(curr_column),
 					#"email check": detective.email_check(curr_column),
-					"column duplications": detective.cluster_rows(curr_column.rows)}
+					"column duplications": detective.cluster_rows(curr_column)}
 
 		return switcher.get(error_string) # second argument blank so that if trying to call a numeric error checker on a non numeric column	
 	
