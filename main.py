@@ -5,7 +5,7 @@ execfile(path+'table.py')
 execfile(path+'typify/column_type.py')
 execfile(path+'numeric_classifier.py')
 execfile(path+'counter.py')
-execfile(path+'errors.py')
+execfile(path+'error_detection/errors.py')
 
 ct = counter()
 

@@ -8,7 +8,8 @@ import mysql.connector, os, re
 from secrets import path
 execfile(path+"typify/heuristics.py")
 execfile(path+"typify/helper.py")
-execfile(path+"typify/features/features.py")
+execfile(path+"typify/features/exampleslib.py")
+execfile(path+"typify/features/regexlib.py")
 execfile(path+"typify/classifier.py")
 execfile(path+'numeric_classifier.py')
 execfile(path+'table.py')
