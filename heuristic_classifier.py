@@ -43,8 +43,8 @@ class heuristic_classifier:
 		# TODO add all types
 
 		# names
-		names = ['full name', 'first name', 'last name', 'datestring',
-				'full address', 'street address', 'city state', 'email',
+		names = ['full_name', 'first_name', 'last_name', 'datestring',
+				'full_address', 'street_address', 'city_state', 'email',
 				'description', 'url', 'city', 'state',
 				'date', 'longitude', 'latitude', 'number', 'zip', 'phone_number',
 				'ip', 'year', 'isbn']

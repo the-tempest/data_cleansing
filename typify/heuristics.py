@@ -33,11 +33,19 @@ FULL_ADDRESS_POS   = 4
 STREET_ADDRESS_POS = 5
 CITY_STATE_POS     = 6
 EMAIL_POS          = 7
-LOCATION_POS       = 8
-DESCRIPTION_POS    = 9
-URL_POS            = 10
-CITY_POS           = 11
-STATE_POS          = 12
+DESCRIPTION_POS    = 8
+URL_POS            = 9
+CITY_POS           = 10
+STATE_POS          = 11
+DATE_POS           = 12
+LONGITUDE_POS      = 13
+LATITUDE_POS       = 14
+LONGITUDE_POS      = 15
+ZIP_POS            = 16
+PHONE_POS          = 17
+IP_POS             = 18
+YEAR_POS           = 19
+ISBN_POS           = 20
 
 def full_name_heuristic(token, typer):
 	'''returns a  name heuristic value or negative infinity
@@ -261,6 +269,132 @@ def state_heuristic(token, typer):
 
 	return 'state', value + misc_value
 
+def date_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	date or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['date', 'day']
+	# main part
+	value = generic_heuristic(token, typer, possibles, DATE_POS, split_token)
+	if value == 0:
+		return 'date', 0
+	# misc part
+	# TODO improve
+	misc_value = 0
+	if len(token) == 8:
+		misc_value += 10
+
+	return 'date', value + misc_value
+
+def longitude_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	date or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['longitude', 'position', 'location']
+	# main part
+	value = generic_heuristic(token, typer, possibles, LONGITUDE_POS, split_token)
+	if value == 0:
+		return 'longitude', 0
+	# misc part
+	# TODO improve
+	misc_value = 0
+	if token.count('.') == 1:
+		misc_value += 10
+
+	return 'longitude', value + misc_value
+
+def latitude_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	date or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['latitude', 'position', 'location']
+	# main part
+	value = generic_heuristic(token, typer, possibles, LATITUDE_POS, split_token)
+	if value == 0:
+		return 'latitude', 0
+	# misc part
+	# TODO improve
+	misc_value = 0
+	if token.count('.') == 1:
+		misc_value += 10
+
+	return 'latitude', value + misc_value
+
+def number_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	date or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['number', 'count', 'quantity', 'amount']
+	# main part
+	value = generic_heuristic(token, typer, possibles, NUMBER_POS, split_token)
+	if value == 0:
+		return 'number', 0
+	# misc part
+	# TODO improve
+	misc_value = 0
+	if token.count('.') == 1:
+		misc_value += 10
+
+	return 'number', value + misc_value
+
+def zip_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	date or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['zip', 'postal code']
+	# main part
+	value = generic_heuristic(token, typer, possibles, ZIP_POS, split_token)
+	if value == 0:
+		return 'zip', 0
+	# misc part
+	# TODO improve
+	misc_value = 0
+	if len(token) in [5, 9, 10]:
+		misc_value += 10
+
+	return 'zip', value + misc_value
+
+def phone_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	date or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['phone', 'number', 'contact']
+	# main part
+	value = generic_heuristic(token, typer, possibles, PHONE_POS, split_token)
+	if value == 0:
+		return 'phone', 0
+	# misc part
+	# TODO improve
+	misc_value = 0
+	if token.count('(') and token.count(')'):
+		misc_value += 10
+
+	return 'phone', value + misc_value
+
+def phone_heuristic(token, typer):
+	'''returns a certainty value for token being a
+	date or zero if it definitely
+	isn't an state'''
+	split_token = token.split()
+	possibles = ['ip', 'address']
+	# main part
+	value = generic_heuristic(token, typer, possibles, IP_POS, split_token)
+	if value == 0:
+		return 'ip', 0
+	# misc part
+	# TODO improve
+	misc_value = 0
+	if token.count('.') == 3:
+		misc_value += 10
+
+	return 'ip', value + misc_value
+
 def generic_heuristic(token, typer, possibles, pos, split_token):
 	'''returns a certainty value for token being a
 	certain type'''
@@ -293,82 +427,12 @@ def generic_heuristic(token, typer, possibles, pos, split_token):
 			break
 
 	return value
-
-
-def repetition_heuristic(column, tipe):
-	'''returns a heuristic value based on the amount of repetition in the column
-	if the column doesn't already have a strong classification'''
-	# TODO figure out what to do with this
-	# it's a bit redundant
-	value = 0
-	length = len(column)
-
-	if tipe in ['full name', 'full address', 'street address', 'city state', 'email']:
-		return value
-
-	token_dict = {}
-	for elem in column:
-		if not token_dict.has_key(elem):
-			token_dict[elem] = 0
-		token_dict[elem] += 1
-
-	distinct_vals = len(token_dict.keys())
-	if float(length)/distinct_vals >= 10:
-		value += 100
-
-	return value
-
-
-def propname_city(token, typer):
-	'''this is not really a heuristic of the same form as the others; it functions
-	as a tie breaker'''
-	# get the right classifier
-	# TODO implement
-	my_typer = typer.column_classifiers[FULL_NAME_POS]
-
-	char_val_list = []
-	for char in token:
-		char_val_list.append(ord(char))
-	split_token = token.split()
-	len_split_token = len(split_token)
-
-	#check if it can't be a description
-	if not my_typer.can_be(char_val_list):
-		return 'description', 0
-
-	# main part #####################
-	value = 0
-
-	# check column name
-	if 'description' in typer.curr_col_name.lower():
-		value += 10
-	elif 'note' in typer.curr_col_name.lower():
-		value += 10
-
-	#account for the form of the token
-	if my_typer.has_form(token):
-		value += 20
-
-	# looking at format of individual words
-	for word in split_token:
-		if my_typer.is_a(word.lower()):
-			value += 50
-			break
-
-	# misc part #############################
-	misc_value = 0
-	# account for description length
-	# using number of spaces
-	if len_split_token > 10:
-		misc_value += 10
-	else:
-		misc_value += len_split_token
-
-	return 'description', value + misc_value
-
 	
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
 			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
-			 city_state_heuristic, email_heuristic, location_heuristic,
+			 city_state_heuristic, email_heuristic,
 			 description_heuristic, url_heuristic, city_heuristic,
 			 state_heuristic]
+
+names = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number',
+				'ip', 'year', 'isbn']
