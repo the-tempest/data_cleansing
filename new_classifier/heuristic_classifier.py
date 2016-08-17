@@ -5,10 +5,10 @@
 
 import mysql.connector, os, re
 from secrets import path
-execfile(path+"typify/new_stuff/heuristics.py")
-execfile(path+"typify/helper.py")
-execfile(path+"typify/features/features.py")
-execfile(path+"typify/classifier.py")
+execfile(path+"new_classifier/heuristics.py")
+execfile(path+"new_classifier/helper.py")
+execfile(path+"new_classifier/features/exampleslib.py")
+execfile(path+"new_classifier/classifier.py")
 execfile(path+'table.py')
 
 ASCII_NUMS = [n for n in range(48, 58)]

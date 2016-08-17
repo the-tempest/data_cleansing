@@ -6,10 +6,10 @@
 
 import mysql.connector, os, re, random
 from secrets import path
-execfile(path+"typify/heuristics.py")
-execfile(path+"typify/helper.py")
-execfile(path+"typify/features/features.py") # TODO give it a spot
-execfile(path+"typify/classifier.py")
+execfile(path+"new_classifier/heuristics.py")
+execfile(path+"new_classifier/helper.py")
+execfile(path+"new_classifier/features/exampleslib.py")
+execfile(path+"new_classifier/classifier.py")
 execfile(path+'new_classifier/naivebayes_classifier.py')
 execfile(path+'new_classifier/heuristic_classifier.py')
 execfile(path+'table.py')
