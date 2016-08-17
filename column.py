@@ -113,7 +113,7 @@ class table:
 
     def delete_row(self,row_index):
 
-         if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
+        if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
             self.t.startTransaction()
 
         for col in self.columns: # python deletion
