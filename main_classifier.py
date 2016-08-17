@@ -9,7 +9,7 @@ from secrets import path
 execfile(path+"typify/new_stuff/heuristics.py")
 execfile(path+"typify/helper.py")
 execfile(path+"typify/features/features.py")
-execfile(path+"typify/new_classifier.py")
+execfile(path+"typify/classifier.py")
 execfile(path+'naivebayes_classifier.py')
 execfile(path+'heuristic_classifier.py')
 execfile(path+'table.py')
@@ -136,10 +136,11 @@ class main_classifier:
 		(prediction, certainty)'''
 		results = {}
 		# populate the dictionary
-		for item in guesses:
-			if item not in results:
-				results[item] = 0
-			results[item] += 1
+		for l in guesses:
+			for guess in l:
+				if guess not in results:
+					results[guess] = 0
+				results[guess] += 1
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
@@ -160,28 +161,28 @@ class main_classifier:
 		i = 0
 		self.prev = {}
 		for token in column:
-			guess = self.get_token_prediction(token)
+			guesses = self.get_token_predictions(token)
 			if token not in self.prev:
-				self.prev[token] = guess
-			predictions.append(guess)
+				self.prev[token] = guesses
+			for guess in guesses:
+				predictions.append(guess)
 		self.prev = {}
 		return predictions
 
-	def get_token_prediction(self, token):
+	def get_token_predictions(self, token):
 		'''takes in a token and returns a
-		prediction for its type'''
+		list of predictions for its type'''
 
 		# looks at previous guesses to save time
 		if token in self.prev:
 			return self.prev[token]
 
 		# Naive Bayes part
-		# classifies numerics
-		classification = self.naivebayes_class.classify(token)
-		if classification not in ['name', 'string']:
-			return classification
+		nb_guess = self.naivebayes_class.classify(token)
+		guesses  = [nb_guess]
 
 		# Heuristic part
-		# one or more guesses
-		prediction = self.heuristic_class.classify(token, classification)
-		return random.choice(prediction)
+		h_guess = self.heuristic_class.classify(token)
+		guesses += h_guess
+
+		return guesses
