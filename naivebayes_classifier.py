@@ -10,7 +10,6 @@ from secrets import password, port, database, user, host, path
 execfile(path+'table.py')
 MY_DIRECTORY = (path+r"naivebayes_training_data")
 
-# TODO put location back into types once data is found
 MY_FEATURES = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas',
 			'upper', 'lower', 'numbers'] # default features and types
 MY_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn', # numerics are built in
