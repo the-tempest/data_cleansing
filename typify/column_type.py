@@ -169,8 +169,6 @@ class column_typer:
 			results[key] = fraction
 		best_guess = dict_max(results)
 		guess_fraction = results[best_guess]
-		if repetition_heuristic(column, best_guess) == 100:
-			return best_guess, 1.00
 		# ensure there actually is a good guess
 		print guess_fraction
 		if float (guess_fraction) < float(.9):
