@@ -1,0 +1,4 @@
+The column named REVIEW_DATE appears to be of the type date with a certainty of 1.00.
+The column named AUTHOR appears to be of the type state with a certainty of 0.80.
+The column named ISBN appears to be of the type zip with a certainty of 1.00.
+The column named DISCOUNTED_PRICE appears to be of the type latitude with a certainty of 1.00.

@@ -15,9 +15,11 @@ def getRows(columnName, fileName, cursor):
             rows[j] = str(''.join(rows[j][0].decode('utf-8')))
     return rows;
 
-def getTable(tablename, u=user, p=password, h=host, d=database, port = port ):
-    cnx = mysql.connector.connect(user=u, password=p, host=h, database=d, port=port);
-    cursor = cnx.cursor()
+def getTable(tablename, u=user, p=password, h=host, d=database, port = port, cnx = None, cursor = None ):
+    if (cnx == None) or (cursor == None):
+        cnx = mysql.connector.connect(user=u, password=p, host=h, database=d, port=port);
+        cursor = cnx.cursor()
+
     newTable = table(tablename)
     #print tablename
     query = "SHOW columns FROM " + tablename

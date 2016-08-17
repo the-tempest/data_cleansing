@@ -5,7 +5,7 @@ import table
 
 # class to represent a table
 class table:
-    def __init__(self, name):
+    def __init__(self, name, cnx=None, cursor=None):
         self.name = name; # the name of the table
         self.column_index = {} # dictionary mapping column names to indices
         self.columns = []; # the list containing the columns of the table
@@ -16,8 +16,15 @@ class table:
         self.query_list = []
         self.num_queries = 0
 
-        self.cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
-        self.cursor = self.cnx.cursor()
+
+        if (cnx == None) or (cursor == None):
+            self.cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port, autocommit = True)
+            self.cursor = self.cnx.cursor()
+        else:
+            self.cnx = cnx
+            self.cursor = cursor
+        self.cnx.autocommit = True
+
 
     def build_column_index(self):
         ''' build the column index dictionary '''
@@ -35,7 +42,7 @@ class table:
 
     def startTransaction(self):
 
-        #self.transaction = True
+        print "starting transaction... "
         
         query = "START TRANSACTION;" # execute the command
         self.query_list.append(query)
@@ -93,6 +100,70 @@ class table:
                 self.cursor.execute(self.query_list[x])
             #hopefully no dependencies. what to do with python object?
 
+        return 0 
+
+    def get_sql_index(self,python_index):
+        ''' function used to get the TableIndex of a table in mysql. This is an auto_increment columns
+        but when deleting a row, it is no longer continuous. need to use limit to get the actual nth item''' 
+        self.t.cursor.execute("Select TableIndex FROM " + self.name +  " Limit " + str(python_index) + ",1;")
+        sql_index = self.cursor.fetchall()
+        sql_index = sql_index[0][0]
+
+        return sql_index
+
+    def delete_row(self,row_index):
+
+         if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
+            self.t.startTransaction()
+
+        for col in self.columns: # python deletion
+            del col.rows[row_index]
+
+
+        sql_index = self.get_sql_index(row_index)
+
+        query = "Delete FROM " + self.name + " WHERE TableIndex = " + str(sql_index) + ";"
+        self.cursor.execute(query)
+
+        self.query_list.append(query)
+        self.num_queries += 1
+        self.savepoint_generator()
+
+        return
+
+
+    def insert_row(self,values):
+        '''Inserts a row into the table, must make sure it is formatted correctly from frontend 
+            values is assumed to be a list of values in order to be inserted. Assumed values is same length as num of cols''' 
+        
+        if len(values) != len(self.columns):
+            print "values list incorrectly formatted"
+            return -1
+
+        if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
+            self.t.startTransaction()
+
+
+        values_string = "VALUES("
+        for x in range(len(self.columns)):
+            cur_value = "'"
+            cur_value += values[x]
+            cur_value += "'"
+            self.columns[x].rows.append(values[x])
+            if x == len(self.columns)-1: # if last value no comma
+                values_string += str(cur_value) + ")"
+            else:
+                values_string += str(cur_value) + ',' 
+
+
+
+        query = "Insert INTO " + self.name + ' ' + values_string + ";"
+        print query
+        self.cursor.execute(query)
+        self.query_list.append(query)
+        self.num_queries += 1
+        self.savepoint_generator()
+
         return
 
     def end_transaction(self):
@@ -100,20 +171,22 @@ class table:
             Will flush the query_list so you cannot undo small changes ''' 
 
 
-        self.cnx.commit()
+        self.cursor.execute("COMMIT;")
+        #self.cnx.commit()
 
         #self.print_fetchall()
 
         self.num_queries = 0 # reset num_queries
 
         self.query_list = [] # remove all queries from list, means you can't go back but maybe allow you to go all the way back at this point
-        new_table = getTable(self.name, user, password,host, database)
+        #new_table = getTable(self.name, user, password,host, database, port, self.cnx, self.cursor)
 
-        self.columns = new_table.columns; # the list containing the columns of the table
-        self.build_column_index()
+        #self.columns = new_table.columns; # the list containing the columns of the table
+        #self.build_column_index()
 
+        #return new_table
 
-
+        return 0
     
 class column(table):
     def __init__(self, rows, colName, table):
@@ -148,14 +221,14 @@ class column(table):
             self.t.startTransaction()
 
         self.rows[index] = new_val # python easy change
-        index = index+1 # auto increment starts at 1 but python users will index at 0 
 
-        
+        sql_index = self.t.get_sql_index(index)
+
+
         new_val = "'" + new_val + "'"
 
         # need to edit sql database
-        query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + str(new_val) + '\n' + "Where " + "TableIndex = " + str(index) + ';'
-        # need to index+1 because auto_increment starts at 1 not 0. 
+        query = 'Update ' + self.t.name + ' \n' +  "Set " + self.colName + '=' + str(new_val) + '\n' + "Where " + "TableIndex = " + str(sql_index) + ';'
         #print query
         self.t.cursor.execute(query)
 
@@ -168,5 +241,5 @@ class column(table):
 
 
 
-        return
+        return 0
 
