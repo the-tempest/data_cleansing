@@ -68,7 +68,7 @@ class error_detection:
 	def get_regex_list(self, classification):
 		switcher = {'full name': FULL_NAME_REGEXS, 'first name': FIRST_NAME_REGEXS, 'last name': LAST_NAME_REGEXS, 'datestring': DATESTRING_REGEXS,
 					'full address': FULL_ADDRESS_REGEXS, 'street address': STREET_ADDRESS_REGEXS, 'city state': CITYSTATE_REGEXS, 'email': EMAIL_REGEXS, 
-					'location': LOCATION_REGEXS, 'description': DESCRIPTION_REGEXS, 'url': URL_REGEXS, 'city': NAME_REGEX, 'state': NAME_REGEX,
+					'location': LOCATION_REGEXS, 'description': DESCRIPTION_REGEXS, 'url': URL_REGEXS, 'city': CITY_REGEXS, 'state': STATE_REGEXS,
 					'date': DATE_REGEXS, 'longitude': LONGITUDE_REGEXS, 'latitude': LATITUDE_REGEXS, 'number': NUMBER_REGEXS, 'zip': ZIP_REGEXS,
 					'ip': IP_REGEXS, 'phone_number': PHONE_REGEXS, 'year': YEAR_REGEXS, 'isbn': ISBN_REGEXS}
 
