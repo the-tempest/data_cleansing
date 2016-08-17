@@ -27,42 +27,64 @@ class error_form_detector:
 			print "Elements in cluster " + item + " are: " 
 			for x in range(len(finger_dict[item])):
 				print x, ": ",  rows[finger_dict[item][x]]
-
 			print "\n"
 		return 0
 
 
-	def email_check_table(self, table):
-		'''takes in a table's  '''
-		email_column_dictionary = {}
-		for item in table.columns:
-			if item.tentClass != 'email':
-				continue
-			else:
-				possible_email_errors = email_check(item.rows)
-				curr_index = table.column_index[item.colName]
-				email_column_dictionary[curr_index] = possible_email_errors
+#	def email_check_table(self, table):
+#		'''takes in a table's  '''
+#		email_column_dictionary = {}
+#		for item in table.columns:
+#			if item.tentClass != 'email':
+#				continue
+#			else:
+#				possible_email_errors = email_check(item.rows)
+#				curr_index = table.column_index[item.colName]
+#				email_column_dictionary[curr_index] = possible_email_errors
+#
+#	def email_check(self,column):
+#		''' Takes in a list of elements in a column. Uses a regular expresion to see if emails are valid''' 
+#		
+#		if column.colName != 'email':
+#			return
+#
+#		rows = column.rows
+#		prog = re.compile(em_regexp)
+#		possible_error_indices = []
+#		for x in range(len(rows)):
+#			result = prog.findall(rows[x])
+#			if len(result) == 0:
+#				possible_error_indices.append(x)
+#
+#		return possible_error_indices
 
+	def format_check(self, column):
+		#use a different method if there is a problem with the column classification or regex form classification
+		if (column.tentClass == None or column.tentClass == 'misc' or column.forms == []):
+			return self.format_check_misc(column.rows)
 
-
-	def email_check(self,column):
-		''' Takes in a list of elements in a column. Uses a regular expresion to see if emails are valid''' 
-		
-		if column.colName != 'email':
-			return
-
-		rows = column.rows
-		prog = re.compile(em_regexp)
+		#use regexs - might want to make this into another helper function
 		possible_error_indices = []
-		for x in range(len(rows)):
-			result = prog.findall(rows[x])
-			if len(result) == 0:
-				possible_error_indices.append(x)
+
+		compiled_forms = []
+		for regex in column.forms:
+			compiled_forms.append(re.compile(regex))
+
+		column_rows = column.rows
+		for index in range(len(column_rows)):
+			matched = False
+			for regexObj in compiled_forms:
+				if regexObj.match(column_rows[index]) != None:
+					matched = True
+					break
+			if not matched:
+				possible_error_indices.append(column_rows[index])
 
 		return possible_error_indices
 
 
-	def format_checks(self, rows):
+
+	def format_check_misc(self, rows):
 		'''Looks for formating errors in a column and takes in a list of rows in a column'''
 		column = []
 		for item in rows: # i needed to do this for some reason because rows was getting edited outside of this scope 
