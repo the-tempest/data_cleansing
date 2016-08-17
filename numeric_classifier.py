@@ -7,7 +7,7 @@ import extraction
 
 from secrets import password, port, database, user, host, path
 execfile(path+'table.py')
-training_directory = (path+"numeric_training_data")
+training_directory = (path+"naivebayes_training_data/numeric_training_data")
 
 
 features = ['length', 'slashes', 'dashes', 'spaces', 'decimal points','pound sign', 'percent sign', 'dollar sign'] # default features and types
