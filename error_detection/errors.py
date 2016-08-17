@@ -1,7 +1,7 @@
 from secrets import password, port, database, user, host, path
 
-execfile(path + "error_detection_number.py")
-execfile(path + "error_form_detection.py")
+execfile(path + "error_detection/error_detection_number.py")
+execfile(path + "error_detection/error_form_detection.py")
 execfile(path + "didYouMean.py")
 execfile(path + "typify/features/features.py")
 numeric_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
