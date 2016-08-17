@@ -2,8 +2,8 @@ execfile("typify/column_type.py")
 execfile("extraction.py")
 from secrets import password, port, database, user, host
 import copy
-num_classes = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP', 'ISBN', 'Year']
-list_of_classes = ['Date', 'Longitude', 'Latitude', 'Number', 'Zip', 'Phone_Number', 'IP', 'ISBN', 'Year', 'full name', 'first name', 'last name', 'datestring',
+num_classes = ['Date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'isbn', 'year']
+list_of_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'isbn', 'year', 'full name', 'first name', 'last name', 'datestring',
 		'full address', 'street address', 'city state', 'email', 'location', 'description', 'url', 'city', 'state']
 NUMBER_OF_CLASSES = len(list_of_classes)
 
