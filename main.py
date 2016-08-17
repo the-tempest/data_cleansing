@@ -3,8 +3,8 @@ import extraction
 from secrets import path
 execfile(path+'table.py')
 execfile(path+'typify/column_type.py')
-execfile(path+'numeric_classifier.py')
-execfile(path+'counter.py')
+execfile(path+'typify/numeric_classifier.py')
+execfile(path+'evaluation/counter.py')
 execfile(path+'error_detection/errors.py')
 
 ct = counter()

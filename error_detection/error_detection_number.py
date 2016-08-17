@@ -6,7 +6,7 @@ import math
 em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile(path+"table.py")
 execfile(path+"typify/helper.py")
-execfile(path+'numeric_classifier.py')
+execfile(path+'typify/numeric_classifier.py')
 
 
 d = difflib.Differ()

@@ -5,8 +5,8 @@ import extraction, re, math
 em_regexp = r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)"
 execfile(path + "table.py")
 execfile(path + "typify/helper.py")
-execfile(path + "fingerprint.py")
-execfile(path + "error_detection_number.py")
+execfile(path + "error_detection/fingerprint.py")
+execfile(path + "error_detection/error_detection_number.py")
 d = difflib.Differ()
 
 

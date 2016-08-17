@@ -1,9 +1,11 @@
 from secrets import password, port, database, user, host, path
-
+import os
 execfile(path + "error_detection/error_detection_number.py")
 execfile(path + "error_detection/error_form_detection.py")
-execfile(path + "didYouMean.py")
-execfile(path + "typify/features/features.py")
+execfile(path + "error_detection/didYouMean.py")
+
+execfile(path + "typify/features/regexlib.py")
+execfile(path + "typify/features/exampleslib.py")
 numeric_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
 names = ['full name', 'first name', 'last name', 'datestring',
 				'full address', 'street address', 'city state', 'email',
