@@ -113,6 +113,9 @@ class table:
 
     def delete_row(self,row_index):
 
+         if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
+            self.t.startTransaction()
+
         for col in self.columns: # python deletion
             del col.rows[row_index]
 
@@ -124,13 +127,44 @@ class table:
 
         self.query_list.append(query)
         self.num_queries += 1
+        self.savepoint_generator()
 
         return
 
 
-    # def insert_row(self,row,values):
-    #     query = "Insert INTO " + self.name + 
+    def insert_row(self,values):
+        '''Inserts a row into the table, must make sure it is formatted correctly from frontend 
+            values is assumed to be a list of values in order to be inserted. Assumed values is same length as num of cols''' 
+        
+        if len(values) != len(self.columns):
+            print "values list incorrectly formatted"
+            return -1
 
+        if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
+            self.t.startTransaction()
+
+
+        values_string = "VALUES("
+        for x in range(len(self.columns)):
+            cur_value = "'"
+            cur_value += values[x]
+            cur_value += "'"
+            self.columns[x].rows.append(values[x])
+            if x == len(self.columns)-1: # if last value no comma
+                values_string += str(cur_value) + ")"
+            else:
+                values_string += str(cur_value) + ',' 
+
+
+
+        query = "Insert INTO " + self.name + ' ' + values_string + ";"
+        print query
+        self.cursor.execute(query)
+        self.query_list.append(query)
+        self.num_queries += 1
+        self.savepoint_generator()
+
+        return
 
     def end_transaction(self):
         ''' A function to permanently save all the changes you've made. 
