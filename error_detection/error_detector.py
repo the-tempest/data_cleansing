@@ -1,6 +1,7 @@
 import difflib
 from secrets import password, port, database, user, host, path
 import extraction, re, math
+from const import string_types, number_types
 
 execfile(path + "table.py")
 execfile(path + "typify/helper.py")
@@ -14,10 +15,8 @@ class error_form_detector:
 	def __init__(self,table):
 		self.name = "hi"
 		self.t = table
-		self.STRING_TYPES = ['full name', 'first name', 'last name', 'datestring',
-				'full address', 'street address', 'city state', 'email',
-				'location', 'description', 'url', 'city', 'state']
-		self.NUMBER_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
+		self.STRING_TYPES = const.string_types
+		self.NUMBER_TYPES = const.number_types
 
 
 	def cluster_rows(self,column):
