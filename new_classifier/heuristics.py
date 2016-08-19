@@ -178,53 +178,25 @@ def location_heuristic(token, typer):
 	return 'location', value + misc_value
 
 def description_heuristic(token, typer):
-	'''returns a certainty value for token being a description
-	or zero if it definitely isn't a description'''
-	split_token = token.split()
-	possibles = ['des', 'note', 'rep', 'sum', 'exp']
-	value = generic_heuristic(token, typer, possibles, DESCRIPTION_POS, split_token)
-	if value == 0:
-		return 'description', 0
-	# misc part
-	misc_value = 0
-	len_split_token = len(split_token)
-	if len_split_token > 10:
-		misc_value += 10
-	else:
-		misc_value += len_split_token
-
-	return 'description', value + misc_value
+	'''returns a certainty value for token being a description'''
+	possibles = ['des', 'web', 'rep', 'sum']
+	my_classifier = typer.heuristic_classifiers['state']
+	value = generic_heuristic(token, typer, my_classifier, possibles)
+	return 'city', value
 
 def url_heuristic(token, typer):
-	'''returns a certainty value for token being a url
-	or zero if it definitely isn't a url'''
-	split_token = token.split()
-	possibles = ['url', 'web', 'address']
-	value = generic_heuristic(token, typer, possibles, URL_POS, split_token)
-	if value == 0:
-		return 'url', 0
-	# misc part
-	misc_value = 0
-	if 'www' in token:
-		misc_value = 10
-
-	return 'url', value + misc_value
+	'''returns a certainty value for token being a url'''
+	possibles = ['url', 'web', 'address', 'site']
+	my_classifier = typer.heuristic_classifiers['state']
+	value = generic_heuristic(token, typer, my_classifier, possibles)
+	return 'city', value
 
 def city_heuristic(token, typer):
-	'''returns a certainty value for token being a
-	city or zero if it definitely
-	isn't an city'''
-	split_token = token.split()
+	'''returns a certainty value for token being a city'''
 	possibles = ['city', 'town', 'village', 'municipality']
-	value = generic_heuristic(token, typer, possibles, CITY_POS, split_token)
-	if value == 0:
-		return 'city', 0
-	# misc part
-	misc_value = 0
-	if len(token.split()) == 1:
-		misc_value += 10
-
-	return 'city', value + misc_value
+	my_classifier = typer.heuristic_classifiers['state']
+	value = generic_heuristic(token, typer, my_classifier, possibles)
+	return 'city', value
 
 def state_heuristic(token, typer):
 	'''returns a certainty value for token being a state'''

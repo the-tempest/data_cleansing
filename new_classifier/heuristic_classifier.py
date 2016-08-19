@@ -38,8 +38,8 @@ class heuristic_classifier:
 		'''builds the self.column_classifiers data member by creating classifier objects created
 		by classifier(name of the type, possible ascii values in the type string, list of the known condensed forms)'''
 		# TODO complete classifiers
-		self.heuristic_classifiers = []
 
+		self.heuristic_classifiers = {}
 		# TODO add all types
 
 		# names
@@ -117,4 +117,4 @@ class heuristic_classifier:
 							  possible_values[i],
 							  regex[i],
 							  known_examples[i])
-			self.heuristic_classifiers.append(curr)
+			self.heuristic_classifiers[names[i]] = curr
