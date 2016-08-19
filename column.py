@@ -105,7 +105,7 @@ class table:
     def get_sql_index(self,python_index):
         ''' function used to get the TableIndex of a table in mysql. This is an auto_increment columns
         but when deleting a row, it is no longer continuous. need to use limit to get the actual nth item''' 
-        self.t.cursor.execute("Select TableIndex FROM " + self.name +  " Limit " + str(python_index) + ",1;")
+        self.cursor.execute("Select TableIndex FROM " + self.name +  " Limit " + str(python_index) + ",1;")
         sql_index = self.cursor.fetchall()
         sql_index = sql_index[0][0]
 
@@ -113,8 +113,8 @@ class table:
 
     def delete_row(self,row_index):
 
-        if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
-            self.t.startTransaction()
+        if self.cnx.in_transaction == False: # need to know if at beginning of transaction
+            self.startTransaction()
 
         for col in self.columns: # python deletion
             del col.rows[row_index]
@@ -179,14 +179,23 @@ class table:
         self.num_queries = 0 # reset num_queries
 
         self.query_list = [] # remove all queries from list, means you can't go back but maybe allow you to go all the way back at this point
-        #new_table = getTable(self.name, user, password,host, database, port, self.cnx, self.cursor)
 
-        #self.columns = new_table.columns; # the list containing the columns of the table
-        #self.build_column_index()
+        self.sync_table()
 
-        #return new_table
 
         return 0
+
+    def sync_table(self):
+        table_name = self.name
+        cursor = self.cursor
+
+        for x in range(len(self.columns)):
+            col_name = self.columns[x].colName
+            rows = getRows(col_name, table_name, cursor)
+            self.columns[x].rows = rows
+        
+        return 
+
     
 class column(table):
     def __init__(self, rows, colName, table):
@@ -198,8 +207,7 @@ class column(table):
         self.guesses = {} # dictionary of index of token and guess for that token
         
         self.t = table
-        # cnx = mysql.connector.connect(user=user,password=password, host=host, database=database, port=port)
-        # self.cursor = cnx.cursor()
+        
 
 
     def tentativeClassification(self, tc):

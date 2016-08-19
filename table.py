@@ -3,8 +3,8 @@ from secrets import password, port, user, host, database, path
 execfile(path+'column.py');
 
 
-def getRows(columnName, fileName, cursor):
-    query = "SELECT " + columnName + " FROM " + fileName;
+def getRows(columnName, tableName, cursor):
+    query = "SELECT " + columnName + " FROM " + tableName;
     cursor.execute(query);
     rows = cursor.fetchall();
     #print rows
