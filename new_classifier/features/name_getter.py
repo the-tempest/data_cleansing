@@ -1,8 +1,8 @@
-output = open("url_examples.txt", "w")
+output = open("zip.txt", "w")
 names = []
-with open("url_example_list.txt", "r") as f:
+with open("raw_zip.txt", "r") as f:
 	for line in f:
-		word = line.strip('\n')
+		word = line.strip('\n').split()[0]
 		if word not in names:
 			names.append(word)
 ret = "["

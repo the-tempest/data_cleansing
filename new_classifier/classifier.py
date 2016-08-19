@@ -8,38 +8,49 @@ class classifier:
 			97-122 but cannot contain '=' 61)
 		3. A list of regular expressions representing forms of the type
 		4. A list of a set of known examples for the particular type (Ex: John)'''
-	def __init__(self, n, pv, regs, ke):
-		self.name = n
+	def __init__(self, name, possible_values=[], regexs=[], examples=[], column_names=[]):
+		self.my_name = name
 
-		self.possVals = {}
-		for elem in pv:
-			self.possVals[elem] = 1
+		self.my_possibles = {}
+		for val in possible_values:
+			self.my_possibles[val] = 1
 
-		self.regExs = []
-		for regex in regs:	
-			self.regExs.append(re.compile(regex))
+		self.my_regexs = []
+		for regex in regexs:	
+			self.my_regexs.append(re.compile(regex))
 
-		self.knownExamples = {}
-		for elem in ke:
-			self.knownExamples[elem] = 1
+		self.my_examples = {}
+		for ex in examples:
+			self.my_examples[ex] = 1
 
-	def can_be(self, token):
+		self.my_columns = []
+		for col in column_names:
+			self.my_columns.append(col)
+
+	def check_possibles(self, token):
 		'''Tests whether the sequence of ascii values inputted has any that are not allowed in this particular type'''
 		for char in token:
-			if char not in self.possVals:
+			if char not in self.my_possibles:
 				return False
 		return True
 
-	def has_form(self, token):
+	def check_regexs(self, token):
 		'''Tests whether the given token is in the form of the regular expression for the type'''
-		for regex in self.regExs:
+		for regex in self.my_regexs:
 			if regex.match(token) != None:
 				return True
 		return False
 
-	def is_a(self, token):
+	def check_examples(self, token):
 		'''Tests whether the given string is stored in the list of known string examples of the particular types'''
 		for elem in token.split():
-			if elem in self.knownExamples:
+			if elem in self.my_examples:
+				return True
+		return False
+
+	def check_column_name(self, col_name):
+		'''Tests whether the name of the tokens column matches a possible column name for the type'''
+		for elem in self.my_columns:
+			if elem in col_name:
 				return True
 		return False
