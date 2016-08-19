@@ -100,10 +100,10 @@ class heuristic_classifier:
 		longitude_ex      = []
 		latitude_ex       = []
 		number_ex         = []
-		zip_ex            = []
+		zip_ex            = COMMON_ZIPS
 		phone_ex          = []
-		ip_ex             = []
-		year_ex           = []
+		ip_ex             = COMMON_IPS
+		year_ex           = COMMON_YEARS
 		isbn_ex           = []
 		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
@@ -112,9 +112,39 @@ class heuristic_classifier:
 						  number_ex, zip_ex, phone_ex,
 						  ip_ex, year_ex, isbn_ex]
 
+		# possible column names
+		full_name_cn      = ['name', 'person']
+		first_name_cn     = ['first', 'name']
+		last_name_cn      = ['last', 'sur', 'name']
+		datestring_cn     = ['date', 'day']
+		full_address_cn   = ['address']
+		street_address_cn = ['street']
+		city_state_cn     = ['city', 'state']
+		email_cn          = ['email', 'address']
+		description_cn    = ['des', 'rep', 'sum']
+		url_cn            = ['url', 'web', 'address', 'site']
+		city_cn           = ['city', 'town', 'village']
+		state_cn          = ['state', 'province', 'territory']
+		date_cn           = ['date', 'day']
+		longitude_cn      = ['long']
+		latitude_cn       = ['lat']
+		number_cn         = ['number', 'count', 'quantity', 'amount']
+		zip_cn            = ['zip', 'code']
+		phone_cn          = ['phone', 'number']
+		ip_cn             = ['ip', 'address']
+		year_cn           = ['year']
+		isbn_cn           = ['isbn', 'code']
+		column_names = [full_name_cn, first_name_cn, last_name_cn, datestring_cn,
+						  full_address_cn, street_address_cn, city_state_cn, email_cn,
+						  description_cn, url_cn, city_cn, state_cn,
+						  date_cn, longitude_cn, latitude_cn,
+						  number_cn, zip_cn, phone_cn,
+						  ip_cn, year_cn, isbn_cn]
+
 		for i in range(len(names)):
 			curr = classifier(names[i],
 							  possible_values[i],
 							  regex[i],
-							  known_examples[i])
+							  known_examples[i],
+							  column_names[i])
 			self.heuristic_classifiers[names[i]] = curr
