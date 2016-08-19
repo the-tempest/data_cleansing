@@ -41,12 +41,13 @@ class table:
 
 
     def startTransaction(self):
+        ''' Starts a SQL Transaction so savepoints can be used to rollback ''' 
 
         print "starting transaction... "
         
         query = "START TRANSACTION;" # execute the command
         self.query_list.append(query)
-        #self.cursor.execute(query)
+ 
         self.cnx.start_transaction()
 
         self.num_queries += 1
@@ -56,7 +57,7 @@ class table:
         return 
 
     def savepoint_generator(self):
-        '''returns the name of the savepoint but also executes ''' 
+        '''returns the name of the savepoint but also executes the savepoint query''' 
         letter = self.num_queries #make sure t normalize to 0 A = 65 
         letter = str(letter)
 
@@ -73,7 +74,8 @@ class table:
         ''' Will revert all changes and revert to a previous savepoint '''
         self.cursor.execute("ROLLBACK TO " + str(restore_index) + "a") # a is there to satisfy mysql syntax
         # not sure exactly what to do with the python object at this point
-        #self.print_fetchall()
+        
+
 
 
         return
@@ -144,7 +146,7 @@ class table:
             self.t.startTransaction()
 
 
-        values_string = "VALUES("
+        values_string = "VALUES(" # builds the values part of the query
         for x in range(len(self.columns)):
             cur_value = "'"
             cur_value += values[x]
@@ -172,9 +174,7 @@ class table:
 
 
         self.cursor.execute("COMMIT;")
-        #self.cnx.commit()
 
-        #self.print_fetchall()
 
         self.num_queries = 0 # reset num_queries
 
@@ -186,6 +186,7 @@ class table:
         return 0
 
     def sync_table(self):
+        ''' sets the columns of the current table to actually what is in the db. Is run after end_transaction''' 
         table_name = self.name
         cursor = self.cursor
 
