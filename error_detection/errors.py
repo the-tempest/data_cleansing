@@ -14,6 +14,7 @@ names = ['full name', 'first name', 'last name', 'datestring',
 class error_detection:
 
 	def __init__(self, table):
+		'''a class used for error detection'''
 		self.t = table
 		self.ed ={}
 		self.ec = []
@@ -21,6 +22,7 @@ class error_detection:
 
 
 	def find_table_errors(self,errors_to_check_list):
+		'''main function for finding table errors. error_to_check_list is a list of strings represeting the errors'''
 		self.ec = errors_to_check_list
 		form_detective = error_form_detector(self.t)
 		number_detective = error_detector_number(self.t)
@@ -45,6 +47,8 @@ class error_detection:
 		return error_dictionary
 
 	def regex_form_finder(self, column):
+		'''goes through the elements of a column, given that the column is classified, and
+		finds the most common regexs of that type to represent the column'''
 		if (column.tentClass == None or column.tentClass == 'misc'):
 			return []
 		print column.tentClass
@@ -68,6 +72,7 @@ class error_detection:
 		return form_list
 
 	def get_regex_list(self, classification):
+		'''associates column names with lists of regexs'''
 		switcher = {'full name': FULL_NAME_REGEXS, 'first name': FIRST_NAME_REGEXS, 'last name': LAST_NAME_REGEXS, 'datestring': DATESTRING_REGEXS,
 					'full address': FULL_ADDRESS_REGEXS, 'street address': STREET_ADDRESS_REGEXS, 'city state': CITYSTATE_REGEXS, 'email': EMAIL_REGEXS, 
 					'location': LOCATION_REGEXS, 'description': DESCRIPTION_REGEXS, 'url': URL_REGEXS, 'city': CITY_REGEXS, 'state': STATE_REGEXS,
@@ -77,6 +82,7 @@ class error_detection:
 		return switcher.get(classification)
 
 	def numeric_error_switcher(self, detective, error_string, curr_column):
+		'''associates numeric error checks with strings'''
 		switcher = {"range check": detective.range_check(curr_column.rows),
 					"misclassified number": detective.misclassified(curr_column), # as in the heuristic incorrectly classified
 					"number format check": detective.number_format_check(curr_column)}
@@ -84,6 +90,7 @@ class error_detection:
 		return switcher.get(error_string)
 
 	def string_error_switcher(self, detective, error_string, curr_column):
+		'''associates string error checks with strings'''
 		switcher = {"format checks": detective.format_check(curr_column),
 					#"email check": detective.email_check(curr_column),
 					"column duplications": detective.cluster_rows(curr_column)}
@@ -114,6 +121,7 @@ class error_detection:
 				
 		
 	def info_for_user(self):
+		'''puts the info in a form that is more informative for the user'''
 		i = 0
 		dyct = {}
 		dict_errors  = self.make_other_format()
