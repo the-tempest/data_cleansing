@@ -6,20 +6,20 @@ from const import string_types, number_types
 execfile(path + "table.py")
 execfile(path + "typify/helper.py")
 execfile(path + "error_detection/fingerprint.py")
-execfile(path + "error_detection/error_detection_number.py")
 d = difflib.Differ()
 
 
 
-class error_form_detector:
+class error_detector:
 	def __init__(self,table):
 		self.name = "hi"
 		self.t = table
-		self.STRING_TYPES = const.string_types
-		self.NUMBER_TYPES = const.number_types
+		self.STRING_TYPES = string_types
+		self.NUMBER_TYPES = number_types
 
 
 	def cluster_rows(self,column):
+		#TODO: implement a use for this outside of print statements
 		''' Takes in a list of elements in a column and prints out clusters'''
 		rows = column.rows
 		clustered_dictionary, finger_dict = fingerprint_column(rows)
@@ -133,7 +133,7 @@ class error_form_detector:
 
 		return possible_error_indices
 
-	def execute1(self, filename):
+	'''def execute1(self, filename):
 		filename = filename.replace("\n", "")
 		filename = filename.replace(" ", "_")
 		table_name = extraction.extract(filename)
@@ -148,10 +148,10 @@ class error_form_detector:
 		pathToSave = os.path.join(dirToSave, fn);
 		
 		with open(pathToSave, "w") as text_file:
-			text_file.write(cl);
+			text_file.write(cl);'''
 		
 	
-	def check_on_table(self):
+	'''def check_on_table(self):
 		table = self.t
 		column_errors = []
 		for column in table.columns:
@@ -164,15 +164,17 @@ class error_form_detector:
 		print "here"
 		print column.tentClass
 		print column.colName
-		return column_errors
+		return column_errors'''
 
-	def range_check(self, rows):
+	def range_check(self, column):
 		'''Looks for formating errors in a column'''
-		if column.colName in ['']
+		if column.colName in self.STRING_TYPES + ['date', 'phone_number', 'ip', 'isbn']:
+			return []
 		flagged = []
 		format_dictionary = {}
 		mean = 0
 		total = 0
+		rows = column.rows
 
 		split_rows = []
 		max_length = 0
@@ -185,7 +187,7 @@ class error_form_detector:
 
 		for curr_num in range(max_length):
 			for x in split_rows:
-				if no_letters(x[curr_num]):
+				if (curr_num < len(x) and no_letters(x[curr_num])):
 					sub_regex = re.compile(r'''[^0-9]''')
 					x[curr_num] = sub_regex.sub('', x[curr_num])
 					total += int(x[curr_num])
@@ -195,7 +197,7 @@ class error_form_detector:
 		#	print mean
 			variance = 0.0
 			for x in range(len(split_rows)):
-				if no_letters(split_rows[x][curr_num]):
+				if (curr_num < len(split_rows[x]) and no_letters(split_rows[x][curr_num])):
 					add = int(split_rows[x][curr_num]) - mean
 					add = add * add
 					variance += add
@@ -208,12 +210,15 @@ class error_form_detector:
 			#print mean
 			#print std
 			for x in range(len(split_rows)):
-				if  no_letters(split_rows[x][curr_num]):
+				if (curr_num < len(split_rows[x]) and no_letters(split_rows[x][curr_num])):
 					if abs(int(split_rows[x][curr_num])-mean)> 2*std:
 						if x not in flagged:
 							flagged.append(x)
 			
 		return flagged
+
+	def date_range_check(self, column):
+		'''TODO: implement this'''
 	
 	def misclassified(self, column):
 		if column.colName in [None, 'misc']:
