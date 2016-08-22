@@ -15,6 +15,7 @@ class table:
 
         self.query_list = []
         self.num_queries = 0
+        self.cur_query_index = 0 # used for redo
 
 
         if (cnx == None) or (cursor == None):
@@ -45,19 +46,20 @@ class table:
         print "starting transaction... "
         
         query = "START TRANSACTION;" # execute the command
-        self.query_list.append(query)
+        self.query_list.insert(self.cur_query_index,query)
         #self.cursor.execute(query)
         self.cnx.start_transaction()
+        savepoint_name = self.savepoint_generator() # this executes the command but also returns the name
 
         self.num_queries += 1
+        self.cur_query_index += 1
 
-        savepoint_name = self.savepoint_generator() # this executes the command but also returns the name
 
         return 
 
     def savepoint_generator(self):
         '''returns the name of the savepoint but also executes ''' 
-        letter = self.num_queries #make sure t normalize to 0 A = 65 
+        letter = self.cur_query_index #make sure t normalize to 0 A = 65 
         letter = str(letter)
 
         letter += 'a'
@@ -69,14 +71,29 @@ class table:
         return letter
 
 
-    def revert_previous_changes_to_index(self,restore_index):
-        ''' Will revert all changes and revert to a previous savepoint '''
+    def undo_changes(self,restore_index):
+        ''' Will revert all changes and revert to a previous savepoint restore index is based on cur_index. 0 reverts to 
+        beginning of the start transaction, 1 reverts to just after the first change etc... '''
         self.cursor.execute("ROLLBACK TO " + str(restore_index) + "a") # a is there to satisfy mysql syntax
         # not sure exactly what to do with the python object at this point
         #self.print_fetchall()
-
-
+        self.cur_query_index = restore_index + 1
         return
+
+
+    def redo_change(self):
+    	''' will redo a single change. can only be called immediatly after an undo'''
+    	if len(self.query_list) == self.cur_query_index:
+    		print 'no changes to redo'
+    		return
+
+
+    	query = self.query_list[self.cur_query_index]
+    	self.cursor.execute(query)
+
+    	self.cur_query_index += 1
+
+    	return 
 
     def print_fetchall(self):
         i = self.cursor.fetchall()
@@ -88,19 +105,6 @@ class table:
         self.cursor = self.cnx.cursor()
         return
 
-    def undo_single_change(self, command_index):
-        ''' will undo a single change and attempt to re execute all the other commands ASSUME INDEX OF COMMAND IS INDEXED BY 0'''
-
-        self.cursor.execute("ROLLBACK TO " + str(command_index) + "a")
-
-        for x in range(command_index + 1, len(self.query_list)):
-            if self.query_list[x] == "START TRANSACTION;":
-                self.cnx.start_transaction()
-            else:
-                self.cursor.execute(self.query_list[x])
-            #hopefully no dependencies. what to do with python object?
-
-        return 0 
 
     def get_sql_index(self,python_index):
         ''' function used to get the TableIndex of a table in mysql. This is an auto_increment columns
@@ -113,6 +117,7 @@ class table:
 
     def delete_row(self,row_index):
 
+    	self.query_list = self.query_list[0:self.cur_query_index]
         if self.cnx.in_transaction == False: # need to know if at beginning of transaction
             self.startTransaction()
 
@@ -125,8 +130,9 @@ class table:
         query = "Delete FROM " + self.name + " WHERE TableIndex = " + str(sql_index) + ";"
         self.cursor.execute(query)
 
-        self.query_list.append(query)
+        self.query_list.insert(self.cur_query_index, query)
         self.num_queries += 1
+        self.cur_query_index += 1
         self.savepoint_generator()
 
         return
@@ -135,7 +141,9 @@ class table:
     def insert_row(self,values):
         '''Inserts a row into the table, must make sure it is formatted correctly from frontend 
             values is assumed to be a list of values in order to be inserted. Assumed values is same length as num of cols''' 
-        
+        self.query_list = self.query_list[0:self.cur_query_index]
+
+
         if len(values) != len(self.columns):
             print "values list incorrectly formatted"
             return -1
@@ -160,9 +168,12 @@ class table:
         query = "Insert INTO " + self.name + ' ' + values_string + ";"
         print query
         self.cursor.execute(query)
-        self.query_list.append(query)
-        self.num_queries += 1
+        self.query_list.insert(self.cur_query_index, query)
+        
         self.savepoint_generator()
+
+        self.num_queries += 1
+        self.cur_query_index += 1
 
         return
 
@@ -177,6 +188,7 @@ class table:
         #self.print_fetchall()
 
         self.num_queries = 0 # reset num_queries
+        self.cur_query_index = 0
 
         self.query_list = [] # remove all queries from list, means you can't go back but maybe allow you to go all the way back at this point
 
@@ -224,6 +236,7 @@ class column(table):
        
     def edit_cell(self,index, new_val):
         ''' index is python 0 indexed value that user wants to update. new_value is a string that is getting put into table. string becuase table is all strings'''
+        self.t.query_list = self.t.query_list[0:self.t.cur_query_index]
 
         if self.t.cnx.in_transaction == False: # need to know if at beginning of transaction
             self.t.startTransaction()
@@ -242,11 +255,12 @@ class column(table):
 
         #self.print_fetchall()
 
-        self.t.query_list.append(query)
-        self.t.num_queries += 1
+        self.t.query_list.insert(self.t.cur_query_index,query)
+        
 
         self.t.savepoint_generator()
-
+        self.t.num_queries += 1
+        self.t.cur_query_index += 1
 
 
         return 0
