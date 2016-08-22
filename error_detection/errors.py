@@ -64,8 +64,8 @@ class error_detection:
 
 	def get_regex_list(self, classification):
 		'''associates column names with lists of regexs'''
-		switcher = {'full name': FULL_NAME_REGEXS, 'first name': FIRST_NAME_REGEXS, 'last name': LAST_NAME_REGEXS, 'datestring': DATESTRING_REGEXS,
-					'full address': FULL_ADDRESS_REGEXS, 'street address': STREET_ADDRESS_REGEXS, 'city state': CITYSTATE_REGEXS, 'email': EMAIL_REGEXS, 
+		switcher = {'full_name': FULL_NAME_REGEXS, 'first_name': FIRST_NAME_REGEXS, 'last_name': LAST_NAME_REGEXS, 'datestring': DATESTRING_REGEXS,
+					'full_address': FULL_ADDRESS_REGEXS, 'street_address': STREET_ADDRESS_REGEXS, 'city_state': CITYSTATE_REGEXS, 'email': EMAIL_REGEXS, 
 					'location': LOCATION_REGEXS, 'description': DESCRIPTION_REGEXS, 'url': URL_REGEXS, 'city': CITY_REGEXS, 'state': STATE_REGEXS,
 					'date': DATE_REGEXS, 'longitude': LONGITUDE_REGEXS, 'latitude': LATITUDE_REGEXS, 'number': NUMBER_REGEXS, 'zip': ZIP_REGEXS,
 					'ip': IP_REGEXS, 'phone_number': PHONE_REGEXS, 'year': YEAR_REGEXS, 'isbn': ISBN_REGEXS}

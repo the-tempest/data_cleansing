@@ -74,16 +74,16 @@ class main_classifier:
 		column_error_dict = self.error_dict[column.colName]
 		line = ""
 		for index in column_error_dict.keys()[:10]:
-			line += "Item "
+			line += "--Item "
 			line += column.rows[index]
 			line += " is possibly an error identified by the "
 			for x in range(len(column_error_dict[index])):
 				line += column_error_dict[index][x]
 				if x < (len(column_error_dict[index]) - 1):
 					line += ", "
-			line +=" error detectors.\n"
+			line +=" error detector(s).\n"
 		if len(column_error_dict.keys()) > 10:
-			line += "And more...\n"
+			line += "--And more...\n"
 		return line
 
 	def misclassified(self, column):

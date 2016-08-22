@@ -54,7 +54,7 @@ class error_detector:
 					matched = True
 					break
 			if not matched:
-				possible_error_indices.append(column_rows[index])
+				possible_error_indices.append(index)
 
 		return possible_error_indices
 

@@ -1,0 +1,112 @@
+The column named Transaction_date appears to be of the type date with a certainty of 0.5.
+Item 1/2/09 6:17 is possibly an error identified by the format check error detectors.
+Item 1/2/09 4:53 is possibly an error identified by the format check error detectors.
+Item 1/2/09 13:08 is possibly an error identified by the format check error detectors.
+Item 1/3/09 14:44 is possibly an error identified by the format check error detectors.
+Item 1/4/09 12:56 is possibly an error identified by the format check error detectors.
+Item 1/4/09 13:19 is possibly an error identified by the format check error detectors.
+Item 1/4/09 20:11 is possibly an error identified by the format check error detectors.
+Item 1/2/09 20:09 is possibly an error identified by the format check error detectors.
+Item 1/4/09 13:17 is possibly an error identified by the format check error detectors.
+Item 1/4/09 14:11 is possibly an error identified by the format check error detectors.
+And more...
+The column named Product appears to be of the type phone_number with a certainty of 0.499.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product2 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+Item Product1 is possibly an error identified by the format check error detectors.
+And more...
+The column named Price appears to be of the type phone_number with a certainty of 0.5.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 3600 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+Item 1200 is possibly an error identified by the format check error detectors.
+And more...
+The column named Payment_Type appears to be of the type first_name with a certainty of 0.545.
+The column named Name appears to be of the type first_name with a certainty of 0.749.
+Item Federica e Andrea is possibly an error identified by the format check error detectors.
+Item Gerd W  is possibly an error identified by the format check error detectors.
+Item LAURENCE is possibly an error identified by the format check error detectors.
+Item Renee Elisabeth is possibly an error identified by the format check error detectors.
+Item PATRICK is possibly an error identified by the format check error detectors.
+Item Sean  is possibly an error identified by the format check error detectors.
+Item TG is possibly an error identified by the format check error detectors.
+Item Bryan Kerrene is possibly an error identified by the format check error detectors.
+Item SYLVIA is possibly an error identified by the format check error detectors.
+Item Andrea  is possibly an error identified by the format check error detectors.
+And more...
+The column named City appears to be of the type first_name with a certainty of 0.379.
+Item Parkville                    is possibly an error identified by the format check error detectors.
+Item Astoria                      is possibly an error identified by the format check error detectors.
+Item Cahaba Heights               is possibly an error identified by the format check error detectors.
+Item Mickleton                    is possibly an error identified by the format check error detectors.
+Item Peoria                       is possibly an error identified by the format check error detectors.
+Item Martin                       is possibly an error identified by the format check error detectors.
+Item New York                     is possibly an error identified by the format check error detectors.
+Item Shavano Park                 is possibly an error identified by the format check error detectors.
+Item Eagle                        is possibly an error identified by the format check error detectors.
+Item Riverside                    is possibly an error identified by the format check error detectors.
+And more...
+The column named State appears to be of the type first_name with a certainty of 0.587.
+Item Provence-Alpes-Cote d'Azur is possibly an error identified by the format check error detectors.
+Item Sogn og Fjordane is possibly an error identified by the format check error detectors.
+Item Zuid-Holland is possibly an error identified by the format check error detectors.
+Item Zuid-Holland is possibly an error identified by the format check error detectors.
+Item Basel-Country is possibly an error identified by the format check error detectors.
+Item Ile-de-France is possibly an error identified by the format check error detectors.
+Item Franche-Comte is possibly an error identified by the format check error detectors.
+Item Noord-Holland is possibly an error identified by the format check error detectors.
+Item Brussels (Bruxelles) is possibly an error identified by the format check error detectors.
+Item Zuid-Holland is possibly an error identified by the format check error detectors.
+And more...
+The column named Country appears to be of the type first_name with a certainty of 0.651.
+The column named Account_Created appears to be of the type date with a certainty of 0.5.
+Item 1/2/09 6:00 is possibly an error identified by the format check error detectors.
+Item 1/2/09 4:42 is possibly an error identified by the format check error detectors.
+Item 1/1/09 16:21 is possibly an error identified by the format check error detectors.
+Item 9/25/05 21:13 is possibly an error identified by the format check error detectors.
+Item 11/15/08 15:47 is possibly an error identified by the format check error detectors.
+Item 9/24/08 15:19 is possibly an error identified by the format check error detectors.
+Item 1/3/09 9:38 is possibly an error identified by the format check error detectors.
+Item 1/2/09 17:43 is possibly an error identified by the format check error detectors.
+Item 1/4/09 13:03 is possibly an error identified by the format check error detectors.
+Item 6/3/08 4:22 is possibly an error identified by the format check error detectors.
+And more...
+The column named Last_Login appears to be of the type date with a certainty of 0.5.
+Item 1/2/09 6:08 is possibly an error identified by the format check error detectors.
+Item 1/2/09 7:49 is possibly an error identified by the format check error detectors.
+Item 1/3/09 12:32 is possibly an error identified by the format check error detectors.
+Item 1/3/09 14:22 is possibly an error identified by the format check error detectors.
+Item 1/4/09 12:45 is possibly an error identified by the format check error detectors.
+Item 1/4/09 13:04 is possibly an error identified by the format check error detectors.
+Item 1/4/09 19:45 is possibly an error identified by the format check error detectors.
+Item 1/4/09 20:01 is possibly an error identified by the format check error detectors.
+Item 1/4/09 22:10 is possibly an error identified by the format check error detectors.
+Item 1/5/09 1:17 is possibly an error identified by the format check error detectors.
+And more...
+The column named Latitude appears to be of the type url with a certainty of 0.499.
+Item 47 is possibly an error identified by the format check error detectors.
+Item -28 is possibly an error identified by the format check error detectors.
+The column named Longitude appears to be of the type url with a certainty of 0.496.
+Item -3 is possibly an error identified by the format check error detectors.
+Item 13 is possibly an error identified by the format check error detectors.
+Item -1 is possibly an error identified by the format check error detectors.
+Item -2 is possibly an error identified by the format check error detectors.
+Item 10 is possibly an error identified by the format check error detectors.
+Item 151 is possibly an error identified by the format check error detectors.
+Item -9 is possibly an error identified by the format check error detectors.
+Item -1 is possibly an error identified by the format check error detectors.
+Item -3 is possibly an error identified by the format check error detectors.
+Item -3 is possibly an error identified by the format check error detectors.
