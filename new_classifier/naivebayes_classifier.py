@@ -13,12 +13,13 @@ MY_DIRECTORY = (path+r"naivebayes_training_data")
 MY_FEATURES = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas',
 			'upper', 'lower', 'numbers'] # default features and types
 MY_TYPES = ['full_name', 'first_name', 'last_name',
-		    'full_address', 'street',
+		    'street',
 			 'city_state', 'email', 'description',
 			 'url', 'city', 'state',
 			 'date', 'longitude', 'latitude',
 			 'number', 'zip', 'phone',
 			 'ip', 'year', 'isbn']
+# currently not doing full_address or datestring
 LEN_TYPES = len(MY_TYPES)
 
 print 'MY_DIRECTORY'
