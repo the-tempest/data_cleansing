@@ -130,7 +130,7 @@ def generic_heuristic(token, typer, name):
 	char_val_list = []
 	for char in token:
 		char_val_list.append(ord(char))
-	if not my_classifier.can_be(char_val_list):
+	if not my_classifier.check_possibles(char_val_list):
 		return 0
 
 	value = 0
@@ -139,12 +139,12 @@ def generic_heuristic(token, typer, name):
 		value += 4
 
 	#account for the form of the token
-	if my_classifier.has_form(token):
+	if my_classifier.check_regexs(token):
 		value += 3
 
 	# check examples
 	for word in token.split():
-		if my_typer.is_a(word):
+		if my_classifier.check_examples(word):
 			value += 3
 			break
 
@@ -152,7 +152,7 @@ def generic_heuristic(token, typer, name):
 	
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
 			 street_address_heuristic,
-			 city_state_heuristic, email_heuristic, description_heuristic,
+			 email_heuristic, description_heuristic,
 			 url_heuristic, city_heuristic, state_heuristic,
 			 date_heuristic, longitude_heuristic, latitude_heuristic,
 			 number_heuristic, zip_heuristic, phone_heuristic,

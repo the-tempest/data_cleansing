@@ -136,11 +136,10 @@ class main_classifier:
 		(prediction, certainty)'''
 		results = {}
 		# populate the dictionary
-		for l in guesses:
-			for guess in l:
-				if guess not in results:
-					results[guess] = 0
-				results[guess] += 1
+		for guess in guesses:
+			if guess not in results:
+				results[guess] = 0
+			results[guess] += 1
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
@@ -164,8 +163,8 @@ class main_classifier:
 			guesses = self.get_token_predictions(token)
 			if token not in self.prev:
 				self.prev[token] = guesses
-			for guess in guesses:
-				predictions.append(guess)
+			predictions.append(guesses[0])
+			predictions.append(guesses[1])
 		self.prev = {}
 		return predictions
 
@@ -179,10 +178,7 @@ class main_classifier:
 
 		# Naive Bayes part
 		nb_guess = self.naivebayes_class.classify(token)
-		guesses  = [nb_guess]
 
 		# Heuristic part
 		h_guess = self.heuristic_class.classify(token)
-		guesses += h_guess
-
-		return guesses
+		return (nb_guess, h_guess)

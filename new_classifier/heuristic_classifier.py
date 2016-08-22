@@ -24,7 +24,7 @@ class heuristic_classifier:
 		self.build_heuristic_classifiers()
 		self.curr_col_name = ''
 
-	def classify(self, token, classification):
+	def classify(self, token):
 		'''takes in a token and returns
 		a list of predictions'''
 		certainties = {}
