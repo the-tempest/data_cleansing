@@ -25,11 +25,12 @@ class error_detector:
 		clustered_dictionary, finger_dict = fingerprint_column(rows)
 
 		for item in clustered_dictionary.keys():
-			print "Found Cluster: " + str(item)
-			print "Elements in cluster " + item + " are: " 
+			#print "Found Cluster: " + str(item)
+			#print "Elements in cluster " + item + " are: " 
 			for x in range(len(finger_dict[item])):
-				print x, ": ",  rows[finger_dict[item][x]]
-			print "\n"
+			#	print x, ": ",  rows[finger_dict[item][x]]
+				x = 1
+			#print "\n"
 		return 0
 
 

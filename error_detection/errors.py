@@ -1,5 +1,6 @@
 from secrets import password, port, database, user, host, path
 import os
+import const
 execfile(path + "error_detection/error_detector.py")
 #execfile(path + "error_detection/error_detection_number.py")
 #execfile(path + "error_detection/error_form_detection.py")
@@ -7,10 +8,6 @@ execfile(path + "error_detection/didYouMean.py")
 
 execfile(path + "typify/features/regexlib.py")
 execfile(path + "typify/features/exampleslib.py")
-numeric_classes = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn']
-names = ['full name', 'first name', 'last name', 'datestring',
-				'full address', 'street address', 'city state', 'email',
-				'location', 'description', 'url', 'city', 'state']
 
 class error_detection:
 
@@ -23,7 +20,7 @@ class error_detection:
 		
 
 
-	def find_table_errors(self,errors_to_check_list):
+	def find_table_errors(self, errors_to_check_list = const.detectable_errors):
 		'''main function for finding table errors. error_to_check_list is a list of strings represeting the errors'''
 		self.ec = errors_to_check_list
 		#form_detective = error_form_detector(self.t)
@@ -108,19 +105,15 @@ class error_detection:
 		format to a dictionary organized by column Name, index, list of errors'''
 		# dictionary organized by column.colName, index, list of errors
 		dict_other_format= {}
-		i = 0
-		for c in self.ed:
-			dict_col = {}# matching indices and lists of errors associated
-			if c.colName in numeric_classes:	
-				for item in self.ec[i]:
-					for index in self.ed[c.colName][item]:
-						if dict_col[index] ==None:
-							dict_col[index] = item
-						else:
-							dict_col[index].append(item)
-			dict_other_format.append(dict_col)
-			i +=1
-					
+		for c in self.ed.keys():
+			dict_col = {}# matching indices and lists of errors associated	
+			for item in self.ed[c].keys():
+				for index in self.ed[c.colName][item]:
+					if not dict_col[index].has_key(item):
+						dict_col[index] = [item]
+					else:
+						dict_col[index].append(item)
+			dict_other_format[c] = dict_col
 					
 		return dict_other_format	
 				
