@@ -36,7 +36,6 @@ class error_detection:
 					#{column_name: {error_type: [list_of_indexes]}}
 
 		self.ed = error_dictionary
-		return error_dictionary
 
 	def regex_form_finder(self, column):
 		'''goes through the elements of a column, given that the column is classified, and
@@ -108,10 +107,10 @@ class error_detection:
 		for c in self.ed.keys():
 			dict_col = {}# matching indices and lists of errors associated	
 			for item in self.ed[c].keys():
-				for index in self.ed[c.colName][item]:
-					if not dict_col[index].has_key(item):
-						dict_col[index] = [item]
-					else:
+				for index in self.ed[c][item]:
+					if index not in dict_col:
+						dict_col[index] = []
+					if not item in dict_col[index]:
 						dict_col[index].append(item)
 			dict_other_format[c] = dict_col
 					

@@ -13,6 +13,7 @@ execfile(path+"new_classifier/classifier.py")
 execfile(path+'new_classifier/naivebayes_classifier.py')
 execfile(path+'new_classifier/heuristic_classifier.py')
 execfile(path+'table.py')
+execfile(path+"error_detection/errors.py")
 
 class main_classifier:
 	def __init__(self):
@@ -23,13 +24,22 @@ class main_classifier:
 		self.my_table     = None
 		self.results      = None
 		self.result_table = None
+
+		self.ed           = None
+		self.error_dict   = None
+
 		self.report       = ''
 
 	def new_table(self, table):
 		'''takes in a new table and generates the data for it'''
 		self.my_table     = table
-		self.results      = self.classify_table()
-		self.result_table = self.apply_predictions()
+		#self.results      = self.classify_table()
+		#self.result_table = self.apply_predictions()
+
+		self.ed           = error_detection(self.my_table)
+		self.ed.find_table_errors()
+		self.error_dict   = self.ed.make_other_format()
+
 		self.report       = self.build_report()
 
 	def build_report(self):
@@ -37,8 +47,8 @@ class main_classifier:
 		results = self.results
 		i = 0
 		for item in results:
-			line = self.build_column_report(item)
-			ret += line
+			#line = self.build_column_report(item)
+			#ret += line
 			#adding in the misclassified token list
 			ret +=self.build_column_error_report(self.my_table.columns[i])
 			i += 1
@@ -61,14 +71,19 @@ class main_classifier:
 		return line
 
 	def build_column_error_report(self, column):
-		list = self.misclassified(column)
+		column_error_dict = self.error_dict[column.colName]
 		line = ""
-		for i in list:
-			line += "the token "
-			line+= column.rows[i]
-			line +=" was incorrectly classified as "
-			line+= column.guesses[i]
-		line += ".\n"
+		for index in column_error_dict.keys()[:10]:
+			line += "Item "
+			line += column.rows[index]
+			line += " is possibly an error identified by the "
+			for x in range(len(column_error_dict[index])):
+				line += column_error_dict[index][x]
+				if x < (len(column_error_dict[index]) - 1):
+					line += ", "
+			line +=" error detectors.\n"
+		if len(column_error_dict.keys()) > 10:
+			line += "And more...\n"
 		return line
 
 	def misclassified(self, column):

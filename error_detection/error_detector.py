@@ -31,7 +31,7 @@ class error_detector:
 			#	print x, ": ",  rows[finger_dict[item][x]]
 				x = 1
 			#print "\n"
-		return 0
+		return []
 
 
 	def format_check(self, column):
@@ -169,7 +169,7 @@ class error_detector:
 
 	def range_check(self, column):
 		'''Looks for formating errors in a column'''
-		if column.colName in self.STRING_TYPES + ['date', 'phone_number', 'ip', 'isbn']:
+		if column.tentClass in self.STRING_TYPES + ['date', 'phone_number', 'ip', 'isbn']:
 			return []
 		flagged = []
 		format_dictionary = {}
@@ -222,7 +222,7 @@ class error_detector:
 		'''TODO: implement this'''
 	
 	def misclassified(self, column):
-		if column.colName in [None, 'misc']:
+		if column.tentClass in [None, 'misc']:
 			return []
 		think = column.tentClass
 		dyct = column.guesses
