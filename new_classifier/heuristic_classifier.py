@@ -40,7 +40,6 @@ class heuristic_classifier:
 		# TODO complete classifiers
 
 		self.heuristic_classifiers = {}
-		# TODO add all types
 
 		# names
 		names = ['full_name', 'first_name', 'last_name',
