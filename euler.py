@@ -259,6 +259,13 @@ def solve14():
 	print collatz_dict
 	return k[v.index(max(v))] 
 
+def solve16():
+	a = str(2**1000)
+	sums = 0
+	for x in range(len(a)):
+		sums+= int(a[x])
+	return sums
+
 
 def solve21():
 	lst = []
@@ -477,6 +484,20 @@ def solve32():
 	return pandigital
 
 import itertools
+import math
+
+def solve34(): # should probably do this better. precompute factorials and then do better bounds understanding
+	lst = []
+	for x in range(3,100000):
+		num = str(x)
+		dig_sum = 0
+		for y in range(len(num)):
+			dig_sum += math.factorial(int(num[y]))
+
+		if dig_sum == x:
+			lst.append(x)
+			print lst
+	return lst
 
 def solve35():
 	big_sieve = gen_primes_sieve(1000000)
@@ -545,16 +566,7 @@ def solve36():
 		num = str(x)
 		rev_num = num[::-1]
 
-		base_hex = hex(x)
-		base_hex = base_hex[2:]
-
-		rev_hex = base_hex[::-1]
-
-		if rev_hex != base_hex:
-			continue
-
 		
-
 		if num != rev_num:
 			continue
 

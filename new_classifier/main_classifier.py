@@ -13,6 +13,7 @@ execfile(path+"new_classifier/classifier.py")
 execfile(path+'new_classifier/naivebayes_classifier.py')
 execfile(path+'new_classifier/heuristic_classifier.py')
 execfile(path+'table.py')
+execfile(path+"error_detection/errors.py")
 
 class main_classifier:
 	def __init__(self):
@@ -23,6 +24,10 @@ class main_classifier:
 		self.my_table     = None
 		self.results      = None
 		self.result_table = None
+
+		self.ed           = None
+		self.error_dict   = None
+
 		self.report       = ''
 
 	def new_table(self, table):
@@ -30,6 +35,11 @@ class main_classifier:
 		self.my_table     = table
 		self.results      = self.classify_table()
 		self.result_table = self.apply_predictions()
+
+		self.ed           = error_detection(self.my_table)
+		self.ed.find_table_errors()
+		self.error_dict   = self.ed.make_other_format()
+
 		self.report       = self.build_report()
 
 	def build_report(self):
@@ -39,7 +49,7 @@ class main_classifier:
 		for item in results:
 			line = self.build_column_report(item)
 			ret += line
-			#adding in the misclassified token list
+			#adding in the errors
 			ret +=self.build_column_error_report(self.my_table.columns[i])
 			i += 1
 		return ret
@@ -61,14 +71,19 @@ class main_classifier:
 		return line
 
 	def build_column_error_report(self, column):
-		list = self.misclassified(column)
+		column_error_dict = self.error_dict[column.colName]
 		line = ""
-		for i in list:
-			line += "the token "
-			line+= column.rows[i]
-			line +=" was incorrectly classified as "
-			line+= column.guesses[i]
-		line += ".\n"
+		for index in column_error_dict.keys()[:10]:
+			line += "--Item "
+			line += column.rows[index]
+			line += " is possibly an error identified by the "
+			for x in range(len(column_error_dict[index])):
+				line += column_error_dict[index][x]
+				if x < (len(column_error_dict[index]) - 1):
+					line += ", "
+			line +=" error detector(s).\n"
+		if len(column_error_dict.keys()) > 10:
+			line += "--And more...\n"
 		return line
 
 	def misclassified(self, column):
@@ -136,11 +151,10 @@ class main_classifier:
 		(prediction, certainty)'''
 		results = {}
 		# populate the dictionary
-		for l in guesses:
-			for guess in l:
-				if guess not in results:
-					results[guess] = 0
-				results[guess] += 1
+		for guess in guesses:
+			if guess not in results:
+				results[guess] = 0
+			results[guess] += 1
 		size = len(guesses)
 		for key in results.keys():
 			fraction = float(results[key]) / float(size)
@@ -164,8 +178,8 @@ class main_classifier:
 			guesses = self.get_token_predictions(token)
 			if token not in self.prev:
 				self.prev[token] = guesses
-			for guess in guesses:
-				predictions.append(guess)
+			predictions.append(guesses[0])
+			predictions.append(guesses[1])
 		self.prev = {}
 		return predictions
 
@@ -179,10 +193,7 @@ class main_classifier:
 
 		# Naive Bayes part
 		nb_guess = self.naivebayes_class.classify(token)
-		guesses  = [nb_guess]
 
 		# Heuristic part
 		h_guess = self.heuristic_class.classify(token)
-		guesses += h_guess
-
-		return guesses
+		return (nb_guess, h_guess)

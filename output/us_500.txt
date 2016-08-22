@@ -1,24 +1,24 @@
-The column named first_name appears to be of the type isbn with a certainty of 0.66.
+The column named first_name appears to be of the type first_name with a certainty of 0.863.
 .
-The column named last_name appears to be of the type isbn with a certainty of 0.804.
+The column named last_name appears to be of the type first_name with a certainty of 0.81.
 .
-The column named company_name appears to be of the type l with a certainty of 0.16.
+The column named company_name appears to be of the type first_name with a certainty of 0.46.
 .
-The column named address appears to be of the type isbn with a certainty of 0.448.
+The column named address appears to be of the type street_address with a certainty of 0.758.
 .
-The column named city appears to be of the type isbn with a certainty of 0.654.
+The column named city appears to be of the type city with a certainty of 0.795.
 .
-The column named county appears to be of the type isbn with a certainty of 0.674.
+The column named county appears to be of the type first_name with a certainty of 0.697.
 .
-The column named state appears to be of the type isbn with a certainty of 1.0.
+The column named state appears to be of the type state with a certainty of 1.0.
 .
-The column named zip appears to be of the type zip with a certainty of 0.844.
+The column named zip appears to be of the type phone_number with a certainty of 0.5.
 .
 The column named phone1 appears to be of the type phone_number with a certainty of 1.0.
 .
 The column named phone2 appears to be of the type phone_number with a certainty of 1.0.
 .
-The column named email appears to be of the type latitude with a certainty of 0.742.
+The column named email appears to be of the type email with a certainty of 0.871.
 .
-The column named web appears to be of the type u with a certainty of 0.34.
+The column named web appears to be of the type url with a certainty of 1.0.
 .

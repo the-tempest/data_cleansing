@@ -12,9 +12,13 @@ MY_DIRECTORY = (path+r"naivebayes_training_data")
 
 MY_FEATURES = ['length', 'slashes', 'dashes', 'spaces', 'dots', 'commas',
 			'upper', 'lower', 'numbers'] # default features and types
-MY_TYPES = ['date', 'longitude', 'latitude', 'number', 'zip', 'phone_number', 'ip', 'year', 'isbn', # numerics are built in
-		    'name', # this is made more specific by heuristics
-		    'string'] # this is made more specific by heuristics
+MY_TYPES = ['full_name', 'first_name', 'last_name',
+		    'street_address', 'email', 'description',
+			 'url', 'city', 'state',
+			 'date', 'longitude', 'latitude',
+			 'number', 'zip', 'phone_number',
+			 'ip', 'year', 'isbn']
+# currently not doing full_address or datestring, city_state
 LEN_TYPES = len(MY_TYPES)
 
 print 'MY_DIRECTORY'
@@ -38,7 +42,7 @@ class naivebayes_classifier:
 		self.types = MY_TYPES #list of all numeric_type classes (strings)
 		self.training_directory = MY_DIRECTORY
 		print 'in naivebayes init'
-		print training_directory
+		print self.training_directory
 
 		if os.path.isfile(path+"new_trained_dictionary.dat"):
 			self.trained_dictionary = self.load(path+"new_trained_dictionary.dat")
@@ -99,6 +103,7 @@ class naivebayes_trainer: # class fo holding training functions
 	def train(self):
 		''' Will train given some training data, can edit this later. must give path to directory
 				need to put r in front of training_dir for windows at least'''
+		print 'training now'
 		print self.training_dir
 		training_files_list = [f for f in listdir(self.training_dir) if isfile(join(self.training_dir, f))] # gets list of files in the training _dir
 		print training_files_list
@@ -108,7 +113,6 @@ class naivebayes_trainer: # class fo holding training functions
 			table_name = extraction.extract(file_path);
 			t = getTable(table_name, user, password, host, database) #  returns table object
 			column_names = []
-
 			for column in t.columns:
 				# remove characters 0-9 in column name
 				firstNum = "0"
@@ -122,7 +126,7 @@ class naivebayes_trainer: # class fo holding training functions
 				index = t.column_index[col]
 				column_obj = t.columns[index] # we have the column object now
 				self.train_on_column(column_obj)
-
+		print 'done training'
 		self.save(self.trained_dictionary, path+"new_trained_dictionary.dat")
 
 	def train_on_column(self, col):

@@ -4,7 +4,7 @@ import os, subprocess
 from datetime import datetime
 from secrets import path
 import main
-import column_testing as ct
+execfile(path+"evaluation/column_testing.py")
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = path+'uploaded/'
@@ -46,7 +46,7 @@ def evaluate():
             noExt, ext = os.path.splitext(f.filename);
             filename = os.path.join(app.config['UPLOAD_FOLDER'], noExt+now+ext)
             f.save(str(filename));
-            evaluator = ct.column_type_tester(filename)
+            evaluator = column_type_tester(filename)
             output = evaluator.entry_test()
             r = make_response(output );
             return r;

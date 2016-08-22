@@ -1,0 +1,9 @@
+The column named REVIEW_DATE appears to be of the type date with a certainty of 0.5.
+Item     "1985/01/21" is possibly an error identified by the format check error detectors.
+Item     "1990/01/12" is possibly an error identified by the format check error detectors.
+Item     "1998/07/15" is possibly an error identified by the format check error detectors.
+Item     "1999/12/03" is possibly an error identified by the format check error detectors.
+Item     "2004/10/04" is possibly an error identified by the format check error detectors.
+The column named AUTHOR appears to be of the type city with a certainty of 0.4.
+The column named ISBN appears to be of the type phone_number with a certainty of 0.5.
+The column named DISCOUNTED_PRICE appears to be of the type latitude with a certainty of 0.5.

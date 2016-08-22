@@ -7,7 +7,6 @@ def getRows(columnName, tableName, cursor):
     query = "SELECT " + columnName + " FROM " + tableName;
     cursor.execute(query);
     rows = cursor.fetchall();
-    #print rows
     for j in range(len(rows)):
         try:
             rows[j] = str(''.join(rows[j]));
