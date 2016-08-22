@@ -2,9 +2,9 @@ import sys, subprocess, json, operator, os
 import extraction
 from secrets import path
 execfile(path+'table.py')
-execfile(path+'main_classifier.py')
-execfile(path+'counter.py')
-execfile(path+'errors.py')
+execfile(path+'new_classifier/main_classifier.py')
+execfile(path+'evaluation/counter.py')
+execfile(path+'error_detection/errors.py')
 
 ct = counter()
 

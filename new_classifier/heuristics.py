@@ -14,6 +14,8 @@
 #    - 3 points for being a known example
 # 4. return name of type being tested and point value (out of 10)
 
+# CURRENTLY UNUSED: datestring
+
 def full_name_heuristic(token, typer):
 	'''returns a certainty value for token being a last name'''
 	value = generic_heuristic(token, typer, 'full_name')
@@ -149,7 +151,7 @@ def generic_heuristic(token, typer, name):
 	return value
 	
 heuristics = [full_name_heuristic, first_name_heuristic, last_name_heuristic,
-			 datestring_heuristic, full_address_heuristic, street_address_heuristic,
+			 full_address_heuristic, street_address_heuristic,
 			 city_state_heuristic, email_heuristic, description_heuristic,
 			 url_heuristic, city_heuristic, state_heuristic,
 			 date_heuristic, longitude_heuristic, latitude_heuristic,

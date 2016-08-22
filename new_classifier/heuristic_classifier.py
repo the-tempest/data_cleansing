@@ -69,7 +69,7 @@ class heuristic_classifier:
 		possible_values = [ASCII_NAME, ASCII_NAME, ASCII_NAME, datestring_pv,
 					 ASCII_ADDRESS, ASCII_ADDRESS, ASCII_NAME, email_pv,
 					 description_pv, url_pv, ASCII_NAME, ASCII_NAME,
-					 date_pv, longitude_pv, latitude_pv, number_pv, zip_pv, phone_number,
+					 date_pv, longitude_pv, latitude_pv, number_pv, zip_pv, phone_pv,
 					 ip_pv, year_pv, isbn_pv]
 		
 
@@ -107,7 +107,7 @@ class heuristic_classifier:
 		isbn_ex           = []
 		known_examples = [full_name_ex, first_name_ex, last_name_ex, datestring_ex,
 						  full_address_ex, street_address_ex, city_state_ex, email_ex,
-						  description_ex, url_ex, city_ex, state_ex
+						  description_ex, url_ex, city_ex, state_ex,
 						  date_ex, longitude_ex, latitude_ex,
 						  number_ex, zip_ex, phone_ex,
 						  ip_ex, year_ex, isbn_ex]
