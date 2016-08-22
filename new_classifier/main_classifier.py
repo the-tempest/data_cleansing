@@ -33,8 +33,8 @@ class main_classifier:
 	def new_table(self, table):
 		'''takes in a new table and generates the data for it'''
 		self.my_table     = table
-		#self.results      = self.classify_table()
-		#self.result_table = self.apply_predictions()
+		self.results      = self.classify_table()
+		self.result_table = self.apply_predictions()
 
 		self.ed           = error_detection(self.my_table)
 		self.ed.find_table_errors()
@@ -47,9 +47,9 @@ class main_classifier:
 		results = self.results
 		i = 0
 		for item in results:
-			#line = self.build_column_report(item)
-			#ret += line
-			#adding in the misclassified token list
+			line = self.build_column_report(item)
+			ret += line
+			#adding in the errors
 			ret +=self.build_column_error_report(self.my_table.columns[i])
 			i += 1
 		return ret
