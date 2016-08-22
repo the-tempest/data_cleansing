@@ -47,13 +47,9 @@ class table:
         print "starting transaction... "
         
         query = "START TRANSACTION;" # execute the command
-<<<<<<< HEAD
-        self.query_list.append(query)
- 
-=======
+
         self.query_list.insert(self.cur_query_index,query)
         #self.cursor.execute(query)
->>>>>>> 360ce592ca1120654f0b98c6f0cd2ec1ba03ce8b
         self.cnx.start_transaction()
         savepoint_name = self.savepoint_generator() # this executes the command but also returns the name
 
@@ -64,13 +60,9 @@ class table:
         return 
 
     def savepoint_generator(self):
-<<<<<<< HEAD
-        '''returns the name of the savepoint but also executes the savepoint query''' 
-        letter = self.num_queries #make sure t normalize to 0 A = 65 
-=======
+
         '''returns the name of the savepoint but also executes ''' 
         letter = self.cur_query_index #make sure t normalize to 0 A = 65 
->>>>>>> 360ce592ca1120654f0b98c6f0cd2ec1ba03ce8b
         letter = str(letter)
 
         letter += 'a'
@@ -87,14 +79,10 @@ class table:
         beginning of the start transaction, 1 reverts to just after the first change etc... '''
         self.cursor.execute("ROLLBACK TO " + str(restore_index) + "a") # a is there to satisfy mysql syntax
         # not sure exactly what to do with the python object at this point
-<<<<<<< HEAD
-        
 
-=======
         #self.print_fetchall()
         self.cur_query_index = restore_index + 1
         return
->>>>>>> 360ce592ca1120654f0b98c6f0cd2ec1ba03ce8b
 
 
     def redo_change(self):
